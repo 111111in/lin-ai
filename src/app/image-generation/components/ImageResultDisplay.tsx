@@ -71,32 +71,38 @@ export function ImageResultDisplay({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-primary/30 flex items-center justify-center shadow-sm">
-            <Sparkles className="w-4 h-4 text-primary" />
+    <div className="space-y-8">
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center shadow-xl">
+            <Sparkles className="w-6 h-6 text-primary" />
           </div>
-          <h2 className="text-lg font-semibold">Generated Image</h2>
+          <h2 className="text-2xl font-black">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Generated Image
+            </span>
+          </h2>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button
             variant="outline"
             size="sm"
             onClick={handleDownload}
-            className="border-primary/20 hover:bg-primary/5 hover:text-primary"
+            className="border-2 border-primary/30 hover:bg-primary/10 hover:text-primary hover:border-primary/50 rounded-xl font-semibold shadow-lg transition-all duration-300 relative overflow-hidden group"
           >
-            <Download className="w-4 h-4 mr-1.5" />
-            Download
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+            <Download className="w-4 h-4 mr-2 relative z-10" />
+            <span className="relative z-10">Download</span>
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => window.open(absoluteImageUrl, '_blank')}
-            className="border-primary/20 hover:bg-primary/5 hover:text-primary"
+            className="border-2 border-primary/30 hover:bg-primary/10 hover:text-primary hover:border-primary/50 rounded-xl font-semibold shadow-lg transition-all duration-300 relative overflow-hidden group"
           >
-            <ExternalLink className="w-4 h-4 mr-1.5" />
-            Full Size
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+            <ExternalLink className="w-4 h-4 mr-2 relative z-10" />
+            <span className="relative z-10">Full Size</span>
           </Button>
           {conversationHistory.length > 0 && (
             <Button
@@ -104,38 +110,40 @@ export function ImageResultDisplay({
               size="sm"
               onClick={toggleHistory}
               className={cn(
-                'border-primary/20 hover:bg-primary/5',
+                'border-2 border-primary/30 hover:border-primary/50 rounded-xl font-semibold shadow-lg transition-all duration-300 relative overflow-hidden group',
                 showHistory
-                  ? 'bg-primary/10 text-primary'
-                  : 'hover:text-primary'
+                  ? 'bg-primary/15 text-primary border-primary/50'
+                  : 'hover:bg-primary/10 hover:text-primary'
               )}
             >
-              <MessageCircle className="w-4 h-4 mr-1.5" />
-              {showHistory ? 'Hide History' : 'History'}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+              <MessageCircle className="w-4 h-4 mr-2 relative z-10" />
+              <span className="relative z-10">{showHistory ? 'Hide History' : 'History'}</span>
             </Button>
           )}
           <Button
             variant="outline"
             size="sm"
             onClick={onReset}
-            className="border-primary/20 hover:bg-destructive/10 hover:text-destructive"
+            className="border-2 border-destructive/30 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 rounded-xl font-semibold shadow-lg transition-all duration-300 relative overflow-hidden group"
           >
-            <RotateCcw className="w-4 h-4 mr-1.5" />
-            New Image
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+            <RotateCcw className="w-4 h-4 mr-2 relative z-10" />
+            <span className="relative z-10">New Image</span>
           </Button>
         </div>
       </div>
 
-      <div className="rounded-xl overflow-hidden bg-gradient-to-br from-muted/50 to-muted/80 p-1 shadow-inner">
-        <div className="rounded-lg overflow-hidden bg-black/5 backdrop-blur-sm relative">
+      <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-border/30 to-border/50 p-2 shadow-2xl">
+        <div className="rounded-xl overflow-hidden bg-black/5 backdrop-blur-sm relative border-2 border-border/30">
           {!imageLoaded && !imageError && (
-            <div className="flex items-center justify-center h-80 bg-gradient-to-br from-card to-black/5">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 relative flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full border-4 border-primary/30 border-t-primary animate-spin"></div>
-                  <ImageIcon className="w-5 h-5 text-primary/70" />
+            <div className="flex items-center justify-center h-96 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
+              <div className="flex flex-col items-center gap-6">
+                <div className="w-16 h-16 relative flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-2xl border-4 border-primary/30 border-t-primary animate-spin"></div>
+                  <ImageIcon className="w-8 h-8 text-primary" />
                 </div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-base font-bold text-foreground">
                   Loading image...
                 </p>
               </div>
@@ -176,49 +184,53 @@ export function ImageResultDisplay({
       </div>
 
       {description && (
-        <div className="p-5 rounded-xl bg-gradient-to-br from-primary/5 to-background border border-primary/10">
-          <h3 className="text-sm font-medium mb-2 flex items-center gap-2">
-            <span className="inline-block p-1 bg-primary/10 rounded">
-              <MessageCircle className="w-3 h-3 text-primary" />
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-secondary/5 to-background border-2 border-primary/20 shadow-lg">
+          <h3 className="text-base font-bold mb-3 flex items-center gap-2">
+            <span className="inline-block p-2 bg-primary/20 rounded-xl">
+              <MessageCircle className="w-4 h-4 text-primary" />
             </span>
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Description
+            </span>
           </h3>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         </div>
       )}
 
       {showHistory && conversationHistory.length > 0 && (
-        <div className="p-5 rounded-xl bg-muted/30 border border-muted">
-          <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
-            <span className="inline-block p-1 bg-primary/10 rounded">
-              <MessageCircle className="w-3 h-3 text-primary" />
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-muted/30 to-muted/10 border-2 border-border/50 shadow-lg">
+          <h3 className="text-base font-bold mb-6 flex items-center gap-2">
+            <span className="inline-block p-2 bg-primary/20 rounded-xl">
+              <MessageCircle className="w-4 h-4 text-primary" />
             </span>
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Image History
+            </span>
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-5">
             {conversationHistory.map((item, index) => (
               <div
                 key={index}
                 className={cn(
-                  'p-4 rounded-lg',
+                  'p-5 rounded-xl border-2 shadow-lg transition-all duration-300 hover:shadow-xl',
                   item.role === 'user'
-                    ? 'bg-muted border border-muted-foreground/20'
-                    : 'bg-primary/5 border border-primary/20'
+                    ? 'bg-gradient-to-br from-muted/50 to-muted/30 border-muted-foreground/30'
+                    : 'bg-gradient-to-br from-primary/10 to-secondary/5 border-primary/30'
                 )}
               >
                 <p
-                  className={`text-sm font-medium mb-2 ${
+                  className={`text-sm font-bold mb-3 ${
                     item.role === 'user' ? 'text-foreground' : 'text-primary'
                   }`}
                 >
                   {item.role === 'user' ? 'Your Request' : 'Generated Result'}
                 </p>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {item.parts.map((part, partIndex) => (
                     <div key={partIndex}>
-                      {part.text && <p className="text-sm">{part.text}</p>}
+                      {part.text && <p className="text-sm leading-relaxed">{part.text}</p>}
                       {part.image && (
-                        <div className="mt-3 overflow-hidden rounded-lg border border-muted-foreground/10 shadow-sm">
+                        <div className="mt-4 overflow-hidden rounded-xl border-2 border-border/30 shadow-lg">
                           <img
                             src={ensureAbsoluteUrl(part.image)}
                             alt={`${item.role} image`}

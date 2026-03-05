@@ -1,14 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1A73E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/>
-  <path d="m7 16.5-4.74-2.85"/>
-  <path d="m7 16.5 5-3"/>
-  <path d="M7 16.5v5.17"/>
-  <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/>
-  <path d="m17 16.5-5-3"/>
-  <path d="m17 16.5 4.74-2.85"/>
-  <path d="M17 16.5v5.17"/>
-  <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/>
-  <path d="M12 8 7.26 5.15"/>
-  <path d="m12 8 4.74-2.85"/>
-  <path d="M12 13.5V8"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 外圈 -->
+  <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#grad1)" stroke-width="2" fill="none"/>
+  
+  <!-- L 字母 -->
+  <path d="M10 10 L10 22 L18 22" stroke="url(#grad2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- AI 点 -->
+  <circle cx="22" cy="12" r="2" fill="url(#grad3)"/>
+  <circle cx="22" cy="20" r="2" fill="url(#grad4)"/>
+  
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00bfff"/>
+      <stop offset="100%" style="stop-color:#00d9a3"/>
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00bfff"/>
+      <stop offset="100%" style="stop-color:#00d9a3"/>
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d9a3"/>
+      <stop offset="100%" style="stop-color:#00bfff"/>
+    </linearGradient>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00cc99"/>
+      <stop offset="100%" style="stop-color:#00d9a3"/>
+    </linearGradient>
+  </defs>
 </svg> 

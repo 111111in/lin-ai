@@ -35,7 +35,7 @@ const nextConfig: CustomNextConfig = {
 
   // Experimental features
   experimental: {
-    typedRoutes: true
+    typedRoutes: false
   },
 
   // File tracing configuration (at root level as required by Next.js)

@@ -97,12 +97,25 @@ const config = {
           'light-bg': 'var(--shiki-light-bg)',
           dark: 'var(--shiki-dark)',
           'dark-bg': 'var(--shiki-dark-bg)'
+        },
+        // CHIRP 风格调色板
+        candy: {
+          cyan: 'hsl(180, 100%, 50%)',
+          blue: 'hsl(240, 100%, 60%)',
+          purple: 'hsl(280, 100%, 60%)',
+          pink: 'hsl(330, 100%, 65%)',
+          red: 'hsl(0, 100%, 65%)',
+          green: 'hsl(150, 100%, 50%)',
+          yellow: 'hsl(45, 100%, 55%)',
+          orange: 'hsl(25, 100%, 60%)'
         }
       },
       borderRadius: {
         lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
+        md: 'calc(var(--radius) - 4px)',
+        sm: 'calc(var(--radius) - 6px)',
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 8px)'
       },
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans]

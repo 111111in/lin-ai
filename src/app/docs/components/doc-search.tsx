@@ -188,13 +188,18 @@ export function DocSearch() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex w-full items-center justify-between rounded-md border border-input px-3 py-2 text-sm text-muted-foreground hover:bg-accent/10 transition-colors"
+        className="flex w-full items-center justify-between rounded-xl border-2 border-border/50 px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:bg-gradient-to-r hover:from-accent/10 hover:to-accent/5 transition-all duration-300 group relative overflow-hidden shadow-lg hover:shadow-xl hover:shadow-primary/10"
       >
-        <div className="flex items-center gap-2">
-          <Search className="h-4 w-4" />
-          <span>Search docs...</span>
+        {/* 悬停光效 */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+        
+        <div className="flex items-center gap-3 relative z-10">
+          <div className="p-1.5 rounded-lg bg-muted/50 group-hover:bg-primary/20 transition-all duration-300">
+            <Search className="h-4 w-4 group-hover:text-primary transition-colors" />
+          </div>
+          <span className="font-medium">Search docs...</span>
         </div>
-        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+        <kbd className="pointer-events-none hidden h-6 select-none items-center gap-1 rounded-lg border border-border/50 bg-muted/50 px-2 font-mono text-[10px] font-bold opacity-100 sm:flex group-hover:border-primary/50 group-hover:bg-primary/10 transition-all duration-300 relative z-10">
           <span className="text-xs">⌘</span>K
         </kbd>
       </button>

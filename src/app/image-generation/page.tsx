@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LogCategory, logger } from 'agentdock-core';
-import { ChevronUp, ImageIcon, PencilLine, Trash2 } from 'lucide-react';
+import { ChevronUp, ImageIcon, PencilLine, Trash2, X } from 'lucide-react';
 
 import { generateImageAction } from '@/app/api/images/gemini/actions';
 import { Button } from '@/components/ui/button';
@@ -404,23 +404,50 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
   }, [sessionId]);
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="mb-8 flex flex-col items-center text-center max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
+    <div className="container mx-auto py-12 relative">
+      {/* 背景装饰 */}
+      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 via-secondary/10 to-transparent rounded-full filter blur-3xl opacity-30 pointer-events-none"></div>
+      
+      <div className="mb-12 flex flex-col items-center text-center max-w-3xl mx-auto relative">
+        {/* 装饰性图标 */}
+        <div className="mb-6 flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-xl border border-primary/30 shadow-lg shadow-primary/20">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary animate-pulse-glow"></div>
+        </div>
+        
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none mb-4">
+          <span className="inline-block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
           Image Generation
+          </span>
         </h1>
-        <p className="text-muted-foreground mt-3 max-w-2xl">
-          Create and edit images with Gemini AI.
+        
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent"></div>
+          <p className="text-muted-foreground/90 text-base sm:text-lg font-medium">
+            Create and edit images with Gemini AI
         </p>
+          <div className="h-px w-12 bg-gradient-to-l from-primary/50 to-transparent"></div>
+        </div>
       </div>
 
-      <div className="relative mb-14 max-w-4xl mx-auto">
-        <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-indigo-500/20 to-primary/20 rounded-2xl blur-lg opacity-70"></div>
-        <div className="relative bg-card/95 backdrop-blur-sm border-0 rounded-xl shadow-xl overflow-hidden">
-          <div className="p-8 space-y-8">
+      <div className="relative mb-16 max-w-4xl mx-auto">
+        {/* 外层光晕 */}
+        <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-60"></div>
+        
+        {/* 主卡片 */}
+        <div className="relative bg-card/50 backdrop-blur-xl border-2 border-border/30 rounded-3xl shadow-2xl overflow-hidden">
+          {/* 顶部装饰线 */}
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+          
+          <div className="p-8 md:p-10 space-y-8">
             {error && (
-              <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
-                {error}
+              <div className="p-5 mb-4 text-sm rounded-2xl border-2 border-destructive/30 bg-gradient-to-br from-destructive/10 to-destructive/5 text-destructive font-medium shadow-lg relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+                <div className="relative z-10 flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-destructive/20">
+                    <X className="h-4 w-4" />
+                  </div>
+                  <span>{error}</span>
+                </div>
               </div>
             )}
 
@@ -445,27 +472,30 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                         variant="ghost"
                         size="sm"
                         onClick={handleScrollToGallery}
-                        className="text-xs text-muted-foreground flex items-center gap-1 hover:text-primary transition-colors"
+                        className="text-sm font-medium text-muted-foreground flex items-center gap-2 hover:text-primary transition-all duration-300 hover:bg-primary/5 rounded-xl px-4 py-2"
                       >
                         <span>Browse image gallery</span>
-                        <ChevronUp className="h-3 w-3 rotate-180" />
+                        <ChevronUp className="h-4 w-4 rotate-180 transition-transform group-hover:translate-y-1" />
                       </Button>
                     </div>
                   )}
                 </div>
               </>
             ) : loading ? (
-              <div className="flex items-center justify-center h-80 rounded-lg bg-gradient-to-br from-primary/5 to-accent/10 animate-pulse">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center relative">
-                    <div className="absolute inset-0 rounded-full border-t-primary border-2 animate-spin"></div>
-                    <ImageIcon className="w-8 h-8 text-primary/70" />
+              <div className="flex items-center justify-center h-96 rounded-2xl bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border-2 border-border/30 relative overflow-hidden">
+                {/* 动画背景 */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+                
+                <div className="flex flex-col items-center gap-6 relative z-10">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative shadow-2xl">
+                    <div className="absolute inset-0 rounded-2xl border-4 border-transparent border-t-primary animate-spin"></div>
+                    <ImageIcon className="w-10 h-10 text-primary animate-pulse" />
                   </div>
                   <div className="text-center">
-                    <p className="text-base font-medium text-foreground">
+                    <p className="text-lg font-bold text-foreground mb-2">
                       Creating your image...
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm text-muted-foreground">
                       This may take a few moments
                     </p>
                   </div>
@@ -479,7 +509,10 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                   onReset={handleReset}
                   conversationHistory={historyItems}
                 />
-                <div className="border-t pt-6 mt-6">
+                <div className="relative mt-8 pt-8">
+                  {/* 分隔线 */}
+                  <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent"></div>
+                  
                   <ImagePromptInput
                     onSubmit={handlePromptSubmit}
                     isEditing={true}
@@ -495,21 +528,31 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
       {/* Stored Images in the Global Store */}
       <div
         id="image-gallery"
-        className="mt-16 scroll-mt-4 max-w-7xl mx-auto"
+        className="mt-20 scroll-mt-4 max-w-7xl mx-auto relative"
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+        {/* 顶部分隔线 */}
+        <div className="absolute -top-10 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 mb-2">
-              <div className="p-1.5 bg-primary/10 rounded-lg">
-                <ImageIcon className="h-4 w-4 text-primary" />
+            <div className="inline-flex items-center gap-3 mb-3">
+              <div className="p-2.5 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl shadow-lg">
+                <ImageIcon className="h-5 w-5 text-primary" />
               </div>
-              <h2 className="text-xl font-semibold">Gallery</h2>
+              <h2 className="text-3xl font-black tracking-tight">
+                <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                  Gallery
+                </span>
+              </h2>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 ml-1">
+              <div className="h-px w-8 bg-gradient-to-r from-primary/50 to-transparent"></div>
+              <p className="text-sm text-muted-foreground/80 font-medium">
               Browse and edit your images
             </p>
+            </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             {process.env.NEXT_PUBLIC_DEPLOYMENT_ENV === 'hub' && (
               <TooltipProvider>
                 <Tooltip>
@@ -518,12 +561,12 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                       variant="outline"
                       size="sm"
                       onClick={handleClearHistory}
-                      // Disable if no session OR historyItems is empty (relevant in hub mode)
                       disabled={!sessionId || historyItems.length === 0}
-                      className="border-destructive/20 hover:bg-destructive/10 hover:text-destructive shadow-sm text-xs"
+                      className="border-2 border-destructive/30 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 shadow-lg text-sm font-semibold rounded-xl transition-all duration-300 relative overflow-hidden group"
                     >
-                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                      Clear History & Session
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+                      <Trash2 className="h-4 w-4 mr-2 relative z-10" />
+                      <span className="relative z-10">Clear History</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -537,9 +580,12 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
               size="sm"
               onClick={handleRefreshGallery}
               disabled={galleryLoading}
-              className="border-primary/20 hover:bg-primary/5 hover:text-primary shadow-sm text-xs"
+              className="border-2 border-primary/30 hover:bg-primary/10 hover:text-primary hover:border-primary/50 shadow-lg text-sm font-semibold rounded-xl transition-all duration-300 relative overflow-hidden group"
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+              <span className="relative z-10">
               {galleryLoading ? 'Refreshing...' : 'Refresh Gallery'}
+              </span>
             </Button>
           </div>
         </div>
@@ -547,17 +593,22 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
         {galleryLoading ? (
           <ImageGallerySkeleton count={8} />
         ) : storedImages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-16 bg-gradient-to-br from-muted/30 to-muted/10 rounded-xl border border-dashed border-muted-foreground/20">
-            <div className="w-16 h-16 rounded-xl bg-primary/5 flex items-center justify-center mb-4">
-              <ImageIcon className="w-8 h-8 text-muted-foreground" />
+          <div className="flex flex-col items-center justify-center p-20 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 rounded-3xl border-2 border-dashed border-border/50 relative overflow-hidden">
+            {/* 背景装饰 */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb),0.1),transparent_50%)]"></div>
+            
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-6 shadow-xl">
+                <ImageIcon className="w-10 h-10 text-primary" />
             </div>
-            <p className="text-muted-foreground font-medium">No images yet</p>
-            <p className="text-sm text-muted-foreground/80 mt-1 max-w-md text-center">
+              <p className="text-lg font-bold text-foreground mb-2">No images yet</p>
+              <p className="text-sm text-muted-foreground max-w-md text-center">
               Create your first image with the tools above
             </p>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {storedImages.map((imageRef, index) => {
               // Determine type based on environment (for Edit button logic)
               const IS_HUB_CLIENT =
@@ -572,17 +623,17 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
               return (
                 <div
                   key={imageId}
-                  className="overflow-hidden group relative rounded-xl border border-muted bg-gradient-to-br from-card to-muted/30 shadow-sm hover:shadow-md transition-all duration-300"
+                  className="overflow-hidden group relative rounded-2xl border-2 border-border/30 bg-gradient-to-br from-card/50 to-card hover:border-primary/50 shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300"
                 >
                   <div className="aspect-square relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
                     <img
                       src={imageUrl} // Always use imageUrl directly
                       alt={`Generated image ${imageId}`}
-                      className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-4 z-20">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-5 z-20">
                       <div className="flex-1">
                         {/* Attempt timestamp extraction - might fail for Blob URLs initially */}
                         {imageId.startsWith('img_') && (
@@ -616,14 +667,14 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                         )}
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex gap-2.5">
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
                                 variant="secondary"
                                 size="icon"
-                                className="h-8 w-8 rounded-lg bg-white/90 text-black hover:bg-white/100 shadow-md transition-transform hover:scale-105"
+                                className="h-10 w-10 rounded-xl bg-white/95 text-black hover:bg-white shadow-xl transition-all duration-300 hover:scale-110 border-2 border-white/50"
                                 // Edit button needs careful handling in hub mode
                                 // We need the *local* API ID equivalent if possible,
                                 // or adjust handleGalleryImageSelect to work with Blob URLs?
@@ -655,13 +706,13 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={cn(
-                                  'inline-flex items-center justify-center h-8 w-8 rounded-lg',
-                                  'bg-white/90 text-black hover:bg-white/100 shadow-md transition-transform hover:scale-105',
+                                  'inline-flex items-center justify-center h-10 w-10 rounded-xl',
+                                  'bg-white/95 text-black hover:bg-white shadow-xl transition-all duration-300 hover:scale-110',
                                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-                                  'focus-visible:ring-ring transition-colors'
+                                  'focus-visible:ring-ring border-2 border-white/50'
                                 )}
                               >
-                                <ImageIcon className="h-4 w-4" />
+                                <ImageIcon className="h-5 w-5" />
                               </a>
                             </TooltipTrigger>
                             <TooltipContent>

@@ -395,228 +395,226 @@ function SettingsPage() {
 
   return (
     <TooltipProvider>
-      <div className="container py-6 space-y-6 md:py-10">
-        <div className="flex items-center justify-between mb-8">
-          <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-            <p className="text-muted-foreground">
-              Manage your API keys and application preferences
-            </p>
-          </div>
-          <Button
-            onClick={handleSave}
-            disabled={loading}
-          >
-            {loading ? (
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                <span>Saving...</span>
-              </div>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save Changes
-              </>
-            )}
-          </Button>
+      <div className="relative min-h-screen">
+        {/* CHIRP 风格动态背景 */}
+        <div className="fixed inset-0 -z-10">
+          {/* 主渐变背景 */}
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/10 to-secondary/10"></div>
+          
+          {/* 动态渐变光斑 */}
+          <div className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-gradient-to-br from-primary/30 via-primary/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float"></div>
+          <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-gradient-to-br from-secondary/30 via-secondary/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float" style={{ animationDelay: '2s', animationDuration: '7s' }}></div>
+          <div className="absolute bottom-0 left-1/4 w-[750px] h-[750px] bg-gradient-to-br from-accent/30 via-accent/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float" style={{ animationDelay: '4s', animationDuration: '6s' }}></div>
+          
+          {/* 细微网格背景 */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+          
+          {/* 顶部和底部渐变遮罩 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background"></div>
         </div>
 
-        {error && (
-          <Card className="mb-6 border-destructive">
-            <CardContent className="flex items-start gap-4 pt-6">
-              <AlertCircle className="h-5 w-5 text-destructive" />
-              <div className="space-y-1">
-                <p className="font-medium leading-none">
-                  Error Saving Settings
+        <div className="container relative py-12 space-y-8 md:py-16">
+          {/* 标题区域 */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12">
+            <div className="space-y-3">
+              <h1 className="text-5xl sm:text-6xl font-black tracking-tight">
+                <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
+                  Settings
+                </span>
+              </h1>
+              <div className="flex items-center gap-3">
+                <div className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent"></div>
+                <p className="text-muted-foreground/90 text-base sm:text-lg font-medium">
+                  Manage your API keys and application preferences
                 </p>
-                <p className="text-sm text-muted-foreground">{error}</p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Core Settings and Font Settings */}
-        <div className="grid gap-6 md:grid-cols-2">
-          <CoreSettings
-            settings={settings}
-            onByokChange={handleByokOnlyChange}
-            onDebugModeChange={handleDebugModeChange}
-          />
-
-          <FontSettings
-            settings={settings}
-            onPrimaryFontChange={handlePrimaryFontChange}
-            onMonoFontChange={handleMonoFontChange}
-          />
-        </div>
-
-        {/* API Keys */}
-        <div className="space-y-4">
-          <Card className="shadow-none">
-            <div className="p-6 space-y-6">
-              <div className="flex items-center gap-2">
-                <KeyRound className="h-5 w-5" />
-                <h3 className="text-lg font-medium">API Keys</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Configure API keys for language models and other services
-              </p>
-
-              {/* 
-                TODO: Embedding Provider Configuration (Platform v2)
-                =====================================================
-                
-                CURRENT CONFIGURATION (via environment variables):
-                - EMBEDDING_PROVIDER=openai|google|mistral
-                - EMBEDDING_MODEL=text-embedding-3-small (optional)
-                - OPENAI_API_KEY / GOOGLE_API_KEY / MISTRAL_API_KEY
-                
-                Usage Examples:
-                EMBEDDING_PROVIDER=google GOOGLE_API_KEY=xxx npm run dev
-                EMBEDDING_PROVIDER=mistral MISTRAL_API_KEY=xxx npm run dev
-                
-                FUTURE (Platform v2):
-                - Admin dashboard configuration
-                - Per-workspace provider settings
-                - Cost tracking & usage analytics
-                - Provider performance monitoring
-                - Multi-tenant isolation
-                - Automatic failover/redundancy
-                
-                MIGRATION PATH:
-                1. Current: Environment variables only
-                2. Next: Uncomment provider implementations as packages available
-                3. Platform v2: Full UI with admin configuration
-                
-                No breaking changes - environment variables will continue working
-                
-                Supported Providers:
-                ✅ openai (text-embedding-3-small)
-                ✅ google (text-embedding-004)
-                🔄 mistral (mistral-embed) - Package needed
-                🔄 voyage (voyage-3) - Package needed
-                🔄 cohere (embed-english-v3.0) - Package needed
-                
-                Note: Full UI implementation during platform transformation
-              */}
-
-              <div className="grid gap-6">
-                {API_KEY_PROVIDERS.map(
-                  ({ key, label, icon: Icon, description }) => (
-                    <div
-                      key={key.toString()}
-                      className="grid gap-2"
-                    >
-                      <Label
-                        htmlFor={key.toString()}
-                        className="flex items-center gap-2"
-                      >
-                        <Icon className="h-4 w-4" />
-                        {label}
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id={key.toString()}
-                          type="password"
-                          placeholder={`Enter your ${key} API key`}
-                          value={settings.apiKeys[key]}
-                          onChange={(e) =>
-                            handleApiKeyChange(key, e.target.value)
-                          }
-                          onBlur={(e) =>
-                            handleApiKeyValidate(key, e.target.value)
-                          }
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              handleApiKeyValidate(
-                                key,
-                                (e.target as HTMLInputElement).value
-                              );
-                            }
-                          }}
-                          className="pr-20"
-                        />
-                        {settings.apiKeys[key] && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            className="absolute right-1 top-1 h-7"
-                            onClick={() => handleApiKeyValidate(key, '')}
-                          >
-                            Clear
-                          </Button>
-                        )}
-                      </div>
-                      {description && (
-                        <p className="text-xs text-muted-foreground">
-                          {description}
-                        </p>
-                      )}
-                      {key === 'anthropic' && (
-                        <div className="pt-2">
-                          <ModelDisplay
-                            provider="anthropic"
-                            refreshTrigger={modelsRefreshTrigger}
-                            onRefreshComplete={handleRefreshTrigger}
-                          />
-                        </div>
-                      )}
-                      {key === 'openai' && (
-                        <div className="pt-2">
-                          <ModelDisplay
-                            provider="openai"
-                            refreshTrigger={modelsRefreshTrigger}
-                            onRefreshComplete={handleRefreshTrigger}
-                          />
-                        </div>
-                      )}
-                      {key === 'gemini' && (
-                        <div className="pt-2">
-                          <ModelDisplay
-                            provider="gemini"
-                            refreshTrigger={modelsRefreshTrigger}
-                            onRefreshComplete={handleRefreshTrigger}
-                          />
-                        </div>
-                      )}
-                      {key === 'deepseek' && (
-                        <div className="pt-2">
-                          <ModelDisplay
-                            provider="deepseek"
-                            refreshTrigger={modelsRefreshTrigger}
-                            onRefreshComplete={handleRefreshTrigger}
-                          />
-                        </div>
-                      )}
-                      {key === 'groq' && (
-                        <div className="pt-2">
-                          <ModelDisplay
-                            provider="groq"
-                            refreshTrigger={modelsRefreshTrigger}
-                            onRefreshComplete={handleRefreshTrigger}
-                          />
-                        </div>
-                      )}
-                      {key === 'cerebras' && (
-                        <div className="pt-2">
-                          <ModelDisplay
-                            provider="cerebras"
-                            refreshTrigger={modelsRefreshTrigger}
-                            onRefreshComplete={handleRefreshTrigger}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )
-                )}
               </div>
             </div>
-          </Card>
+            <Button
+              onClick={handleSave}
+              disabled={loading}
+              className="h-12 px-6 rounded-xl bg-gradient-to-r from-primary via-primary to-secondary hover:from-primary/90 hover:via-primary/90 hover:to-secondary/90 text-white font-bold shadow-xl hover:shadow-2xl hover:shadow-primary/50 transition-all duration-300 border-0"
+            >
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <span>Saving...</span>
+                </div>
+              ) : (
+                <>
+                  <Save className="mr-2 h-5 w-5" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </div>
 
-          {/* Debug Information */}
-          {settings.core.debugMode && <DebugPanel settings={settings} />}
+          {/* 分隔线 */}
+          <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent mb-8"></div>
+
+          {error && (
+            <Card className="mb-6 border-destructive/50 bg-destructive/10 backdrop-blur-xl rounded-2xl shadow-xl">
+              <CardContent className="flex items-start gap-4 pt-6">
+                <AlertCircle className="h-5 w-5 text-destructive" />
+                <div className="space-y-1">
+                  <p className="font-medium leading-none text-destructive">
+                    Error Saving Settings
+                  </p>
+                  <p className="text-sm text-destructive/80">{error}</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Core Settings and Font Settings */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <CoreSettings
+              settings={settings}
+              onByokChange={handleByokOnlyChange}
+              onDebugModeChange={handleDebugModeChange}
+            />
+
+            <FontSettings
+              settings={settings}
+              onPrimaryFontChange={handlePrimaryFontChange}
+              onMonoFontChange={handleMonoFontChange}
+            />
+          </div>
+
+          {/* API Keys */}
+          <div className="space-y-4">
+            <Card className="shadow-2xl border-0 rounded-3xl bg-card/80 backdrop-blur-xl relative overflow-hidden">
+              {/* 卡片装饰 */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+              
+              <div className="p-8 space-y-6 relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl">
+                    <KeyRound className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold">API Keys</h3>
+                </div>
+                <p className="text-sm text-muted-foreground/90">
+                  Configure API keys for language models and other services
+                </p>
+
+                <div className="grid gap-6">
+                  {API_KEY_PROVIDERS.map(
+                    ({ key, label, icon: Icon, description }) => (
+                      <div
+                        key={key.toString()}
+                        className="grid gap-3 p-4 rounded-2xl bg-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-300"
+                      >
+                        <Label
+                          htmlFor={key.toString()}
+                          className="flex items-center gap-2 font-semibold"
+                        >
+                          <Icon className="h-4 w-4 text-primary" />
+                          {label}
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id={key.toString()}
+                            type="password"
+                            placeholder={`Enter your ${key} API key`}
+                            value={settings.apiKeys[key]}
+                            onChange={(e) =>
+                              handleApiKeyChange(key, e.target.value)
+                            }
+                            onBlur={(e) =>
+                              handleApiKeyValidate(key, e.target.value)
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleApiKeyValidate(
+                                  key,
+                                  (e.target as HTMLInputElement).value
+                                );
+                              }
+                            }}
+                            className="pr-20"
+                          />
+                          {settings.apiKeys[key] && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-1 top-1 h-7 hover:bg-destructive/20 hover:text-destructive"
+                              onClick={() => handleApiKeyValidate(key, '')}
+                            >
+                              Clear
+                            </Button>
+                          )}
+                        </div>
+                        {description && (
+                          <p className="text-xs text-muted-foreground/80">
+                            {description}
+                          </p>
+                        )}
+                        {key === 'anthropic' && (
+                          <div className="pt-2">
+                            <ModelDisplay
+                              provider="anthropic"
+                              refreshTrigger={modelsRefreshTrigger}
+                              onRefreshComplete={handleRefreshTrigger}
+                            />
+                          </div>
+                        )}
+                        {key === 'openai' && (
+                          <div className="pt-2">
+                            <ModelDisplay
+                              provider="openai"
+                              refreshTrigger={modelsRefreshTrigger}
+                              onRefreshComplete={handleRefreshTrigger}
+                            />
+                          </div>
+                        )}
+                        {key === 'gemini' && (
+                          <div className="pt-2">
+                            <ModelDisplay
+                              provider="gemini"
+                              refreshTrigger={modelsRefreshTrigger}
+                              onRefreshComplete={handleRefreshTrigger}
+                            />
+                          </div>
+                        )}
+                        {key === 'deepseek' && (
+                          <div className="pt-2">
+                            <ModelDisplay
+                              provider="deepseek"
+                              refreshTrigger={modelsRefreshTrigger}
+                              onRefreshComplete={handleRefreshTrigger}
+                            />
+                          </div>
+                        )}
+                        {key === 'groq' && (
+                          <div className="pt-2">
+                            <ModelDisplay
+                              provider="groq"
+                              refreshTrigger={modelsRefreshTrigger}
+                              onRefreshComplete={handleRefreshTrigger}
+                            />
+                          </div>
+                        )}
+                        {key === 'cerebras' && (
+                          <div className="pt-2">
+                            <ModelDisplay
+                              provider="cerebras"
+                              refreshTrigger={modelsRefreshTrigger}
+                              onRefreshComplete={handleRefreshTrigger}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            </Card>
+
+            {/* Debug Information */}
+            {settings.core.debugMode && <DebugPanel settings={settings} />}
+          </div>
         </div>
       </div>
     </TooltipProvider>

@@ -45,22 +45,24 @@ export function ImagePromptInput({
       onSubmit={handleSubmit}
       className="w-full"
     >
-      <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-primary/10 rounded-lg">
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl shadow-lg">
             {isEditing ? (
-              <Wand2 className="h-4 w-4 text-primary" />
+              <Wand2 className="h-5 w-5 text-primary" />
             ) : (
-              <Sparkles className="h-4 w-4 text-primary" />
+              <Sparkles className="h-5 w-5 text-primary" />
             )}
           </div>
           <label
             htmlFor="prompt"
-            className="block text-base font-medium"
+            className="block text-lg font-bold"
           >
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {isEditing
               ? 'Edit your image'
               : 'Describe what you want to generate'}
+            </span>
           </label>
         </div>
 
@@ -68,17 +70,19 @@ export function ImagePromptInput({
           <Textarea
             id="prompt"
             className={cn(
-              'min-h-[120px] resize-none transition-all p-4 pr-8',
-              'focus-visible:ring-primary/70 focus-visible:ring-offset-0',
-              'border-primary/20 bg-gradient-to-b from-card/80 to-card',
-              'placeholder:text-muted-foreground/80 rounded-xl shadow-sm'
+              'min-h-[140px] resize-none transition-all p-5 pr-10',
+              'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+              'border-2 border-border/50 focus-visible:border-primary/50',
+              'bg-gradient-to-b from-card/80 to-card/50 backdrop-blur-sm',
+              'placeholder:text-muted-foreground/70 rounded-2xl shadow-lg',
+              'font-medium text-base'
             )}
             placeholder={getPlaceholder()}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
           />
-          <div className="absolute bottom-3 right-3 flex gap-1.5">
-            <div className="text-xs font-medium px-2 py-1 rounded-md bg-primary/10 text-primary/70">
+          <div className="absolute bottom-4 right-4 flex gap-2">
+            <div className="text-xs font-bold px-3 py-1.5 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 text-primary border border-primary/30 shadow-lg">
               {prompt.length} chars
             </div>
           </div>
@@ -88,25 +92,29 @@ export function ImagePromptInput({
           type="submit"
           disabled={!prompt.trim() || isLoading}
           className={cn(
-            'w-full gap-2 transition-all h-12 rounded-xl',
-            'bg-gradient-to-r from-primary to-primary/90 hover:opacity-90',
-            'font-medium text-white shadow-md',
+            'w-full gap-3 transition-all h-14 rounded-2xl relative overflow-hidden group',
+            'bg-gradient-to-r from-primary via-secondary to-accent hover:opacity-90',
+            'font-bold text-white shadow-xl text-base',
+            'border-0',
             isLoading && 'animate-pulse'
           )}
         >
+          {/* 悬停光效 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+          
           {isLoading ? (
             <>
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-background border-t-transparent" />
-              <span>Processing your request...</span>
+              <div className="h-6 w-6 animate-spin rounded-full border-3 border-background border-t-transparent relative z-10" />
+              <span className="relative z-10">Processing your request...</span>
             </>
           ) : (
             <>
               {isEditing ? (
-                <Wand2 className="h-5 w-5" />
+                <Wand2 className="h-6 w-6 relative z-10 group-hover:rotate-12 transition-transform" />
               ) : (
-                <Sparkles className="h-5 w-5" />
+                <Sparkles className="h-6 w-6 relative z-10 group-hover:scale-110 transition-transform" />
               )}
-              <span>{isEditing ? 'Edit Image' : 'Generate Image'}</span>
+              <span className="relative z-10">{isEditing ? 'Edit Image' : 'Generate Image'}</span>
             </>
           )}
         </Button>

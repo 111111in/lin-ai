@@ -8,6 +8,9 @@ import {
   ChevronDown,
   ChevronRight,
   FileText,
+  GitCompare,
+  History,
+  Home,
   Image,
   LucideIcon,
   Settings
@@ -29,6 +32,11 @@ interface NavigationItemData {
 
 // Core navigation items (main platform features)
 const coreNavigationItems: NavigationItemData[] = [
+  {
+    name: 'Home',
+    href: '/',
+    icon: Home
+  },
   {
     name: 'Agents',
     href: '/agents',
@@ -62,8 +70,8 @@ const coreNavigationItems: NavigationItemData[] = [
 AGENT_TAGS.sort((a, b) => a.order - b.order)
   .filter((tag) => tag.id !== 'featured') // Skip featured since we added it manually
   .forEach((tag) => {
-    if (coreNavigationItems[0].children) {
-      coreNavigationItems[0].children.push({
+    if (coreNavigationItems[1].children) {
+      coreNavigationItems[1].children.push({
         name: tag.name,
         href: `/agents/${tag.id}`
       });
@@ -76,6 +84,16 @@ const additionalNavigationItems: NavigationItemData[] = [
     name: 'Image Generation',
     href: '/image-generation',
     icon: Image
+  },
+  {
+    name: 'AI Compare',
+    href: '/compare',
+    icon: GitCompare
+  },
+  {
+    name: 'History',
+    href: '/history',
+    icon: History
   }
 ];
 
@@ -146,55 +164,62 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
           {/* Wrapper Div handles background, rounding, and base layout */}
           <div
             className={cn(
-              'flex w-full items-center rounded-md transition-colors', // Base: flex, center items, full round
-              // Active State (Applies blue background to the whole wrapper)
+              'flex w-full items-center rounded-xl transition-all duration-300 relative overflow-hidden',
+              // Active State
               isItemActive
-                ? 'bg-primary/10 text-primary'
-                : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground',
-              // Specific collapsed styles if needed (like centering content if link takes full width)
-              isCollapsed && 'justify-center px-3 py-2' // Add padding when collapsed
+                ? 'bg-gradient-to-r from-primary/15 to-primary/10 text-primary shadow-lg shadow-primary/20 border border-primary/30'
+                : 'text-muted-foreground hover:bg-gradient-to-r hover:from-accent/10 hover:to-accent/5 hover:text-foreground border border-transparent hover:border-accent/20',
+              isCollapsed && 'justify-center px-2 py-2'
             )}
           >
+            {/* 悬停光效 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover/sidebar-item:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover/sidebar-item:translate-x-[100%]"></div>
+            
             {/* Link - No background/rounding, handles text/icon & navigation */}
             <Link
               href={{ pathname: item.href }}
-              // Remove background/rounding, adjust flex/padding as needed
               className={cn(
-                'flex items-center gap-2.5 text-sm font-medium',
-                isCollapsed ? 'flex-none' : 'flex-1 px-3 py-2' // Link takes full width when collapsed, padding only when expanded
+                'flex items-center gap-3 text-sm font-semibold relative z-10',
+                isCollapsed ? 'flex-none' : 'flex-1 px-3 py-2.5'
               )}
               onClick={(e) => {
-                // Toggle expansion only if applicable, allow navigation otherwise
                 if (isCollapsed) {
-                  e.preventDefault(); // Prevent nav when collapsed, force expansion
-                  setIsCollapsed(false); // Use context to expand sidebar
+                  e.preventDefault();
+                  setIsCollapsed(false);
                   setTimeout(() => toggleExpanded(item.name), 50);
                   return;
                 }
                 if (!isExpanded) {
                   toggleExpanded(item.name);
                 }
-                // Allow navigation to proceed unless expansion was triggered
                 if (item.autoCollapse) {
                   setIsCollapsed(true);
                 }
               }}
             >
-              {item.icon && <item.icon className="h-4 w-4 flex-shrink-0" />}
+              {item.icon && (
+                <div className={cn(
+                  'p-1.5 rounded-lg transition-all duration-300',
+                  isItemActive 
+                    ? 'bg-primary/20 text-primary' 
+                    : 'bg-muted/50 text-muted-foreground group-hover/sidebar-item:bg-accent/20 group-hover/sidebar-item:text-accent'
+                )}>
+                  <item.icon className="h-4 w-4 flex-shrink-0" />
+                </div>
+              )}
               {!isCollapsed && <span className="truncate">{item.name}</span>}
             </Link>
 
-            {/* Toggle Button - No background/rounding, handles chevron & toggle action */}
+            {/* Toggle Button */}
             {!isCollapsed && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent click propagating to Link
+                  e.stopPropagation();
                   toggleExpanded(item.name);
                 }}
-                // Remove rounding/background, adjust padding/opacity
-                className="h-auto px-2 py-2 opacity-60 hover:opacity-100 bg-transparent hover:bg-transparent"
+                className="h-auto px-2 py-2 opacity-60 hover:opacity-100 bg-transparent hover:bg-transparent relative z-10"
                 aria-label={
                   isExpanded ? `Collapse ${item.name}` : `Expand ${item.name}`
                 }
@@ -208,9 +233,9 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
             )}
           </div>
 
-          {/* Render children links (Remains the same) */}
+          {/* Render children links */}
           {!isCollapsed && isExpanded && (
-            <div className="mt-1 space-y-0.5 pl-5 border-l border-border/40 ml-5">
+            <div className="mt-1.5 space-y-1 pl-6 border-l-2 border-primary/20 ml-6">
               {item.children.map(renderItem)}
             </div>
           )}
@@ -218,21 +243,18 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
       );
     }
 
-    // Render simple link (no children) - Styling remains largely the same
+    // Render simple link (no children)
     return (
       <Link
         key={item.name}
         href={{ pathname: item.href }}
         className={cn(
-          // Base styles
-          'flex items-center gap-2.5 px-3 py-2 text-sm font-medium transition-colors rounded-md',
-          // Add left padding if it's a sub-item (no icon expected)
-          !item.icon && !isCollapsed && 'pl-7',
-          // Collapsed Styles
-          isCollapsed && 'w-full justify-center', // Full width, Center icon
+          'flex items-center gap-3 px-3 py-2.5 text-sm font-semibold transition-all duration-300 rounded-xl relative overflow-hidden group/link',
+          !item.icon && !isCollapsed && 'pl-4',
+          isCollapsed && 'w-full justify-center',
           isItemActive
-            ? 'bg-primary/10 text-primary'
-            : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground'
+          ? 'bg-gradient-to-r from-primary/15 to-primary/10 text-primary shadow-lg shadow-primary/20 border border-primary/30'
+          : 'text-muted-foreground hover:bg-gradient-to-r hover:from-accent/10 hover:to-accent/5 hover:text-foreground border border-transparent hover:border-accent/20'
         )}
         onClick={() => {
           if (item.autoCollapse) {
@@ -240,8 +262,20 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
           }
         }}
       >
-        {item.icon && <item.icon className="h-4 w-4 flex-shrink-0" />}
-        {!isCollapsed && <span className="truncate">{item.name}</span>}
+        {/* 悬停光效 */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover/link:translate-x-[100%]"></div>
+        
+        {item.icon && (
+          <div className={cn(
+            'p-1.5 rounded-lg transition-all duration-300 relative z-10',
+            isItemActive 
+              ? 'bg-primary/20 text-primary' 
+              : 'bg-muted/50 text-muted-foreground group-hover/link:bg-accent/20 group-hover/link:text-accent'
+          )}>
+            <item.icon className="h-4 w-4 flex-shrink-0" />
+          </div>
+        )}
+        {!isCollapsed && <span className="truncate relative z-10">{item.name}</span>}
       </Link>
     );
   };
@@ -249,46 +283,68 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen border-r border-border/40 bg-background transition-all duration-300 ease-in-out',
-        isCollapsed ? 'w-[70px]' : 'w-[240px]',
+        'fixed left-0 top-0 z-40 h-screen border-r border-border/30 bg-gradient-to-b from-background via-background to-background/95 backdrop-blur-xl transition-all duration-300 ease-in-out',
+        isCollapsed ? 'w-[70px]' : 'w-[260px]',
         'hidden md:block'
       )}
     >
-      <div className="flex h-full flex-col">
-        <div className="flex h-14 items-center border-b border-border/40 px-4 justify-center">
+      {/* 侧边栏装饰光效 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
+      
+      <div className="flex h-full flex-col relative z-10">
+        {/* Logo 区域 */}
+        <div className="flex h-16 items-center border-b border-border/30 px-4 justify-center relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent"></div>
           <Logo showText={!isCollapsed} />
         </div>
-        <div className="flex-1 overflow-y-auto py-4">
-          <div className="space-y-4">
+        
+        <div className="flex-1 overflow-y-auto py-6 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
+          <div className="space-y-6">
             {/* Core Platform Section */}
             <div>
               <h2
                 className={cn(
-                  'mb-1 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground',
+                  'mb-3 px-4 text-[10px] font-bold uppercase tracking-widest',
+                  'bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent',
                   isCollapsed && 'text-center'
                 )}
               >
-                {!isCollapsed ? 'Core' : 'C'}
+                {!isCollapsed ? 'Core' : '●'}
               </h2>
-              <nav className="flex flex-col gap-0.5 px-4">
+              <nav className="flex flex-col gap-1 px-3">
                 {coreNavigationItems.map(renderItem)}
               </nav>
+            </div>
+
+            {/* 分隔线 */}
+            <div className="px-4">
+              <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent"></div>
             </div>
 
             {/* Additional Features Section */}
             <div>
               <h2
                 className={cn(
-                  'mb-1 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground',
+                  'mb-3 px-4 text-[10px] font-bold uppercase tracking-widest',
+                  'bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent',
                   isCollapsed && 'text-center'
                 )}
               >
-                {!isCollapsed ? 'Features' : 'F'}
+                {!isCollapsed ? 'Features' : '●'}
               </h2>
-              <nav className="flex flex-col gap-0.5 px-4">
+              <nav className="flex flex-col gap-1 px-3">
                 {additionalNavigationItems.map(renderItem)}
               </nav>
             </div>
+          </div>
+        </div>
+        
+        {/* 底部装饰 */}
+        <div className="h-16 border-t border-border/30 flex items-center justify-center relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-secondary/5 to-transparent"></div>
+          <div className="text-[10px] text-muted-foreground/50 font-medium">
+            {!isCollapsed && 'LinAI'}
           </div>
         </div>
       </div>

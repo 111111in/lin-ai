@@ -1,53 +1,318 @@
-<p align="center">
-  <img src="./public/AgentDock-logo.png" alt="AgentDock Logo" width="800" />
-</p>
+<div align="center">
+  <img src="./public/linai-logo.svg" alt="LinAI Logo" width="120" height="120" />
+  <h1>LinAI</h1>
+  <p><strong>Your Personal AI Agent Platform</strong></p>
+  <p>Build, Deploy, and Scale AI Agents with Ease</p>
+</div>
 
-<h1 align="left">Build Anything with AI Agents</h1>
+<div align="center">
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38bdf8)](https://tailwindcss.com/)
 
-[![GitHub stars](https://img.shields.io/github/stars/agentdock/agentdock)](https://github.com/agentdock/agentdock/stargazers)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/AgentDock/AgentDock/blob/main/LICENSE)
-[![Status: Beta](https://img.shields.io/badge/Status-Beta-blue)](https://github.com/AgentDock/AgentDock/releases)
-[![Documentation](https://img.shields.io/badge/Documentation-📕-blue)](https://hub.agentdock.ai/docs)
-[![Discord](https://img.shields.io/discord/1335979387975110656?color=7289DA&label=Discord&logo=discord&logoColor=white)](https://discord.gg/fDYFFmwuRA)
-[![Cloud](https://img.shields.io/badge/Cloud-☁️-blue)](https://agentdock.ai)
-[![Twitter Follow](https://img.shields.io/twitter/follow/AgentDock?style=social)](https://x.com/agentdock)
+</div>
 
+---
 
+## 🌟 Overview
 
-AgentDock is a framework for building sophisticated AI agents that deliver complex tasks with **configurable determinism**. It consists of two main components:
+**LinAI** is a modern, full-stack AI agent platform built with cutting-edge technologies. It provides a beautiful, intuitive interface for interacting with multiple AI models, managing conversation history, comparing model responses, and generating images.
 
-1. **AgentDock Core**: An open-source, backend-first framework for building and deploying AI agents. It's designed to be *framework-agnostic* and *provider-independent*, giving you complete control over your agent's implementation.
+This project showcases:
+- 🎨 **Modern UI/UX Design** - Gradient-based design system with smooth animations
+- 🤖 **Multi-Model Support** - GPT-4, Claude, Gemini, and more
+- 📊 **Advanced Features** - History management, model comparison, image generation
+- 🛠️ **Clean Architecture** - Custom hooks, utilities, and design tokens
+- 📱 **Responsive Design** - Optimized for all devices
 
-2. **Open Source Client**: A complete Next.js application that serves as a reference implementation and consumer of the AgentDock Core framework. You can see it in action at [https://hub.agentdock.ai](https://hub.agentdock.ai)
+Built on top of the AgentDock framework, LinAI demonstrates how to create a production-ready AI application with a focus on user experience and code quality.
 
-Built with TypeScript, AgentDock emphasizes *simplicity*, *extensibility*, and ***configurable determinism*** - making it ideal for building reliable and predictable AI systems that can operate with minimal supervision.
+---
 
-<br>
+## ✨ Features
 
-[![AgentDock](https://github.com/user-attachments/assets/d8037f82-4091-4323-b7d2-4c1935777505)](https://agentdock.ai?utm_source=github&utm_medium=readme&utm_campaign=main)
+### 🎯 Core Features
 
-<br>
+- **🤖 AI Agents** - Interact with 20+ pre-configured AI agents for various tasks
+- **💬 Smart Chat** - Real-time streaming responses with markdown support
+- **📊 Model Comparison** - Compare responses from multiple AI models side-by-side
+- **📜 History Management** - Full conversation history with search, filter, and export
+- **🖼️ Image Generation** - AI-powered image creation and editing
+- **📚 Documentation** - Comprehensive docs with search functionality
 
-🌐 **AgentDock Pro Coming Soon**: Experience the future of AI automation with our comprehensive cloud platform featuring visual workflow builders, advanced orchestration, and enterprise-grade infrastructure. [Sign up at AgentDock.ai](https://agentdock.ai?utm_source=github&utm_medium=readme&utm_campaign=main) to secure early access and earn free platform credits when we launch.
+### 🎨 Design Highlights
 
-📖 **AI Agents Book**: Master the complete methodology for building production-ready AI agents with our comprehensive guide at **[AI Agents Book](https://agentdock.ai/docs/ai-agents-book?utm_source=github&utm_medium=readme&utm_campaign=main)** - covering everything from fundamentals to enterprise deployment patterns.
+- **Modern Gradient UI** - Beautiful cyan-purple-pink gradient color scheme
+- **Smooth Animations** - Carefully crafted transitions and micro-interactions
+- **Glass Morphism** - Backdrop blur effects for depth and elegance
+- **Responsive Design** - Optimized for desktop, tablet, and mobile
+- **Dark/Light Mode** - Seamless theme switching with smooth transitions
+- **Custom Logo** - Unique LinAI branding with animated effects
 
-🎯 **Comprehensive Prompt Library**: We're building the most extensive prompt library covering everyday automation needs and highly specialized vertical requirements. From general productivity to industry-specific workflows, our curated collection empowers agents with battle-tested prompts for any scenario.
+### 🛠️ Technical Highlights
 
-## Demos
+- **Next.js 15** - Latest App Router with Server Components
+- **TypeScript** - Full type safety throughout the codebase
+- **Tailwind CSS** - Custom design system with design tokens
+- **Zustand** - Lightweight state management
+- **Vercel AI SDK** - Streaming AI responses
+- **Custom Hooks** - 8+ reusable React hooks
+- **Utility Libraries** - 800+ lines of custom utilities
 
-**[Dr. Gregory House](https://github.com/AgentDock/AgentDock/tree/main/agents/dr-house):** A diagnostic reasoning powerhouse that orchestrates **`search`**, **`deep_research`**, and **`pubmed`** tools in a multi-stage workflow to tackle complex medical cases using methodical investigation techniques that rival expert diagnosticians.
+---
 
-https://github.com/user-attachments/assets/50c766dc-fc65-481c-aad2-9a71169c7b28
+## 🚀 Quick Start
 
-</br>
+### Prerequisites
 
-**[Cognitive Reasoner](https://github.com/AgentDock/AgentDock/tree/main/agents/cognitive-reasoner):** Multi-stage reasoning engine that orchestrates seven specialized cognitive tools (**`search`**, **`think`**, **`reflect`**, **`compare`**, **`critique`**, **`brainstorm`**, **`debate`**) in configurable workflows to systematically deconstruct and solve complex problems with human-like reasoning patterns.
+- Node.js 18+ 
+- npm or pnpm
+- API keys for AI providers (OpenAI, Anthropic, etc.)
 
-https://github.com/user-attachments/assets/279a4e48-a980-4f83-becb-5e039fe10c56
+### Installation
 
-</br>
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/linai.git
+cd linai
+
+# Install dependencies
+npm install
+# or
+pnpm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your API keys
+
+# Run development server
+npm run dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Environment Variables
+
+```env
+# Required
+OPENAI_API_KEY=your_openai_key
+ANTHROPIC_API_KEY=your_anthropic_key
+
+# Optional
+GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_key
+DEEPSEEK_API_KEY=your_deepseek_key
+GROQ_API_KEY=your_groq_key
+```
+
+---
+
+## 📁 Project Structure
+
+```
+linai/
+├── src/
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── agents/            # AI Agents page
+│   │   ├── compare/           # Model comparison tool
+│   │   ├── history/           # Conversation history
+│   │   ├── image-generation/  # Image generation
+│   │   ├── docs/              # Documentation
+│   │   └── page.tsx           # Welcome page
+│   ├── components/            # React components
+│   │   ├── agents/           # Agent-related components
+│   │   ├── chat/             # Chat interface
+│   │   ├── layout/           # Layout components
+│   │   └── ui/               # UI primitives
+│   ├── lib/                   # Utilities and helpers
+│   │   ├── hooks/            # Custom React hooks
+│   │   ├── utils/            # Utility functions
+│   │   ├── constants.ts      # App constants
+│   │   └── design-tokens.ts  # Design system tokens
+│   └── styles/               # Global styles
+├── public/                    # Static assets
+├── docs/                      # Documentation files
+└── agents/                    # Agent configurations
+```
+
+---
+
+## 🎨 Design System
+
+### Color Palette
+
+```css
+/* Primary Colors */
+--primary: 200 90% 50%;    /* Cyan */
+--secondary: 150 75% 45%;  /* Green */
+--accent: 165 80% 45%;     /* Teal */
+
+/* Gradients */
+from-primary via-secondary to-accent
+from-blue-500 to-cyan-500
+from-purple-500 to-pink-500
+```
+
+### Typography
+
+- **Headings**: Inter (Bold/Black)
+- **Body**: Inter (Regular/Medium)
+- **Code**: Geist Mono
+
+### Spacing & Sizing
+
+- **Border Radius**: 0.5rem - 2rem (8px - 32px)
+- **Shadows**: Multi-layer shadows for depth
+- **Animations**: 150ms - 500ms transitions
+
+---
+
+## 🔧 Tech Stack
+
+### Frontend
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript 5.0
+- **Styling**: Tailwind CSS 3.0
+- **UI Components**: Radix UI + Custom components
+- **State Management**: Zustand
+- **Animations**: CSS animations + Framer Motion
+
+### Backend
+- **API Routes**: Next.js API routes
+- **AI Integration**: Vercel AI SDK
+- **Storage**: Local storage + IndexedDB
+
+### Development
+- **Package Manager**: pnpm
+- **Linting**: ESLint
+- **Formatting**: Prettier
+- **Type Checking**: TypeScript strict mode
+
+---
+
+## 📸 Screenshots
+
+### Welcome Page
+Beautiful landing page with feature showcase and quick navigation.
+
+### AI Agents
+Interact with 20+ specialized AI agents for different tasks.
+
+### Model Comparison
+Compare responses from multiple AI models side-by-side.
+
+### History Management
+Full conversation history with search and filter capabilities.
+
+---
+
+## 🎯 Key Features Explained
+
+### 1. AI Agents
+Pre-configured agents with specialized prompts for:
+- Code review and debugging
+- Content writing and editing
+- Research and analysis
+- Creative brainstorming
+- And many more...
+
+### 2. Model Comparison
+- Send the same prompt to multiple models
+- Compare response quality and speed
+- Vote for the best answer
+- Real-time streaming responses
+
+### 3. History Management
+- Save all conversations automatically
+- Search by content or date
+- Filter by agent or model
+- Export conversations
+- Delete or archive old chats
+
+### 4. Image Generation
+- Text-to-image generation
+- Image editing and enhancement
+- Multiple style options
+- Gallery view with history
+
+---
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+### Docker
+
+```bash
+# Build image
+docker build -t linai .
+
+# Run container
+docker run -p 3000:3000 linai
+```
+
+### Manual Deployment
+
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- Built on top of [AgentDock](https://github.com/agentdock/agentdock) framework
+- UI inspired by modern design trends
+- Icons from [Lucide](https://lucide.dev/)
+- Fonts from [Google Fonts](https://fonts.google.com/)
+
+---
+
+## 📞 Contact
+
+**Your Name** - [@yourtwitter](https://twitter.com/yourtwitter)
+
+Project Link: [https://github.com/yourusername/linai](https://github.com/yourusername/linai)
+
+---
+
+<div align="center">
+  <p>Made with ❤️ using Next.js</p>
+  <p>⭐ Star this repo if you find it helpful!</p>
+</div>
 
 **[History Mentor](https://github.com/AgentDock/AgentDock/tree/main/agents/history-mentor):** Immersive educational agent combining vectorized historical knowledge with **`search`** capabilities and dynamic Mermaid diagram rendering to create authentic learning experiences that visualize complex historical relationships and timelines on demand.
 

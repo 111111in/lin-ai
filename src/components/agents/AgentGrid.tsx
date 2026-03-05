@@ -30,19 +30,21 @@ export const AgentGrid = memo(function AgentGrid({
 }: AgentGridProps) {
   if (templates.length === 0 && !isLoading) {
     return (
-      <div className="text-center py-12">
-        <h3 className="text-xl font-medium mb-2">No agents found</h3>
-        <p className="text-muted-foreground">
-          {searchTerm
-            ? `No agents matching "${searchTerm}"${categoryName ? ` in ${categoryName}` : ''}`
-            : `No agents${categoryName ? ` in ${categoryName}` : ''} yet.`}
-        </p>
+      <div className="text-center py-20">
+        <div className="inline-block p-6 rounded-3xl bg-card/50 backdrop-blur-xl border border-border/50 mb-4">
+          <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">No agents found</h3>
+          <p className="text-muted-foreground text-lg">
+            {searchTerm
+              ? `No agents matching "${searchTerm}"${categoryName ? ` in ${categoryName}` : ''}`
+              : `No agents${categoryName ? ` in ${categoryName}` : ''} yet.`}
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+    <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
       {templates.map((template, index) => (
         <AgentCard
           key={template.agentId}

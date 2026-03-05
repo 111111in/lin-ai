@@ -1,16 +1,21 @@
 /**
- * @fileoverview Core configuration for the AgentDock application.
+ * LinAI - 核心配置文件
+ * 
+ * 定义应用的基础配置信息，包括站点信息、SEO 配置等
+ * 
+ * @author LinAI Team
+ * @version 1.0.0
  */
 
 export const siteConfig = {
-  name: 'AgentDock Hub',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'https://hub.agentdock.ai',
+  name: 'LinAI',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   ogImage:
-    (process.env.NEXT_PUBLIC_APP_URL || 'https://hub.agentdock.ai') + '/api/og',
-  description: 'Build Anything with AI Agents',
+    (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000') + '/api/og',
+  description: 'Your Personal AI Agent Platform - Build, Deploy, and Scale AI Agents',
   links: {
-    twitter: 'https://twitter.com/agentdock',
-    github: 'https://github.com/agentdock'
+    twitter: 'https://twitter.com/yourhandle',
+    github: 'https://github.com/yourusername/linai'
   }
 } as const;
 
@@ -28,18 +33,20 @@ export const metadata = {
     'Machine Learning',
     'Automation',
     'Natural Language Inference',
-    'AgentDock',
+    'LinAI',
     'Agentic AI',
     'Workflows',
-    'Agentic Framework'
+    'Agentic Framework',
+    'ChatGPT',
+    'Gemini'
   ],
   authors: [
     {
-      name: 'AgentDock',
+      name: 'LinAI',
       url: siteConfig.url
     }
   ],
-  creator: 'AgentDock',
+  creator: 'LinAI',
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -61,7 +68,7 @@ export const metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: '@agentdock'
+    creator: '@linai'
   },
   icons: {
     icon: '/favicon.ico',

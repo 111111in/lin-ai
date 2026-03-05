@@ -235,17 +235,17 @@ export default function DocPage(props: {
     <div className="docs-page-container relative">
       {/* 背景装饰 */}
       <div className="absolute -top-40 right-0 w-96 h-96 bg-gradient-to-br from-secondary/20 via-accent/10 to-transparent rounded-full filter blur-3xl opacity-30 pointer-events-none"></div>
-      
+
       <div className="px-4 py-6 md:px-8 md:py-6 relative">
         {/* 内容卡片 */}
         <div className="rounded-3xl border-2 border-border/30 bg-card/50 backdrop-blur-xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
           {/* 卡片装饰 */}
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
           <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary/30 to-transparent"></div>
-          
-        <DocsMarkdown content={content} />
+
+          <DocsMarkdown content={content} />
         </div>
-        
+
         <PrevNextNav
           prev={prev}
           next={next}

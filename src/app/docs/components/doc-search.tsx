@@ -192,7 +192,7 @@ export function DocSearch() {
       >
         {/* 悬停光效 */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-        
+
         <div className="flex items-center gap-3 relative z-10">
           <div className="p-1.5 rounded-lg bg-muted/50 group-hover:bg-primary/20 transition-all duration-300">
             <Search className="h-4 w-4 group-hover:text-primary transition-colors" />

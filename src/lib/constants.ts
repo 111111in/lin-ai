@@ -1,8 +1,8 @@
 /**
  * LinAI - 常量定义
- * 
+ *
  * 集中管理项目中使用的常量
- * 
+ *
  * @author LinAI Team
  */
 
@@ -181,4 +181,3 @@ export const SUCCESS_MESSAGES = {
   COPY_SUCCESS: '复制成功',
   EXPORT_SUCCESS: '导出成功'
 } as const;
-

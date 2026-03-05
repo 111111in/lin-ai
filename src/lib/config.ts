@@ -1,8 +1,8 @@
 /**
  * LinAI - 核心配置文件
- * 
+ *
  * 定义应用的基础配置信息，包括站点信息、SEO 配置等
- * 
+ *
  * @author LinAI Team
  * @version 1.0.0
  */
@@ -12,7 +12,8 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   ogImage:
     (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000') + '/api/og',
-  description: 'Your Personal AI Agent Platform - Build, Deploy, and Scale AI Agents',
+  description:
+    'Your Personal AI Agent Platform - Build, Deploy, and Scale AI Agents',
   links: {
     twitter: 'https://twitter.com/yourhandle',
     github: 'https://github.com/yourusername/linai'

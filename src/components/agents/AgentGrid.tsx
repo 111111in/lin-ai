@@ -32,7 +32,9 @@ export const AgentGrid = memo(function AgentGrid({
     return (
       <div className="text-center py-20">
         <div className="inline-block p-6 rounded-3xl bg-card/50 backdrop-blur-xl border border-border/50 mb-4">
-          <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">No agents found</h3>
+          <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            No agents found
+          </h3>
           <p className="text-muted-foreground text-lg">
             {searchTerm
               ? `No agents matching "${searchTerm}"${categoryName ? ` in ${categoryName}` : ''}`

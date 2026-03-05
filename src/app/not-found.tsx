@@ -1,8 +1,8 @@
 /**
  * LinAI - 404 错误页面
- * 
+ *
  * 友好的错误提示和导航帮助
- * 
+ *
  * @author LinAI Team
  * @version 1.0.0
  */
@@ -84,7 +84,10 @@ export default function NotFound() {
       {/* 背景装饰 */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 pointer-events-none"></div>
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full filter blur-3xl opacity-20 animate-pulse"
+        style={{ animationDelay: '1s' }}
+      ></div>
 
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="max-w-4xl mx-auto">
@@ -93,7 +96,7 @@ export default function NotFound() {
             <div className="relative inline-block">
               {/* 发光效果 */}
               <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-accent blur-3xl opacity-30 animate-pulse"></div>
-              
+
               {/* 404 文字 */}
               <h1 className="relative text-[150px] sm:text-[200px] md:text-[250px] font-black leading-none">
                 <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
@@ -119,9 +122,12 @@ export default function NotFound() {
 
           {/* 搜索框 */}
           <div className="max-w-2xl mx-auto mb-12">
-            <form onSubmit={handleSearch} className="relative">
+            <form
+              onSubmit={handleSearch}
+              className="relative"
+            >
               <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 rounded-2xl blur-lg opacity-60"></div>
-              
+
               <div className="relative flex gap-2">
                 <div className="flex-1 relative">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
@@ -185,10 +191,12 @@ export default function NotFound() {
 
                   <div className="relative">
                     {/* 图标 */}
-                    <div className={cn(
-                      'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 group-hover:scale-110 transition-transform',
-                      page.color
-                    )}>
+                    <div
+                      className={cn(
+                        'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 group-hover:scale-110 transition-transform',
+                        page.color
+                      )}
+                    >
                       <page.icon className="w-6 h-6 text-white" />
                     </div>
 
@@ -211,12 +219,12 @@ export default function NotFound() {
           <div className="mt-16 text-center">
             <p className="text-sm text-muted-foreground">
               如果你认为这是一个错误，请{' '}
-      <Link
+              <Link
                 href={ROUTES.SETTINGS}
                 className="text-primary hover:underline font-semibold"
-      >
+              >
                 联系我们
-      </Link>
+              </Link>
             </p>
           </div>
         </div>
@@ -224,4 +232,3 @@ export default function NotFound() {
     </div>
   );
 }
-

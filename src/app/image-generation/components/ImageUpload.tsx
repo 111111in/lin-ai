@@ -99,7 +99,7 @@ export function ImageUpload({ onImageSelect, currentImage }: ImageUploadProps) {
             </div>
             <h3 className="text-xl font-black mb-2">
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Upload an Image
+                Upload an Image
               </span>
             </h3>
             <p className="text-base font-semibold text-foreground mb-2">

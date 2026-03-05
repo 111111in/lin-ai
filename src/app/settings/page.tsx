@@ -400,15 +400,21 @@ function SettingsPage() {
         <div className="fixed inset-0 -z-10">
           {/* 主渐变背景 */}
           <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/10 to-secondary/10"></div>
-          
+
           {/* 动态渐变光斑 */}
           <div className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-gradient-to-br from-primary/30 via-primary/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float"></div>
-          <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-gradient-to-br from-secondary/30 via-secondary/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float" style={{ animationDelay: '2s', animationDuration: '7s' }}></div>
-          <div className="absolute bottom-0 left-1/4 w-[750px] h-[750px] bg-gradient-to-br from-accent/30 via-accent/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float" style={{ animationDelay: '4s', animationDuration: '6s' }}></div>
-          
+          <div
+            className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-gradient-to-br from-secondary/30 via-secondary/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float"
+            style={{ animationDelay: '2s', animationDuration: '7s' }}
+          ></div>
+          <div
+            className="absolute bottom-0 left-1/4 w-[750px] h-[750px] bg-gradient-to-br from-accent/30 via-accent/20 to-transparent rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-float"
+            style={{ animationDelay: '4s', animationDuration: '6s' }}
+          ></div>
+
           {/* 细微网格背景 */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-          
+
           {/* 顶部和底部渐变遮罩 */}
           <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background"></div>
         </div>
@@ -485,7 +491,7 @@ function SettingsPage() {
             <Card className="shadow-2xl border-0 rounded-3xl bg-card/80 backdrop-blur-xl relative overflow-hidden">
               {/* 卡片装饰 */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
-              
+
               <div className="p-8 space-y-6 relative z-10">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl">

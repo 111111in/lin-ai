@@ -1,8 +1,8 @@
 /**
  * LinAI - 工具函数库
- * 
+ *
  * 这个文件包含了项目中常用的工具函数
- * 
+ *
  * @author LinAI Team
  */
 
@@ -143,18 +143,18 @@ export function uniqueArray<T>(array: T[]): T[] {
 /**
  * 分组数组
  */
-export function groupBy<T>(
-  array: T[],
-  key: keyof T
-): Record<string, T[]> {
-  return array.reduce((result, item) => {
-    const groupKey = String(item[key]);
-    if (!result[groupKey]) {
-      result[groupKey] = [];
-    }
-    result[groupKey].push(item);
-    return result;
-  }, {} as Record<string, T[]>);
+export function groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
+  return array.reduce(
+    (result, item) => {
+      const groupKey = String(item[key]);
+      if (!result[groupKey]) {
+        result[groupKey] = [];
+      }
+      result[groupKey].push(item);
+      return result;
+    },
+    {} as Record<string, T[]>
+  );
 }
 
 /**
@@ -250,4 +250,3 @@ export function isValidUrl(url: string): boolean {
     return false;
   }
 }
-

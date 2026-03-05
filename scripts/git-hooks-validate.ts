@@ -31,7 +31,10 @@ async function validateLint(): Promise<ValidationResult> {
 
 async function validateTests(): Promise<ValidationResult> {
   console.log(chalk.blue('🧪 Running tests...'));
-  return runCommand('pnpm test:unit');
+  // Keep pre-push checks lightweight and environment-agnostic:
+  // agentdock-core contains optional integration tests that may require services
+  // like PostgreSQL. For local pushes, run the app-level test suite only.
+  return runCommand('pnpm test:quick');
 }
 
 async function main() {

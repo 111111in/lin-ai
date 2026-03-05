@@ -59,9 +59,9 @@ export function ImagePromptInput({
             className="block text-lg font-bold"
           >
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            {isEditing
-              ? 'Edit your image'
-              : 'Describe what you want to generate'}
+              {isEditing
+                ? 'Edit your image'
+                : 'Describe what you want to generate'}
             </span>
           </label>
         </div>
@@ -101,7 +101,7 @@ export function ImagePromptInput({
         >
           {/* 悬停光效 */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-          
+
           {isLoading ? (
             <>
               <div className="h-6 w-6 animate-spin rounded-full border-3 border-background border-t-transparent relative z-10" />
@@ -114,7 +114,9 @@ export function ImagePromptInput({
               ) : (
                 <Sparkles className="h-6 w-6 relative z-10 group-hover:scale-110 transition-transform" />
               )}
-              <span className="relative z-10">{isEditing ? 'Edit Image' : 'Generate Image'}</span>
+              <span className="relative z-10">
+                {isEditing ? 'Edit Image' : 'Generate Image'}
+              </span>
             </>
           )}
         </Button>

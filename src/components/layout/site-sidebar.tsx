@@ -174,7 +174,7 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
           >
             {/* 悬停光效 */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover/sidebar-item:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover/sidebar-item:translate-x-[100%]"></div>
-            
+
             {/* Link - No background/rounding, handles text/icon & navigation */}
             <Link
               href={{ pathname: item.href }}
@@ -198,12 +198,14 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
               }}
             >
               {item.icon && (
-                <div className={cn(
-                  'p-1.5 rounded-lg transition-all duration-300',
-                  isItemActive 
-                    ? 'bg-primary/20 text-primary' 
-                    : 'bg-muted/50 text-muted-foreground group-hover/sidebar-item:bg-accent/20 group-hover/sidebar-item:text-accent'
-                )}>
+                <div
+                  className={cn(
+                    'p-1.5 rounded-lg transition-all duration-300',
+                    isItemActive
+                      ? 'bg-primary/20 text-primary'
+                      : 'bg-muted/50 text-muted-foreground group-hover/sidebar-item:bg-accent/20 group-hover/sidebar-item:text-accent'
+                  )}
+                >
                   <item.icon className="h-4 w-4 flex-shrink-0" />
                 </div>
               )}
@@ -253,8 +255,8 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
           !item.icon && !isCollapsed && 'pl-4',
           isCollapsed && 'w-full justify-center',
           isItemActive
-          ? 'bg-gradient-to-r from-primary/15 to-primary/10 text-primary shadow-lg shadow-primary/20 border border-primary/30'
-          : 'text-muted-foreground hover:bg-gradient-to-r hover:from-accent/10 hover:to-accent/5 hover:text-foreground border border-transparent hover:border-accent/20'
+            ? 'bg-gradient-to-r from-primary/15 to-primary/10 text-primary shadow-lg shadow-primary/20 border border-primary/30'
+            : 'text-muted-foreground hover:bg-gradient-to-r hover:from-accent/10 hover:to-accent/5 hover:text-foreground border border-transparent hover:border-accent/20'
         )}
         onClick={() => {
           if (item.autoCollapse) {
@@ -264,18 +266,22 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
       >
         {/* 悬停光效 */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover/link:translate-x-[100%]"></div>
-        
+
         {item.icon && (
-          <div className={cn(
-            'p-1.5 rounded-lg transition-all duration-300 relative z-10',
-            isItemActive 
-              ? 'bg-primary/20 text-primary' 
-              : 'bg-muted/50 text-muted-foreground group-hover/link:bg-accent/20 group-hover/link:text-accent'
-          )}>
+          <div
+            className={cn(
+              'p-1.5 rounded-lg transition-all duration-300 relative z-10',
+              isItemActive
+                ? 'bg-primary/20 text-primary'
+                : 'bg-muted/50 text-muted-foreground group-hover/link:bg-accent/20 group-hover/link:text-accent'
+            )}
+          >
             <item.icon className="h-4 w-4 flex-shrink-0" />
           </div>
         )}
-        {!isCollapsed && <span className="truncate relative z-10">{item.name}</span>}
+        {!isCollapsed && (
+          <span className="truncate relative z-10">{item.name}</span>
+        )}
       </Link>
     );
   };
@@ -291,14 +297,14 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
       {/* 侧边栏装饰光效 */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
       <div className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
-      
+
       <div className="flex h-full flex-col relative z-10">
         {/* Logo 区域 */}
         <div className="flex h-16 items-center border-b border-border/30 px-4 justify-center relative">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent"></div>
           <Logo showText={!isCollapsed} />
         </div>
-        
+
         <div className="flex-1 overflow-y-auto py-6 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
           <div className="space-y-6">
             {/* Core Platform Section */}
@@ -339,7 +345,7 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
             </div>
           </div>
         </div>
-        
+
         {/* 底部装饰 */}
         <div className="h-16 border-t border-border/30 flex items-center justify-center relative">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-secondary/5 to-transparent"></div>

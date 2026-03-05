@@ -234,11 +234,19 @@
 
 /* CHIRP 风格渐变背景 */
 .candy-gradient-pink {
-  background: linear-gradient(135deg, hsl(180, 100%, 50%) 0%, hsl(280, 100%, 60%) 100%);
+  background: linear-gradient(
+    135deg,
+    hsl(180, 100%, 50%) 0%,
+    hsl(280, 100%, 60%) 100%
+  );
 }
 
 .candy-gradient-blue {
-  background: linear-gradient(135deg, hsl(280, 100%, 60%) 0%, hsl(330, 100%, 65%) 100%);
+  background: linear-gradient(
+    135deg,
+    hsl(280, 100%, 60%) 0%,
+    hsl(330, 100%, 65%) 100%
+  );
 }
 
 .candy-gradient-rainbow {
@@ -254,7 +262,7 @@
 
 /* 苹果风格的阴影 */
 .apple-shadow {
-  box-shadow: 
+  box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.04),
     0 2px 4px rgba(0, 0, 0, 0.04),
     0 4px 8px rgba(0, 0, 0, 0.04),
@@ -262,7 +270,7 @@
 }
 
 .apple-shadow-lg {
-  box-shadow: 
+  box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.06),
     0 4px 8px rgba(0, 0, 0, 0.06),
     0 8px 16px rgba(0, 0, 0, 0.06),
@@ -292,7 +300,12 @@
 
 /* CHIRP 风格文字渐变 */
 .candy-text-gradient {
-  background: linear-gradient(135deg, hsl(180, 100%, 50%), hsl(280, 100%, 60%), hsl(330, 100%, 65%));
+  background: linear-gradient(
+    135deg,
+    hsl(180, 100%, 50%),
+    hsl(280, 100%, 60%),
+    hsl(330, 100%, 65%)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -318,7 +331,8 @@
 
 /* 悬浮动画 */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -332,7 +346,8 @@
 
 /* 脉冲光晕效果 */
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
   }
   50% {
@@ -439,14 +454,14 @@
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
+  box-shadow:
     0 8px 32px 0 rgba(31, 38, 135, 0.15),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 /* 霓虹发光效果 */
 .neon-glow {
-  text-shadow: 
+  text-shadow:
     0 0 10px rgba(59, 130, 246, 0.8),
     0 0 20px rgba(59, 130, 246, 0.6),
     0 0 30px rgba(59, 130, 246, 0.4);
@@ -465,8 +480,15 @@
 /* 渐变边框动画 */
 .gradient-border {
   position: relative;
-  background: linear-gradient(var(--card), var(--card)) padding-box,
-              linear-gradient(135deg, hsl(200, 90%, 55%), hsl(165, 80%, 50%), hsl(150, 75%, 50%)) border-box;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(
+        135deg,
+        hsl(200, 90%, 55%),
+        hsl(165, 80%, 50%),
+        hsl(150, 75%, 50%)
+      )
+      border-box;
   border: 2px solid transparent;
   border-radius: 1.5rem;
 }

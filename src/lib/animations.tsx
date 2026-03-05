@@ -1,13 +1,13 @@
 /**
  * LinAI - 动画工具类
- * 
+ *
  * 提供可复用的动画组件和工具函数
- * 
+ *
  * @author LinAI Team
  */
 
-import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
 /**
  * 淡入动画配置
@@ -134,4 +134,3 @@ export const pageTransition = {
   exit: { opacity: 0, x: 20 },
   transition: { duration: 0.3 }
 };
-

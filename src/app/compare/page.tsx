@@ -2,16 +2,15 @@
 
 /**
  * LinAI - AI 模型对比工具
- * 
+ *
  * 功能：
  * - 同时向多个 AI 模型发送相同问题
  * - 并行处理，实时显示响应
  * - 对比响应时间和质量
  * - 投票选择最佳答案
- * 
+ *
  * @author LinAI Team
  */
-
 import { useState } from 'react';
 import {
   ArrowRight,
@@ -47,29 +46,29 @@ interface ModelResponse {
  * 可用的 AI 模型列表
  */
 const AVAILABLE_MODELS = [
-  { 
-    id: AI_MODELS.GPT4.id, 
-    name: AI_MODELS.GPT4.name, 
-    provider: AI_MODELS.GPT4.provider, 
-    color: AI_MODELS.GPT4.color 
+  {
+    id: AI_MODELS.GPT4.id,
+    name: AI_MODELS.GPT4.name,
+    provider: AI_MODELS.GPT4.provider,
+    color: AI_MODELS.GPT4.color
   },
-  { 
-    id: AI_MODELS.GPT35.id, 
-    name: AI_MODELS.GPT35.name, 
-    provider: AI_MODELS.GPT35.provider, 
-    color: AI_MODELS.GPT35.color 
+  {
+    id: AI_MODELS.GPT35.id,
+    name: AI_MODELS.GPT35.name,
+    provider: AI_MODELS.GPT35.provider,
+    color: AI_MODELS.GPT35.color
   },
-  { 
-    id: AI_MODELS.CLAUDE.id, 
-    name: AI_MODELS.CLAUDE.name, 
-    provider: AI_MODELS.CLAUDE.provider, 
-    color: AI_MODELS.CLAUDE.color 
+  {
+    id: AI_MODELS.CLAUDE.id,
+    name: AI_MODELS.CLAUDE.name,
+    provider: AI_MODELS.CLAUDE.provider,
+    color: AI_MODELS.CLAUDE.color
   },
-  { 
-    id: AI_MODELS.GEMINI.id, 
-    name: AI_MODELS.GEMINI.name, 
-    provider: AI_MODELS.GEMINI.provider, 
-    color: AI_MODELS.GEMINI.color 
+  {
+    id: AI_MODELS.GEMINI.id,
+    name: AI_MODELS.GEMINI.name,
+    provider: AI_MODELS.GEMINI.provider,
+    color: AI_MODELS.GEMINI.color
   }
 ];
 
@@ -79,7 +78,7 @@ const AVAILABLE_MODELS = [
 export default function ComparePage() {
   const [prompt, setPrompt] = useState('');
   const [selectedModels, setSelectedModels] = useState<string[]>([
-    AI_MODELS.GPT4.id, 
+    AI_MODELS.GPT4.id,
     AI_MODELS.CLAUDE.id
   ]);
   const [responses, setResponses] = useState<Record<string, ModelResponse>>({});
@@ -102,7 +101,7 @@ export default function ComparePage() {
    */
   const simulateResponse = async (modelId: string): Promise<ModelResponse> => {
     const model = AVAILABLE_MODELS.find((m) => m.id === modelId)!;
-    
+
     // 模拟不同的响应时间
     const delay = Math.random() * 2000 + 1000; // 1-3秒
     await sleep(delay);
@@ -115,7 +114,8 @@ export default function ComparePage() {
       '让我为你分析一下这个问题的关键点...'
     ];
 
-    const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+    const randomResponse =
+      mockResponses[Math.floor(Math.random() * mockResponses.length)];
 
     return {
       model: model.name,
@@ -134,7 +134,7 @@ export default function ComparePage() {
     if (!prompt.trim() || selectedModels.length === 0) return;
 
     setIsComparing(true);
-    
+
     // 初始化所有模型的加载状态
     const initialResponses: Record<string, ModelResponse> = {};
     selectedModels.forEach((modelId) => {
@@ -245,12 +245,16 @@ export default function ComparePage() {
                     {selectedModels.includes(model.id) && (
                       <CheckCircle2 className="absolute top-2 right-2 h-5 w-5 text-primary" />
                     )}
-                    <div className={cn(
-                      'w-12 h-12 rounded-xl bg-gradient-to-br mb-3 mx-auto',
-                      model.color
-                    )}></div>
+                    <div
+                      className={cn(
+                        'w-12 h-12 rounded-xl bg-gradient-to-br mb-3 mx-auto',
+                        model.color
+                      )}
+                    ></div>
                     <h4 className="font-bold text-sm mb-1">{model.name}</h4>
-                    <p className="text-xs text-muted-foreground">{model.provider}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {model.provider}
+                    </p>
                   </button>
                 ))}
               </div>
@@ -272,7 +276,9 @@ export default function ComparePage() {
               />
               <Button
                 onClick={handleCompare}
-                disabled={!prompt.trim() || selectedModels.length === 0 || isComparing}
+                disabled={
+                  !prompt.trim() || selectedModels.length === 0 || isComparing
+                }
                 className="w-full h-14 rounded-2xl bg-gradient-to-r from-primary via-secondary to-accent hover:opacity-90 font-bold text-base relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
@@ -298,29 +304,34 @@ export default function ComparePage() {
                   className="relative rounded-2xl border-2 border-border/30 bg-card/50 backdrop-blur-xl shadow-lg overflow-hidden"
                 >
                   {/* 顶部装饰 */}
-                  <div className={cn(
-                    'h-2 bg-gradient-to-r',
-                    model.color
-                  )}></div>
+                  <div
+                    className={cn('h-2 bg-gradient-to-r', model.color)}
+                  ></div>
 
                   <div className="p-6">
                     {/* 模型信息 */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className={cn(
-                          'w-10 h-10 rounded-xl bg-gradient-to-br',
-                          model.color
-                        )}></div>
+                        <div
+                          className={cn(
+                            'w-10 h-10 rounded-xl bg-gradient-to-br',
+                            model.color
+                          )}
+                        ></div>
                         <div>
                           <h4 className="font-bold">{model.name}</h4>
-                          <p className="text-xs text-muted-foreground">{model.provider}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {model.provider}
+                          </p>
                         </div>
                       </div>
 
                       {!response?.isLoading && response?.responseTime && (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Clock className="h-4 w-4" />
-                          <span>{(response.responseTime / 1000).toFixed(2)}s</span>
+                          <span>
+                            {(response.responseTime / 1000).toFixed(2)}s
+                          </span>
                         </div>
                       )}
                     </div>
@@ -333,7 +344,9 @@ export default function ComparePage() {
                             <div className="absolute inset-0 rounded-xl border-4 border-transparent border-t-primary animate-spin"></div>
                             <Sparkles className="w-6 h-6 text-primary animate-pulse" />
                           </div>
-                          <p className="text-sm text-muted-foreground">生成中...</p>
+                          <p className="text-sm text-muted-foreground">
+                            生成中...
+                          </p>
                         </div>
                       ) : response?.error ? (
                         <div className="flex items-center justify-center h-[200px] text-destructive">
@@ -361,7 +374,8 @@ export default function ComparePage() {
                             onClick={() => handleVote(modelId, 'up')}
                             className={cn(
                               'rounded-xl',
-                              response?.vote === 'up' && 'text-green-500 bg-green-500/10'
+                              response?.vote === 'up' &&
+                                'text-green-500 bg-green-500/10'
                             )}
                           >
                             <ThumbsUp className="h-4 w-4" />
@@ -372,7 +386,8 @@ export default function ComparePage() {
                             onClick={() => handleVote(modelId, 'down')}
                             className={cn(
                               'rounded-xl',
-                              response?.vote === 'down' && 'text-red-500 bg-red-500/10'
+                              response?.vote === 'down' &&
+                                'text-red-500 bg-red-500/10'
                             )}
                           >
                             <ThumbsDown className="h-4 w-4" />
@@ -390,4 +405,3 @@ export default function ComparePage() {
     </div>
   );
 }
-

@@ -1,8 +1,8 @@
 /**
  * LinAI - 品牌配置
- * 
+ *
  * 定义品牌相关的视觉元素，包括颜色、字体、Logo 等
- * 
+ *
  * @author LinAI Team
  * @version 1.0.0
  */

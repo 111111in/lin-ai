@@ -27,11 +27,11 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
       {/* 背景装饰 */}
       <div className="fixed inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
       <div className="fixed top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-      
+
       {/* Mobile header */}
       <header className="md:hidden flex h-16 items-center gap-4 border-b border-border/30 bg-background/80 backdrop-blur-xl px-4 sticky top-0 z-50 relative">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent"></div>
-        
+
         <Link
           href={{ pathname: '/docs' }}
           className="flex items-center gap-3 font-bold text-base relative z-10"
@@ -74,7 +74,7 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
           {/* 侧边栏装饰 */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
           <div className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
-          
+
           <div className="flex md:hidden items-center justify-end p-4 border-b border-border/30 relative z-10">
             <label
               htmlFor="sidebar-mobile-toggle"

@@ -1,12 +1,12 @@
 /**
  * LinAI - 自定义 Hooks 集合
- * 
+ *
  * 这个文件包含了项目中常用的自定义 React Hooks
- * 
+ *
  * @author LinAI Team
  */
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * 防抖 Hook
@@ -212,4 +212,3 @@ export function useInterval(callback: () => void, delay: number | null) {
     return () => clearInterval(id);
   }, [delay]);
 }
-

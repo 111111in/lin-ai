@@ -39,10 +39,10 @@ export function AgentCard({
       key={template.agentId}
       initial={{ opacity: 0, y: 40, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ 
-        duration: 0.6, 
+      transition={{
+        duration: 0.6,
         delay: index * 0.1,
-        type: "spring",
+        type: 'spring',
         stiffness: 80
       }}
       whileHover={{ y: -12, transition: { duration: 0.3 } }}
@@ -52,19 +52,19 @@ export function AgentCard({
         {/* 炫酷的边框光效 */}
         <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl -z-10"></div>
         <div className="absolute inset-[2px] rounded-3xl bg-gradient-to-br from-card via-card/95 to-card/90 backdrop-blur-2xl z-0"></div>
-        
+
         {/* 顶部装饰线 */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        
+
         <CardHeader className="relative pb-4 z-10 space-y-3">
           {/* 动态渐变背景 */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/8 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-t-3xl"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,255,255,0.15),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-          
+
           <div className="flex items-start justify-between relative gap-3">
             <div className="space-y-2 flex-1 min-w-0">
               <CardTitle className="flex items-center gap-2.5">
-                <motion.div 
+                <motion.div
                   className="relative p-2.5 bg-gradient-to-br from-primary via-primary/90 to-secondary rounded-xl shadow-lg group-hover:shadow-xl group-hover:shadow-primary/50 transition-all duration-500"
                   whileHover={{ rotate: [0, -15, 15, -15, 0], scale: 1.1 }}
                   transition={{ duration: 0.6 }}
@@ -83,7 +83,7 @@ export function AgentCard({
             </div>
             <motion.div
               whileHover={{ scale: 1.1, rotate: 8 }}
-              transition={{ type: "spring", stiffness: 400 }}
+              transition={{ type: 'spring', stiffness: 400 }}
               className="flex-shrink-0"
             >
               <Badge
@@ -98,13 +98,15 @@ export function AgentCard({
         <CardContent className="flex-1 pt-0 relative z-10">
           <div className="space-y-3">
             {/* Model 信息卡片 - 玻璃态效果 */}
-            <motion.div 
+            <motion.div
               className="relative overflow-hidden rounded-xl p-3 backdrop-blur-md bg-gradient-to-br from-muted/40 via-muted/30 to-transparent border border-border/50 group-hover:border-primary/30 transition-all duration-300"
               whileHover={{ scale: 1.02 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative">
-                <div className="text-[10px] font-semibold text-primary/80 uppercase tracking-wider mb-0.5">Model</div>
+                <div className="text-[10px] font-semibold text-primary/80 uppercase tracking-wider mb-0.5">
+                  Model
+                </div>
                 <div className="text-xs text-foreground font-bold">
                   {getLLMInfo(template).displayName}
                 </div>
@@ -114,7 +116,9 @@ export function AgentCard({
             {/* Display tags */}
             {template.tags && template.tags.length > 0 && (
               <div className="pt-0.5">
-                <div className="text-[10px] font-semibold text-foreground/70 uppercase tracking-wider mb-2">Categories</div>
+                <div className="text-[10px] font-semibold text-foreground/70 uppercase tracking-wider mb-2">
+                  Categories
+                </div>
                 <div className="flex flex-wrap gap-1.5">
                   {AGENT_TAGS.filter((tag) => template.tags?.includes(tag.id))
                     .filter((tag) => tag.id !== 'featured')
@@ -179,7 +183,9 @@ export function AgentCard({
               <>
                 {template.nodes.some((node) => node in allTools) && (
                   <div className="pt-0.5">
-                    <div className="text-[10px] font-semibold text-foreground/70 uppercase tracking-wider mb-2">Tools</div>
+                    <div className="text-[10px] font-semibold text-foreground/70 uppercase tracking-wider mb-2">
+                      Tools
+                    </div>
                     <div className="flex flex-wrap gap-1.5">
                       {template.nodes
                         .filter((node: string) => node in allTools)
@@ -207,7 +213,7 @@ export function AgentCard({
           </div>
         </CardContent>
         <CardFooter className="flex gap-2.5 pt-4 relative z-10">
-          <motion.div 
+          <motion.div
             className="flex-1"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

@@ -2,16 +2,15 @@
 
 /**
  * LinAI - 对话历史管理页面
- * 
+ *
  * 功能：
  * - 展示所有历史对话
  * - 搜索和过滤对话
  * - 管理收藏和标签
  * - 导出对话数据
- * 
+ *
  * @author LinAI Team
  */
-
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
@@ -119,16 +118,15 @@ export default function HistoryPage() {
       const matchesSearch =
         conv.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         conv.preview.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       // 标签过滤
       const matchesTag =
-        filterTag === 'all' ||
-        filterTag === 'favorites'
+        filterTag === 'all' || filterTag === 'favorites'
           ? filterTag === 'favorites'
             ? conv.isFavorite
             : true
           : conv.tags.includes(filterTag);
-      
+
       return matchesSearch && matchesTag;
     })
     .sort((a, b) => {
@@ -173,7 +171,7 @@ export default function HistoryPage() {
     const dataStr = JSON.stringify(conv, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
-    
+
     const link = document.createElement('a');
     link.href = url;
     link.download = `${conv.title.replace(/\s+/g, '-')}_${Date.now()}.json`;
@@ -231,7 +229,10 @@ export default function HistoryPage() {
               </div>
 
               {/* 标签过滤 */}
-              <Select value={filterTag} onValueChange={setFilterTag}>
+              <Select
+                value={filterTag}
+                onValueChange={setFilterTag}
+              >
                 <SelectTrigger className="h-12 rounded-xl border-2 border-border/50 bg-card/50 backdrop-blur-xl shadow-lg">
                   <SelectValue placeholder="选择标签" />
                 </SelectTrigger>
@@ -239,7 +240,10 @@ export default function HistoryPage() {
                   <SelectItem value="all">所有标签</SelectItem>
                   <SelectItem value="favorites">收藏</SelectItem>
                   {allTags.map((tag) => (
-                    <SelectItem key={tag} value={tag}>
+                    <SelectItem
+                      key={tag}
+                      value={tag}
+                    >
                       {tag}
                     </SelectItem>
                   ))}
@@ -330,9 +334,7 @@ export default function HistoryPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
-                          <span>
-                            {formatDate(conv.timestamp, 'long')}
-                          </span>
+                          <span>{formatDate(conv.timestamp, 'long')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{conv.agentName}</span>
@@ -411,4 +413,3 @@ export default function HistoryPage() {
     </div>
   );
 }
-

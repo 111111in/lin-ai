@@ -42,7 +42,7 @@ export function AgentHeader({
     <div className="relative">
       {/* 背景装饰 */}
       <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 via-secondary/10 to-transparent rounded-full filter blur-3xl opacity-30 pointer-events-none"></div>
-      
+
       <div className="relative flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between mb-12">
         {/* 左侧标题区域 */}
         <div className="space-y-4 sm:space-y-3 flex-1">
@@ -51,14 +51,14 @@ export function AgentHeader({
             <div className="hidden sm:flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-xl border border-primary/30 shadow-lg shadow-primary/20">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary animate-pulse-glow"></div>
             </div>
-            
+
             <div className="flex-1">
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none mb-2">
                 <span className="inline-block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
                   AI Agents
                 </span>
               </h1>
-              
+
               {!isAllAgents && categoryConfig && onRemoveCategory && (
                 <div className="inline-flex items-center gap-2 mt-3">
                   <div className="h-px w-8 bg-gradient-to-r from-transparent to-primary/50"></div>
@@ -79,7 +79,7 @@ export function AgentHeader({
               )}
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <div className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent"></div>
             <p className="text-muted-foreground/90 text-base sm:text-lg font-medium">
@@ -103,7 +103,7 @@ export function AgentHeader({
               />
             </div>
           </div>
-          
+
           <Link
             href="/docs/rfa/add-agent"
             passHref
@@ -116,7 +116,7 @@ export function AgentHeader({
           </Link>
         </div>
       </div>
-      
+
       {/* 底部分隔线 */}
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent mb-8"></div>
     </div>

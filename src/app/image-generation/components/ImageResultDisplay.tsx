@@ -118,7 +118,9 @@ export function ImageResultDisplay({
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
               <MessageCircle className="w-4 h-4 mr-2 relative z-10" />
-              <span className="relative z-10">{showHistory ? 'Hide History' : 'History'}</span>
+              <span className="relative z-10">
+                {showHistory ? 'Hide History' : 'History'}
+              </span>
             </Button>
           )}
           <Button
@@ -190,10 +192,12 @@ export function ImageResultDisplay({
               <MessageCircle className="w-4 h-4 text-primary" />
             </span>
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Description
+              Description
             </span>
           </h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {description}
+          </p>
         </div>
       )}
 
@@ -204,7 +208,7 @@ export function ImageResultDisplay({
               <MessageCircle className="w-4 h-4 text-primary" />
             </span>
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Image History
+              Image History
             </span>
           </h3>
           <div className="space-y-5">
@@ -228,7 +232,9 @@ export function ImageResultDisplay({
                 <div className="space-y-4">
                   {item.parts.map((part, partIndex) => (
                     <div key={partIndex}>
-                      {part.text && <p className="text-sm leading-relaxed">{part.text}</p>}
+                      {part.text && (
+                        <p className="text-sm leading-relaxed">{part.text}</p>
+                      )}
                       {part.image && (
                         <div className="mt-4 overflow-hidden rounded-xl border-2 border-border/30 shadow-lg">
                           <img

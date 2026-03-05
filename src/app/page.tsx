@@ -1,8 +1,8 @@
 /**
  * LinAI - 欢迎首页
- * 
+ *
  * 展示项目特色、核心功能和快速入口
- * 
+ *
  * @author LinAI Team
  * @version 1.0.0
  */
@@ -114,7 +114,10 @@ export default function HomePage() {
       {/* 背景装饰 */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 pointer-events-none"></div>
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/20 rounded-full filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div
+        className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/20 rounded-full filter blur-3xl opacity-20 animate-pulse"
+        style={{ animationDelay: '1s' }}
+      ></div>
 
       <div className="relative z-10">
         {/* Hero 区域 */}
@@ -213,20 +216,24 @@ export default function HomePage() {
                   className="group relative rounded-3xl border-2 border-border/30 bg-card/50 hover:border-primary/50 backdrop-blur-xl shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 overflow-hidden"
                 >
                   {/* 背景渐变 */}
-                  <div className={cn(
-                    'absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300',
-                    feature.gradient
-                  )}></div>
+                  <div
+                    className={cn(
+                      'absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300',
+                      feature.gradient
+                    )}
+                  ></div>
 
                   {/* 悬停光效 */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
 
                   <div className="relative p-8">
                     {/* 图标 */}
-                    <div className={cn(
-                      'w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform duration-300',
-                      feature.color
-                    )}>
+                    <div
+                      className={cn(
+                        'w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform duration-300',
+                        feature.color
+                      )}
+                    >
                       <feature.icon className="w-8 h-8 text-white" />
                     </div>
 
@@ -283,9 +290,7 @@ export default function HomePage() {
                   </div>
 
                   {/* 标题 */}
-                  <h3 className="text-xl font-bold mb-3">
-                    {highlight.title}
-                  </h3>
+                  <h3 className="text-xl font-bold mb-3">{highlight.title}</h3>
 
                   {/* 描述 */}
                   <p className="text-muted-foreground leading-relaxed">
@@ -339,4 +344,3 @@ export default function HomePage() {
     </div>
   );
 }
-

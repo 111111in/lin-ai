@@ -106,7 +106,9 @@ export function DocsSidebar({ sidebarSections }: DocsSidebarProps) {
             </h2>
             <div className="flex items-center gap-2">
               <div className="h-px w-8 bg-gradient-to-r from-primary/50 to-transparent"></div>
-              <p className="text-xs text-muted-foreground/80 font-medium">LinAI Core</p>
+              <p className="text-xs text-muted-foreground/80 font-medium">
+                LinAI Core
+              </p>
             </div>
           </div>
         </div>
@@ -134,7 +136,7 @@ export function DocsSidebar({ sidebarSections }: DocsSidebarProps) {
               >
                 {/* 悬停光效 */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-                
+
                 <span className="font-bold text-[11px] uppercase tracking-widest bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent relative z-10">
                   {section.title}
                 </span>
@@ -170,7 +172,7 @@ export function DocsSidebar({ sidebarSections }: DocsSidebarProps) {
                       >
                         {/* 悬停光效 */}
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover/link:translate-x-[100%]"></div>
-                        
+
                         <span className="relative z-10">{item.title}</span>
                       </Link>
                     );

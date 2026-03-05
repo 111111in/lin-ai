@@ -21,7 +21,7 @@ export function PrevNextNav({ prev, next }: PrevNextNavProps) {
     <nav className="mt-16 flex w-full items-center justify-between gap-6">
       {/* 顶部分隔线 */}
       <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent -mt-8"></div>
-      
+
       {prev ? (
         <Link
           href={{ pathname: prev.path }}
@@ -29,12 +29,14 @@ export function PrevNextNav({ prev, next }: PrevNextNavProps) {
         >
           {/* 悬停光效 */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-          
+
           <div className="p-3 rounded-xl bg-muted/50 group-hover:bg-primary/20 transition-all duration-300 relative z-10">
             <ArrowLeft className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
           </div>
           <div className="flex flex-col text-left overflow-hidden flex-1 relative z-10">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 mb-1">Previous</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 mb-1">
+              Previous
+            </span>
             <span className="truncate text-foreground group-hover:text-primary font-bold text-base transition-colors">
               {prev.title}
             </span>
@@ -43,7 +45,7 @@ export function PrevNextNav({ prev, next }: PrevNextNavProps) {
       ) : (
         <div className="flex-1"></div>
       )}
-      
+
       {next ? (
         <Link
           href={{ pathname: next.path }}
@@ -51,9 +53,11 @@ export function PrevNextNav({ prev, next }: PrevNextNavProps) {
         >
           {/* 悬停光效 */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-          
+
           <div className="flex flex-col text-right overflow-hidden flex-1 relative z-10">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 mb-1">Next</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 mb-1">
+              Next
+            </span>
             <span className="truncate text-foreground group-hover:text-secondary font-bold text-base transition-colors">
               {next.title}
             </span>

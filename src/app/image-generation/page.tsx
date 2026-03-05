@@ -407,24 +407,24 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
     <div className="container mx-auto py-12 relative">
       {/* 背景装饰 */}
       <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 via-secondary/10 to-transparent rounded-full filter blur-3xl opacity-30 pointer-events-none"></div>
-      
+
       <div className="mb-12 flex flex-col items-center text-center max-w-3xl mx-auto relative">
         {/* 装饰性图标 */}
         <div className="mb-6 flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-xl border border-primary/30 shadow-lg shadow-primary/20">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary animate-pulse-glow"></div>
         </div>
-        
+
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none mb-4">
           <span className="inline-block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
-          Image Generation
+            Image Generation
           </span>
         </h1>
-        
+
         <div className="flex items-center gap-3 mb-4">
           <div className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent"></div>
           <p className="text-muted-foreground/90 text-base sm:text-lg font-medium">
             Create and edit images with Gemini AI
-        </p>
+          </p>
           <div className="h-px w-12 bg-gradient-to-l from-primary/50 to-transparent"></div>
         </div>
       </div>
@@ -432,12 +432,12 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
       <div className="relative mb-16 max-w-4xl mx-auto">
         {/* 外层光晕 */}
         <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-60"></div>
-        
+
         {/* 主卡片 */}
         <div className="relative bg-card/50 backdrop-blur-xl border-2 border-border/30 rounded-3xl shadow-2xl overflow-hidden">
           {/* 顶部装饰线 */}
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-          
+
           <div className="p-8 md:p-10 space-y-8">
             {error && (
               <div className="p-5 mb-4 text-sm rounded-2xl border-2 border-destructive/30 bg-gradient-to-br from-destructive/10 to-destructive/5 text-destructive font-medium shadow-lg relative overflow-hidden">
@@ -485,7 +485,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
               <div className="flex items-center justify-center h-96 rounded-2xl bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border-2 border-border/30 relative overflow-hidden">
                 {/* 动画背景 */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
-                
+
                 <div className="flex flex-col items-center gap-6 relative z-10">
                   <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative shadow-2xl">
                     <div className="absolute inset-0 rounded-2xl border-4 border-transparent border-t-primary animate-spin"></div>
@@ -512,7 +512,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                 <div className="relative mt-8 pt-8">
                   {/* 分隔线 */}
                   <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent"></div>
-                  
+
                   <ImagePromptInput
                     onSubmit={handlePromptSubmit}
                     isEditing={true}
@@ -532,7 +532,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
       >
         {/* 顶部分隔线 */}
         <div className="absolute -top-10 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-        
+
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <div>
             <div className="inline-flex items-center gap-3 mb-3">
@@ -548,8 +548,8 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
             <div className="flex items-center gap-2 ml-1">
               <div className="h-px w-8 bg-gradient-to-r from-primary/50 to-transparent"></div>
               <p className="text-sm text-muted-foreground/80 font-medium">
-              Browse and edit your images
-            </p>
+                Browse and edit your images
+              </p>
             </div>
           </div>
           <div className="flex gap-3">
@@ -584,7 +584,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
               <span className="relative z-10">
-              {galleryLoading ? 'Refreshing...' : 'Refresh Gallery'}
+                {galleryLoading ? 'Refreshing...' : 'Refresh Gallery'}
               </span>
             </Button>
           </div>
@@ -596,15 +596,17 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
           <div className="flex flex-col items-center justify-center p-20 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 rounded-3xl border-2 border-dashed border-border/50 relative overflow-hidden">
             {/* 背景装饰 */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb),0.1),transparent_50%)]"></div>
-            
+
             <div className="relative z-10 flex flex-col items-center">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-6 shadow-xl">
                 <ImageIcon className="w-10 h-10 text-primary" />
-            </div>
-              <p className="text-lg font-bold text-foreground mb-2">No images yet</p>
+              </div>
+              <p className="text-lg font-bold text-foreground mb-2">
+                No images yet
+              </p>
               <p className="text-sm text-muted-foreground max-w-md text-center">
-              Create your first image with the tools above
-            </p>
+                Create your first image with the tools above
+              </p>
             </div>
           </div>
         ) : (

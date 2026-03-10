@@ -197,7 +197,7 @@ export function DocSearch() {
           <div className="p-1.5 rounded-lg bg-muted/50 group-hover:bg-primary/20 transition-all duration-300">
             <Search className="h-4 w-4 group-hover:text-primary transition-colors" />
           </div>
-          <span className="font-medium">Search docs...</span>
+          <span className="font-medium">搜索文档...</span>
         </div>
         <kbd className="pointer-events-none hidden h-6 select-none items-center gap-1 rounded-lg border border-border/50 bg-muted/50 px-2 font-mono text-[10px] font-bold opacity-100 sm:flex group-hover:border-primary/50 group-hover:bg-primary/10 transition-all duration-300 relative z-10">
           <span className="text-xs">⌘</span>K
@@ -212,7 +212,7 @@ export function DocSearch() {
           <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
           <Input
             className="flex h-11 w-full rounded-md border-0 bg-transparent py-3 text-sm shadow-none outline-none placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-transparent"
-            placeholder="Search documentation..."
+            placeholder="搜索文档内容..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus

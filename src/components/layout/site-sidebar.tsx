@@ -16,6 +16,7 @@ import {
   Settings
 } from 'lucide-react';
 
+import { useLanguage } from '@/components/providers/language-provider';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/logo';
 import { AGENT_TAGS } from '@/config/agent-tags';
@@ -43,11 +44,11 @@ const coreNavigationItems: NavigationItemData[] = [
     icon: Bot,
     children: [
       {
-        name: 'Featured',
+        name: '精选',
         href: '/agents'
       },
       {
-        name: 'All Agents',
+        name: '全部智能体',
         href: '/agents/all'
       }
       // Main categories will be added here
@@ -72,7 +73,9 @@ AGENT_TAGS.sort((a, b) => a.order - b.order)
   .forEach((tag) => {
     if (coreNavigationItems[1].children) {
       coreNavigationItems[1].children.push({
-        name: tag.name,
+        // Use the tag id as the internal name so we can map it through i18n,
+        // instead of hard-coding the display language here.
+        name: tag.id,
         href: `/agents/${tag.id}`
       });
     }
@@ -105,6 +108,53 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
   const pathname = usePathname();
   const [expandedItems, setExpandedItems] = useState<string[]>(['Agents']);
   const { setIsCollapsed } = useSidebar(); // Only need setIsCollapsed
+  const { t } = useLanguage();
+
+  const getLabel = (item: NavigationItemData): string => {
+    switch (item.name) {
+      case 'Home':
+        return t('nav.home');
+      case 'Agents':
+        return t('nav.agents');
+      case '精选':
+        return t('nav.agents.featured');
+      case '全部智能体':
+        return t('nav.agents.all');
+      case 'Settings':
+        return t('nav.settings');
+      case 'Docs':
+        return t('nav.docs');
+      case 'Image Generation':
+        return t('nav.imageGeneration');
+      case 'AI Compare':
+        return t('nav.compare');
+      case 'History':
+        return t('nav.history');
+      // Category items use their id as the name (e.g. "health", "legal", ...)
+      case 'health':
+        return t('nav.category.health');
+      case 'legal':
+        return t('nav.category.legal');
+      case 'characters':
+        return t('nav.category.characters');
+      case 'productivity':
+        return t('nav.category.productivity');
+      case 'technical':
+        return t('nav.category.technical');
+      case 'research':
+        return t('nav.category.research');
+      case 'web3':
+        return t('nav.category.web3');
+      case 'codegen':
+        return t('nav.category.codegen');
+      case 'learning':
+        return t('nav.category.learning');
+      case 'marketing':
+        return t('nav.category.marketing');
+      default:
+        return item.name;
+    }
+  };
 
   const toggleExpanded = (name: string) => {
     setExpandedItems((prev) =>
@@ -209,7 +259,9 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
                   <item.icon className="h-4 w-4 flex-shrink-0" />
                 </div>
               )}
-              {!isCollapsed && <span className="truncate">{item.name}</span>}
+              {!isCollapsed && (
+                <span className="truncate">{getLabel(item)}</span>
+              )}
             </Link>
 
             {/* Toggle Button */}
@@ -280,7 +332,7 @@ export function SiteSidebar({ isCollapsed }: SiteSidebarProps) {
           </div>
         )}
         {!isCollapsed && (
-          <span className="truncate relative z-10">{item.name}</span>
+          <span className="truncate relative z-10">{getLabel(item)}</span>
         )}
       </Link>
     );

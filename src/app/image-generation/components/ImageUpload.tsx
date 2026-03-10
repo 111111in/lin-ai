@@ -99,14 +99,14 @@ export function ImageUpload({ onImageSelect, currentImage }: ImageUploadProps) {
             </div>
             <h3 className="text-xl font-black mb-2">
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Upload an Image
+                上传图片
               </span>
             </h3>
             <p className="text-base font-semibold text-foreground mb-2">
-              Drop your file here or click to browse
+              将文件拖到此处，或点击选择文件
             </p>
             <p className="text-sm text-muted-foreground mt-1 max-w-md leading-relaxed">
-              Edit existing images or create new ones with text prompts
+              你可以编辑已有图片，或用文本提示生成新图片
             </p>
             <div className="mt-6 flex gap-3">
               <div className="px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 text-primary text-xs font-bold rounded-xl border border-primary/30 shadow-lg">
@@ -116,7 +116,7 @@ export function ImageUpload({ onImageSelect, currentImage }: ImageUploadProps) {
                 JPG
               </div>
               <div className="px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 text-primary text-xs font-bold rounded-xl border border-primary/30 shadow-lg">
-                Max 10MB
+                最大 10MB
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ export function ImageUpload({ onImageSelect, currentImage }: ImageUploadProps) {
               </div>
               <div>
                 <p className="text-sm font-bold truncate">
-                  {selectedFile?.name || 'Image Ready for Editing'}
+                  {selectedFile?.name || '图片已就绪，可开始编辑'}
                 </p>
                 {selectedFile && (
                   <p className="text-xs text-muted-foreground font-medium">
@@ -146,13 +146,13 @@ export function ImageUpload({ onImageSelect, currentImage }: ImageUploadProps) {
               className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl font-semibold transition-all duration-300"
             >
               <X className="w-4 h-4 mr-1.5" />
-              <span className="text-xs">Remove</span>
+              <span className="text-xs">移除</span>
             </Button>
           </div>
           <div className="aspect-[16/9] relative bg-gradient-to-br from-muted/20 to-muted/10">
             <img
               src={currentImage}
-              alt="Selected"
+              alt="已选择的图片"
               className="absolute inset-0 w-full h-full object-contain"
             />
           </div>

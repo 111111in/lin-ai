@@ -1,12 +1,13 @@
-# Model Context Protocol (MCP) Integration
+# Model Context Protocol（MCP）集成
 
-## Status: Planned
+## 状态：规划中（Planned）
 
-## Overview
+## 总览
 
-AgentDock Core will integrate the Model Context Protocol (MCP) to enable standardized tool discovery and execution across different AI agents and services. This integration will allow AgentDock agents to leverage external tools while maintaining our core architecture principles.
+AgentDock Core 计划集成 Model Context Protocol（MCP），以实现跨不同智能体与服务的**标准化工具发现与执行**。  
+通过 MCP，AgentDock 智能体可以更容易地接入外部工具，同时保持核心架构的一致性与可扩展性原则。
 
-## Architecture
+## 架构
 
 ```mermaid
 graph TD
@@ -31,16 +32,16 @@ graph TD
     style D fill:#ffcccc,stroke:#990000
 ```
 
-## Implementation Strategy
+## 实现策略
 
-### Phase 1: Core MCP Client Integration
+### Phase 1：在 Core 中接入 MCP Client
 
-1. **MCP Client Layer**
-   - Utilize Vercel AI SDK's built-in MCP client capabilities
-   - Create a standardized interface for tool discovery and execution
-   - Maintain compatibility with existing node-based architecture
+1. **MCP Client 层**
+   - 利用 Vercel AI SDK 内置的 MCP Client 能力；  
+   - 提供统一的工具发现与执行接口；  
+   - 与现有节点化架构保持兼容。
 
-2. **Tool Registry Integration**
+2. **与 Tool Registry 集成**
    ```typescript
    interface MCPToolConfig {
      transport: {
@@ -53,7 +54,7 @@ graph TD
    }
    ```
 
-3. **Agent Configuration**
+3. **Agent 配置方式**
    ```json
    {
      "nodes": ["llm.anthropic", "mcp.cursor"],
@@ -71,7 +72,7 @@ graph TD
    }
    ```
 
-### Tool Discovery Flow
+### 工具发现流程
 
 ```mermaid
 sequenceDiagram
@@ -88,28 +89,28 @@ sequenceDiagram
     Registry-->>Agent: Available tools
 ```
 
-## Core Features
+## 核心能力
 
-1. **Dynamic Tool Discovery**
-   - Automatic tool registration from MCP servers
-   - Schema validation for tool inputs/outputs
-   - Runtime tool availability checks
+1. **动态工具发现**
+   - 从 MCP Server 自动发现并注册工具；  
+   - 对工具输入/输出做 schema 校验；  
+   - 在运行时检查工具是否可用。
 
-2. **Transport Layer Support**
-   - Standard I/O for local tools
-   - Server-Sent Events (SSE) for remote tools
-   - Extensible transport system
+2. **传输层支持**
+   - 本地工具：Standard I/O（stdio）；  
+   - 远程工具：Server‑Sent Events（SSE）；  
+   - 传输层可扩展。
 
-3. **Error Handling**
-   - Graceful fallbacks for unavailable tools
-   - Clear error messages for configuration issues
-   - Connection retry mechanisms
+3. **错误处理**
+   - 工具不可用时的优雅降级；  
+   - 配置问题的清晰错误提示；  
+   - 连接重试机制。
 
-## Usage Examples
+## 使用示例
 
-### Local Tool Integration
+### 本地工具接入（stdio）
 ```typescript
-// Example: Using Cursor Tools via MCP
+// 示例：通过 MCP 使用 Cursor Tools
 const config = {
   transport: {
     type: 'stdio',
@@ -121,9 +122,9 @@ const config = {
 await agent.registerMCPTools(config);
 ```
 
-### Remote Tool Integration
+### 远程工具接入（SSE）
 ```typescript
-// Example: Using Remote MCP Server
+// 示例：接入远程 MCP Server
 const config = {
   transport: {
     type: 'sse',
@@ -141,33 +142,33 @@ const config = {
 await agent.registerMCPTools(config);
 ```
 
-## Security Considerations
+## 安全性考虑
 
-1. **Tool Validation**
-   - Schema validation for all tool inputs
-   - Sanitization of command arguments
-   - Resource usage limits
+1. **工具校验**
+   - 对所有工具输入做 schema 校验；  
+   - 对命令参数进行净化与约束；  
+   - 限制资源使用（时间/内存/并发等）。
 
-2. **Transport Security**
-   - TLS for remote connections
-   - Local tool execution sandboxing
-   - Access control for sensitive operations
+2. **传输安全**
+   - 远程连接强制 TLS；  
+   - 本地工具执行尽量沙箱化；  
+   - 对敏感操作进行访问控制。
 
-## Future Enhancements
+## 后续增强
 
-1. **Tool Caching**
-   - Cache tool schemas for faster startup
-   - Periodic schema refresh
-   - Offline mode support
+1. **工具缓存**
+   - 缓存工具 schema 以加快启动；  
+   - 定期刷新 schema；  
+   - 支持离线模式（如适用）。
 
-2. **Advanced Features**
-   - Tool composition and chaining
-   - Custom transport layers
-   - Enhanced error recovery
+2. **进阶能力**
+   - 工具组合与链式调用；  
+   - 自定义传输层；  
+   - 更强的错误恢复能力。
 
-## Pro Features Preview
+## Pro 能力预览
 
-AgentDock Pro will extend the MCP integration with advanced capabilities:
+AgentDock Pro 会在 MCP 集成之上提供更高级的能力，例如：
 
 ```mermaid
 graph TD
@@ -189,27 +190,27 @@ graph TD
     style C fill:#d9f2d9,stroke:#006600
 ```
 
-- **Dual-Role Architecture**: Function as both MCP client and server
-- **Workflow Exposure**: Share workflows as MCP resources
-- **Enhanced Resource Management**: Advanced control over exposed capabilities
-- **Cross-Workflow Integration**: Compose workflows using MCP protocol
+- **双角色架构**：既可作为 MCP Client，也可作为 MCP Server；  
+- **工作流暴露**：将工作流作为 MCP Resource 共享给外部；  
+- **资源管理增强**：对暴露能力进行更精细的权限与配额控制；  
+- **跨工作流集成**：通过 MCP 协议组合多个工作流。
 
-*(More details coming soon in Pro documentation)*
+（更多细节会在 Pro 文档中补充）
 
-## Development Timeline
+## 开发计划
 
-1. **Phase 1: Core Integration** (Current)
+1. **Phase 1：Core 集成**（当前）
    - [x] Design architecture
    - [ ] Implement MCP client layer
    - [ ] Add tool registry support
    - [ ] Basic transport layers
 
-2. **Phase 2: Enhanced Features**
+2. **Phase 2：增强特性**
    - [ ] Advanced error handling
    - [ ] Tool caching system
    - [ ] Security improvements
 
-3. **Phase 3: Optimization**
+3. **Phase 3：优化与扩展**
    - [ ] Performance improvements
    - [ ] Extended transport options
    - [ ] Developer tooling 

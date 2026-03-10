@@ -34,9 +34,9 @@ export function ImagePromptInput({
   // Example prompts for simpler concepts that work better
   const getPlaceholder = () => {
     if (isEditing) {
-      return 'Example: Change the background to a beach scene and add a sunset...';
+      return '示例：把背景改成海滩场景，并加上夕阳...';
     } else {
-      return 'Example: A cartoon tiger wearing sunglasses on a tropical beach...';
+      return '示例：一只戴着墨镜、站在热带海滩上的卡通老虎...';
     }
   };
 
@@ -59,9 +59,7 @@ export function ImagePromptInput({
             className="block text-lg font-bold"
           >
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              {isEditing
-                ? 'Edit your image'
-                : 'Describe what you want to generate'}
+              {isEditing ? '编辑你的图片' : '描述你想生成什么'}
             </span>
           </label>
         </div>
@@ -83,7 +81,7 @@ export function ImagePromptInput({
           />
           <div className="absolute bottom-4 right-4 flex gap-2">
             <div className="text-xs font-bold px-3 py-1.5 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 text-primary border border-primary/30 shadow-lg">
-              {prompt.length} chars
+              {prompt.length} 字符
             </div>
           </div>
         </div>
@@ -105,7 +103,7 @@ export function ImagePromptInput({
           {isLoading ? (
             <>
               <div className="h-6 w-6 animate-spin rounded-full border-3 border-background border-t-transparent relative z-10" />
-              <span className="relative z-10">Processing your request...</span>
+              <span className="relative z-10">正在处理你的请求...</span>
             </>
           ) : (
             <>
@@ -115,7 +113,7 @@ export function ImagePromptInput({
                 <Sparkles className="h-6 w-6 relative z-10 group-hover:scale-110 transition-transform" />
               )}
               <span className="relative z-10">
-                {isEditing ? 'Edit Image' : 'Generate Image'}
+                {isEditing ? '编辑图片' : '生成图片'}
               </span>
             </>
           )}

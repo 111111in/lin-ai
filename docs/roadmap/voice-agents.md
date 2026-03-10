@@ -1,26 +1,26 @@
-# Voice AI Agents
+# 语音智能体（Voice AI Agents）
 
-The Voice AI Agents feature enables real-time voice conversations with AgentDock agents through advanced speech-to-speech capabilities, creating natural, interactive experiences through web applications and phone systems.
+语音智能体功能旨在通过先进的「端到端语音（speech‑to‑speech）」能力，让 AgentDock 智能体实现**实时语音对话**，并可在 Web 应用或电话系统中提供自然、交互式的体验。
 
-## Current Status
+## 当前状态
 
-**Status: Planned**
+**状态：规划中（Planned）**
 
-Development of the Voice AI Agents system has been designed with a focus on leveraging cutting-edge real-time speech models and integration with the existing AgentDock architecture.
+语音智能体系统的设计重点是：利用前沿的实时语音模型，并与现有 AgentDock 架构无缝集成。
 
-## Feature Overview
+## 功能概览
 
-The Voice AI Agents feature will provide:
+语音智能体将提供：
 
-- **Real-time Voice Interaction**: Near-instantaneous speech-to-speech conversations
-- **WebRTC Integration**: Low-latency audio streaming for web applications
-- **Phone Number Access**: Connect agents to traditional phone systems via Twilio
-- **Multi-provider Support**: Flexibility to use OpenAI Realtime API, ElevenLabs, and other providers
-- **Voice Node Abstraction**: Standard interface extending the PlatformNode architecture
+- **实时语音交互**：近乎即时的语音输入与语音输出对话；  
+- **WebRTC 集成**：为 Web 应用提供低延迟音频流；  
+- **电话接入**：通过 Twilio 连接到传统电话网络；  
+- **多提供商支持**：可选择 OpenAI Realtime API、ElevenLabs 等语音提供商；  
+- **语音节点抽象**：在 `PlatformNode` 架构基础上扩展标准语音接口。
 
-## Architecture Diagrams
+## 架构图
 
-### Voice Node Architecture
+### 语音节点架构
 
 ```mermaid
 graph LR
@@ -33,7 +33,7 @@ graph LR
     style C fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Speech Processing Pipeline
+### 语音处理流水线
 
 ```mermaid
 graph TD
@@ -48,7 +48,7 @@ graph TD
     style E fill:#0066cc,color:#ffffff,stroke:#0033cc
 ```
 
-### Real-time Voice Communication
+### 实时语音通信
 
 ```mermaid
 graph TD
@@ -68,27 +68,27 @@ graph TD
     style E fill:#e6f2ff,stroke:#99ccff
 ```
 
-## Implementation Details
+## 实现细节
 
-The Voice AI Agents system will be implemented with the following components:
+语音智能体系统计划包含以下组件：
 
 ```typescript
-// Abstract class for voice-based interactions
+// 面向语音交互的抽象节点
 abstract class VoiceNode extends PlatformNode {
-  // Process incoming audio stream
+  // 处理输入音频流
   abstract processAudioStream(audioStream: ReadableStream): Promise<void>;
   
-  // Generate speech from agent response
+  // 将 Agent 响应合成为语音流
   abstract generateSpeech(response: Message): Promise<ReadableStream>;
   
-  // Handle real-time audio session
+  // 处理实时音频会话
   abstract handleAudioSession(sessionId: string): Promise<void>;
   
-  // Initialize voice provider
+  // 初始化语音提供商
   abstract initializeVoiceProvider(config: VoiceProviderConfig): Promise<void>;
 }
 
-// Configuration for voice providers
+// 语音提供商配置
 interface VoiceProviderConfig {
   provider: 'openai' | 'elevenlabs' | 'sesame';
   apiKey: string;
@@ -97,17 +97,17 @@ interface VoiceProviderConfig {
 }
 ```
 
-## Voice Provider Support
+## 语音提供商支持
 
-The system will integrate with leading voice AI providers:
+计划接入主流语音 AI 提供商：
 
-1. **OpenAI Realtime API**: End-to-end speech-to-speech with GPT-4.1
-2. **ElevenLabs**: High-quality voice synthesis and voice-to-voice capabilities
-3. **Sesame AI**: Advanced voice models with natural conversational abilities
+1. **OpenAI Realtime API**：基于 GPT‑4.1 的端到端语音对话能力；  
+2. **ElevenLabs**：高质量语音合成与语音到语音能力；  
+3. **Sesame AI**：更自然的对话式语音模型。
 
-## Integration Methods
+## 接入方式
 
-### WebRTC for Browser Applications
+### WebRTC（浏览器端）
 
 ```typescript
 // Example of creating a WebRTC voice node
@@ -124,7 +124,7 @@ const voiceNode = createWebRTCVoiceNode('voice-1', agentNode, {
 await voiceNode.setupAudioStream(webrtcConnection);
 ```
 
-### Twilio for Phone Number Access
+### Twilio（电话接入）
 
 ```typescript
 // Example of creating a Twilio voice node
@@ -146,44 +146,44 @@ const twilioNode = createTwilioVoiceNode('phone-1', agentNode, {
 await twilioNode.setupWebhook();
 ```
 
-## Key Features
+## 关键特性
 
-### End-to-End Voice Interaction
+### 端到端语音交互
 
-The system leverages frontier voice AI models for seamless conversations:
+系统将利用前沿语音模型实现顺畅对话：
 
-- **Direct Voice Processing**: Uses provider APIs for speech-to-speech conversion
-- **Continuous Streaming**: Processes audio in real-time for natural conversation flow
-- **Low Latency**: Maintains responsive interactions with minimal delay
+- **直接语音处理**：通过提供商 API 完成 speech‑to‑speech；  
+- **连续流式处理**：实时处理音频，保证自然的对话节奏；  
+- **低延迟**：尽可能降低等待时间，提高交互响应性。
 
-### Voice Provider Flexibility
+### 提供商灵活选择
 
-Select the right voice technology based on your needs:
+可按需求选择合适的语音技术：
 
-- **OpenAI Realtime**: End-to-end speech model with conversational capabilities
-- **ElevenLabs**: Superior voice quality and natural-sounding synthesis
-- **Sesame**: Human-like voice with natural pauses and prosody
+- **OpenAI Realtime**：端到端语音模型，擅长实时对话；  
+- **ElevenLabs**：语音质量更高，合成更自然；  
+- **Sesame**：更拟人化的停顿、语调与韵律。
 
-### Phone System Integration
+### 电话系统集成
 
-Connect agents to traditional phone systems:
+将智能体接入传统电话系统：
 
-- **Twilio Integration**: Assign phone numbers to agents
-- **Outbound Calling**: Initiate calls to users
-- **Inbound Support**: Receive and process incoming calls
-- **Call Analytics**: Track conversation duration and metrics
+- **Twilio 集成**：为智能体绑定电话号码；  
+- **外呼**：由智能体主动发起电话；  
+- **呼入**：接收并处理用户来电；  
+- **通话分析**：统计通话时长、质量与关键指标。
 
-## Benefits
+## 价值
 
-The Voice AI Agents feature delivers several important benefits:
+语音智能体带来：
 
-1. **Natural Interaction**: Voice is the most intuitive human interface
-2. **Accessibility**: Provides service to users without technical expertise
-3. **Multimodal Support**: Combine with text and visual responses
-4. **Global Reach**: Connect through universal phone systems
-5. **Enterprise Communication**: Professional voice representation
+1. **更自然的交互**：语音是最直觉的人机接口；  
+2. **更强可达性**：服务不擅长使用复杂 UI 的用户；  
+3. **多模态体验**：可与文本和视觉输出结合；  
+4. **覆盖更广**：通过电话网络触达更多用户；  
+5. **企业沟通**：形成更专业的语音品牌形象。
 
-## Timeline
+## 时间线
 
 | Phase | Status | Description |
 |-------|--------|-------------|
@@ -195,7 +195,7 @@ The Voice AI Agents feature delivers several important benefits:
 | Twilio Phone Integration | Planned | Phone number access |
 | Advanced Voice Features | Future | Voice customization options |
 
-## Connection to Other Roadmap Items
+## 与其他路线图项的关系
 
 The Voice AI Agents feature connects with other roadmap items:
 
@@ -204,9 +204,9 @@ The Voice AI Agents feature connects with other roadmap items:
 - **Natural Language AI Agent Builder**: Create voice-enabled agents with natural language
 - **Agent Marketplace**: Share voice agent templates
 
-## Use Cases
+## 使用场景
 
-### Customer Service Voice Agent
+### 客服语音智能体
 
 Provide 24/7 voice-based customer service:
 
@@ -223,7 +223,7 @@ graph TD
     style D fill:#0066cc,color:#ffffff,stroke:#0033cc
 ```
 
-### Voice Assistant for Applications
+### 应用内语音助手
 
 Enhance applications with conversational voice capabilities:
 

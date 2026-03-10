@@ -15,70 +15,76 @@ export interface TagConfig {
 export const AGENT_TAGS: TagConfig[] = [
   {
     id: 'featured',
-    name: 'Featured',
-    description: 'Our featured agents',
+    name: '精选',
+    description: '精选智能体',
     order: 0,
     default: true,
     alwaysOnTop: true
   },
   {
     id: 'health',
-    name: 'Health',
-    description: 'Health and medical assistants',
+    name: '健康',
+    description: '健康与医疗助手',
     order: 3
   },
   {
     id: 'legal',
-    name: 'Legal',
-    description: 'Legal assistants and advisors',
+    name: '法律',
+    description: '法律助手与顾问',
     order: 3
   },
   {
     id: 'characters',
-    name: 'Characters',
-    description: 'Character-based assistants',
+    name: '角色',
+    description: '人格/角色型助手',
     order: 4
   },
   {
     id: 'productivity',
-    name: 'Productivity',
-    description: 'Productivity enhancement agents',
+    name: '效率',
+    description: '提升效率的智能体',
     order: 2
   },
   {
     id: 'technical',
-    name: 'Technical',
-    description: 'Technical assistants and tools',
+    name: '技术',
+    description: '技术类助手与工具',
     order: 4
   },
   {
     id: 'research',
-    name: 'Research',
-    description: 'Research assistants',
+    name: '研究',
+    description: '研究与分析助手',
     order: 1
   },
   {
+    id: 'vision',
+    name: '视觉',
+    description: '图像与视觉相关助手',
+    order: 5
+  },
+  {
     id: 'web3',
-    name: 'Web3',
-    description: 'Blockchain and Web3 assistants',
+    name: '区块链',
+    description: '区块链与 Web3 助手',
     order: 9
   },
   {
     id: 'codegen',
-    name: 'CodeGen',
-    description: 'Code generation and programming assistants',
+    name: '代码生成',
+    description: '代码生成与编程助手',
     order: 7
   },
   {
     id: 'learning',
-    name: 'Learning',
-    description: 'Learning and tutoring assistants',
+    name: '学习',
+    description: '学习与辅导助手',
     order: 8
   },
   {
     id: 'marketing',
-    name: 'Marketing',
-    description: 'Marketing assistants and agents',
+    name: '营销',
+    description: '营销与运营助手',
     order: 9
   }
 ];

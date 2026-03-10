@@ -1,93 +1,93 @@
-# Session Management Overview
+# 会话管理概览
 
-Sessions in AgentDock provide a foundation for stateful interactions between users and AI agents. This document outlines the core concepts, architecture, and design principles of the session management system.
+AgentDock 中的 **会话（Session）** 为用户与 AI 智能体之间的**有状态交互**提供基础支撑。本文档概述会话管理系统的核心概念、架构与设计原则。
 
-## Core Concepts
+## 核心概念
 
-### What is a Session?
+### 什么是 Session？
 
-A session represents a single conversation between a user and an agent. It maintains state across multiple interactions, ensuring continuity and context preservation. Each session is identified by a unique ID (SessionId) and contains all the state necessary for the conversation to progress.
+一个 Session 代表用户与某个智能体之间的一次独立对话。它在多轮交互之间维护状态，保证对话的连续性和上下文不丢失。每个 Session 都由唯一的 `SessionId` 标识，并包含让对话得以推进所需的全部状态。
 
-### Session Isolation
+### 会话隔离
 
-Session isolation is a critical feature that prevents different conversations from interfering with each other. This is especially important in multi-user environments where multiple conversations may be happening concurrently.
+会话隔离是一个关键特性：不同对话之间不会互相干扰。对于多用户并发场景（同时有很多会话进行中），这一点尤为重要。
 
-### Single Source of Truth
+### 单一事实来源（Single Source of Truth）
 
-AgentDock follows a "single source of truth" principle for session management, where:
+在会话管理上，AgentDock 遵循“单一事实来源”原则：
 
-1. Session IDs are generated at a single point in the system
-2. Session state is managed centrally
-3. All components access the same session state
+1. Session ID 在系统中的**单一点位**生成；
+2. 会话状态由**中心化的组件**统一管理；
+3. 所有组件都访问**同一份**会话状态。
 
-This design eliminates issues with duplicate sessions or inconsistent state.
+这种设计可以避免重复会话、状态不一致等问题。
 
-## Architecture
+## 架构
 
-The session management system consists of several key components:
+会话管理系统由若干关键组件组成：
 
-### SessionManager
+### `SessionManager`
 
-The `SessionManager` is a generic class that provides core session creation, retrieval, and update capabilities. It is designed to be extended for different types of session state.
+`SessionManager` 是一个泛型类，提供创建、读取、更新 Session 的核心能力，并可被扩展以适配不同类型的会话状态。
 
-### Session State Types
+### 会话状态类型
 
-AgentDock uses several types of session state:
+AgentDock 中会话状态大致包括：
 
-1. **Base Session State** - Core session data including the session ID
-2. **AgentSession** - Extended state for agent interactions
-3. **OrchestrationState** - State specific to orchestration workflows
-4. **Tool-specific State** - Some tools maintain their own session state
+1. **基础会话状态（Base Session State）**：包含 `sessionId` 等核心数据；
+2. **`AgentSession`**：与智能体交互相关的扩展状态；
+3. **`OrchestrationState`**：编排（orchestration）工作流相关的状态；
+4. **工具专用状态（Tool-specific State）**：部分工具会维护自己的会话状态。
 
-### Session Lifecycle
+### 会话生命周期
 
-1. **Creation** - Sessions are created when a user starts a new conversation
-2. **Access** - Components access session state to perform operations
-3. **Updates** - State is updated as the conversation progresses
-4. **Cleanup** - Sessions are eventually deleted when they expire
+1. **创建（Creation）**：当用户发起新对话时创建 Session；
+2. **访问（Access）**：各组件在处理逻辑时读取会话状态；
+3. **更新（Updates）**：随着对话推进，会话状态不断更新；
+4. **清理（Cleanup）**：Session 过期后最终被删除。
 
-## Implementation Principles
+## 实现原则
 
-### Immutability
+### 不可变性（Immutability）
 
-Session states are treated as immutable objects. Updates create new state objects rather than modifying existing ones, preventing race conditions in concurrent access.
+会话状态视为不可变对象：更新时创建新状态，而不是就地修改旧对象，从而避免并发访问时的竞态问题。
 
-### Lazy Loading
+### 惰性加载（Lazy Loading）
 
-Sessions are loaded only when needed, improving performance by avoiding unnecessary state creation.
+仅在真正需要时才加载 Session，避免无谓的状态创建，提升性能。
 
-### TTL (Time-to-Live)
+### TTL（存活时间，Time-to-Live）
 
-Sessions have a configurable TTL, after which they are automatically cleaned up to prevent memory leaks.
+Session 拥有可配置的 TTL，到期后会被自动清理，防止内存或存储泄漏。
 
-### Conditional Creation
+### 条件创建（Conditional Creation）
 
-Session state is only created for components that need it, reducing memory usage.
+只有真正需要会话状态的组件才会触发创建，从而节省资源。
 
-## Integration Points
+## 集成点
 
-### LLM Integration
+### 与 LLM 的集成
 
-Sessions provide context for LLM interactions, including:
-- Conversation history
-- System prompts
-- Tool usage patterns
+Session 为 LLM 调用提供上下文，包括：
+- 对话历史；
+- 系统提示词（system prompts）；
+- 工具使用模式等。
 
-### Tool System Integration
+### 与工具系统的集成
 
-Tools access session state to:
-- Maintain tool-specific context
-- Track previous tool invocations
-- Share data between invocations
+工具可以通过会话状态：
+- 维护自身上下文；
+- 记录过往调用；
+- 在多次调用之间共享数据。
 
-### Orchestration Integration
+### 与编排系统的集成
 
-The orchestration system relies on sessions to:
-- Track active steps
-- Manage tool availability
-- Store transition conditions
-- Record tool sequences
+编排系统依赖 Session 来：
+- 跟踪当前激活的步骤（active step）；
+- 管理可用工具集合；
+- 存储跳转条件；
+- 记录工具调用序列等。
 
-## Conclusion
+## 总结
 
-The session management system forms a critical foundation for AgentDock's stateful agent capabilities. By providing consistent, isolated, and efficient state management, it enables complex conversational interactions while maintaining performance and reliability. 
+会话管理系统是 AgentDock 实现有状态智能体能力的关键基础设施。通过提供一致、隔离且高效的状态管理，它使复杂的多轮对话在保证性能与可靠性的前提下顺畅运行。 

@@ -9,6 +9,7 @@ import { FontProvider } from '@/components/font-provider';
 import { SidebarContext } from '@/components/layout/sidebar-context';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteSidebar } from '@/components/layout/site-sidebar';
+import { LanguageProvider } from '@/components/providers/language-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { cn } from '@/lib/utils';
 
@@ -40,31 +41,38 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider>
-      <FontProvider>
-        <CoreInitializer />
-        <SidebarContext.Provider
-          value={{ isCollapsed, setIsCollapsed, toggleSidebar, expandSidebar }}
-        >
-          <div className="relative min-h-screen bg-background">
-            <SiteSidebar isCollapsed={isCollapsed} />
-            <div
-              className={cn(
-                'flex min-h-screen flex-col transition-all duration-300 ease-in-out',
-                isCollapsed ? 'md:ml-[70px]' : 'md:ml-[240px]'
-              )}
-            >
-              <SiteHeader
-                isCollapsed={isCollapsed}
-                onCollapse={toggleSidebar}
-              />
-              <main className="flex-1 p-0 md:p-8 md:py-0 relative">
-                {children}
-              </main>
+      <LanguageProvider>
+        <FontProvider>
+          <CoreInitializer />
+          <SidebarContext.Provider
+            value={{
+              isCollapsed,
+              setIsCollapsed,
+              toggleSidebar,
+              expandSidebar
+            }}
+          >
+            <div className="relative min-h-screen bg-background">
+              <SiteSidebar isCollapsed={isCollapsed} />
+              <div
+                className={cn(
+                  'flex min-h-screen flex-col transition-all duration-300 ease-in-out',
+                  isCollapsed ? 'md:ml-[70px]' : 'md:ml-[240px]'
+                )}
+              >
+                <SiteHeader
+                  isCollapsed={isCollapsed}
+                  onCollapse={toggleSidebar}
+                />
+                <main className="flex-1 p-0 md:p-8 md:py-0 relative">
+                  {children}
+                </main>
+              </div>
             </div>
-          </div>
-        </SidebarContext.Provider>
-        <Toaster richColors />
-      </FontProvider>
+          </SidebarContext.Provider>
+          <Toaster richColors />
+        </FontProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

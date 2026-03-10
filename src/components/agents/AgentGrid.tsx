@@ -1,5 +1,6 @@
 import { memo } from 'react';
 
+import { useLanguage } from '@/components/providers/language-provider';
 import { type AgentTemplate } from '@/lib/store/types';
 import { AgentCard } from './AgentCard';
 
@@ -28,17 +29,27 @@ export const AgentGrid = memo(function AgentGrid({
   categoryName,
   isLoading = false
 }: AgentGridProps) {
+  const { t } = useLanguage();
+
   if (templates.length === 0 && !isLoading) {
     return (
       <div className="text-center py-20">
         <div className="inline-block p-6 rounded-3xl bg-card/50 backdrop-blur-xl border border-border/50 mb-4">
           <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            No agents found
+            {t('agents.empty.title')}
           </h3>
           <p className="text-muted-foreground text-lg">
             {searchTerm
-              ? `No agents matching "${searchTerm}"${categoryName ? ` in ${categoryName}` : ''}`
-              : `No agents${categoryName ? ` in ${categoryName}` : ''} yet.`}
+              ? t('agents.empty.withSearch')
+                  .replace('{search}', searchTerm)
+                  .replace(
+                    '{category}',
+                    categoryName ? ` in ${categoryName}` : ''
+                  )
+              : t('agents.empty.noSearch').replace(
+                  '{category}',
+                  categoryName ? ` ${categoryName}` : ''
+                )}
           </p>
         </div>
       </div>

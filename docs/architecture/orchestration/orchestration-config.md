@@ -1,10 +1,10 @@
-# Orchestration Configuration
+# 编排配置
 
-This document details how to configure orchestration behavior for AgentDock agents using the agent template (`template.json` or similar).
+本文介绍如何通过智能体模板（`template.json` 或类似文件）为 AgentDock 智能体配置编排（Orchestration）行为。
 
 ## Structure
 
-Orchestration is defined within the main agent configuration under the top-level `orchestration` key:
+编排配置位于智能体主配置的顶层 `orchestration` 字段下：
 
 ```json
 {
@@ -26,14 +26,14 @@ Orchestration is defined within the main agent configuration under the top-level
 }
 ```
 
--   `orchestration`: The main object containing all orchestration settings.
--   `description`: Optional description of the orchestration workflow.
--   `defaultStep`: (Optional) The name of the step to activate if no other step's conditions are met. If omitted, the agent might operate without a specific step active initially or fall back to allowing all configured tools.
--   `steps`: An array of orchestration step objects.
+- `orchestration`：包含所有编排设置的主对象。
+- `description`：可选，编排工作流的说明。
+- `defaultStep`：可选，当没有任何步骤满足激活条件时要启用的步骤名。若省略，智能体可能在初始时没有明确的激活步骤，或回退为允许所有已配置工具。
+- `steps`：编排步骤对象数组。
 
 ## Step Definition
 
-Each object in the `steps` array defines an orchestration step:
+`steps` 数组中的每个对象都定义了一个编排步骤：
 
 ```json
 {
@@ -60,17 +60,17 @@ Each object in the `steps` array defines an orchestration step:
 }
 ```
 
-### Core Step Properties:
+### 步骤的核心属性
 
--   `name` (Required): A unique identifier string for the step (e.g., `research_mode`, `planning`, `code_review`).
--   `description` (Optional): A human-readable description of the step's purpose.
+- `name`（必填）：步骤的唯一标识字符串（例如 `research_mode`、`planning`、`code_review`）。
+- `description`（可选）：步骤用途的人类可读说明。
 
 ### `conditions` (Array, Optional)
 
-An array of condition objects that must *all* be met for this step to become active.
+一个条件对象数组。要让该步骤被激活，数组中的条件必须**全部**满足（逻辑 AND）。
 
--   Each object in the array represents a single condition.
--   If this array is omitted or empty, the step has no activation conditions (other than potentially being the `isDefault` step).
+- 数组中的每个对象代表一个条件。
+- 如果省略该数组或数组为空，则该步骤没有激活条件（除非它被用作默认步骤等特殊情况）。
 
 #### Condition Object
 
@@ -82,28 +82,28 @@ An array of condition objects that must *all* be met for this step to become act
 }
 ```
 
--   `type` (String, Required): The type of condition to check. Valid types:
-    -   `tool_used`: Checks if the tool specified in `value` exists in the session's `recentlyUsedTools` history.
-    -   `sequence_match`: Checks if the end of the `recentlyUsedTools` history matches the `sequence` defined for this step.
--   `value` (String, Conditional): The value associated with the condition.
-    -   **Required** if `type` is `tool_used` (specifies the tool name).
-    -   **Not used** (and should be omitted) if `type` is `sequence_match`.
--   `description` (String, Optional): A human-readable description of the condition's purpose.
+- `type`（字符串，必填）：条件类型。当前支持：
+  - `tool_used`：检查 `value` 指定的工具名是否存在于会话的 `recentlyUsedTools` 历史中。
+  - `sequence_match`：检查 `recentlyUsedTools` 的末尾是否与该步骤定义的 `sequence` 完全匹配。
+- `value`（字符串，条件必填）：与条件相关的值。
+  - 当 `type` 为 `tool_used` 时**必填**（表示工具名）。
+  - 当 `type` 为 `sequence_match` 时**不使用**（应省略）。
+- `description`（字符串，可选）：条件用途的说明。
 
 ### `availableTools`
 
--   (Optional) An object controlling which tools are accessible when this step is active.
--   `allowed`: An array of tool names or wildcards (e.g., `*cognitive*`) that are permitted.
--   `denied`: An array of tool names or wildcards that are explicitly forbidden, even if matched by `allowed`.
--   **Behavior:**
-    -   If `availableTools` is omitted, all tools configured for the agent are implicitly allowed.
-    -   If only `allowed` is present, only those tools are available.
-    -   If only `denied` is present, all tools *except* those denied are available.
-    -   If both are present, tools are allowed if they match `allowed` AND do not match `denied`.
+- （可选）用于控制该步骤激活时可访问哪些工具。
+- `allowed`：允许的工具名或通配符数组（例如 `*cognitive*`）。
+- `denied`：显式禁止的工具名或通配符数组（即使同时命中 `allowed` 也会被禁止）。
+- **行为规则：**
+  - 若省略 `availableTools`，则默认允许该智能体配置的全部工具。
+  - 若仅提供 `allowed`，则只允许这些工具。
+  - 若仅提供 `denied`，则允许除 `denied` 之外的所有工具。
+  - 若同时提供 `allowed` 与 `denied`，则工具需命中 `allowed` 且不命中 `denied` 才可用。
 
 ### `sequence` (Array, Optional)
 
--   An array of tool name strings defining a required order of execution for this step.
--   When a step with a sequence is active, the `StepSequencer` typically restricts available tools to only the *next* tool required in the sequence.
--   Tools listed here should generally also be permitted by the `availableTools` configuration for this step.
--   See [Step Sequencing](./step-sequencing.md) for more details.
+- 一个工具名数组，定义该步骤中工具必须按顺序执行。
+- 当带 `sequence` 的步骤处于激活状态时，`StepSequencer` 通常会将可用工具限制为序列中的**下一个**必需工具。
+- 序列中出现的工具一般也应被该步骤的 `availableTools` 配置允许。
+- 更多细节见 [步骤编排（序列）](./step-sequencing.md)。

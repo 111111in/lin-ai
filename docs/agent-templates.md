@@ -1,24 +1,24 @@
-# Agent Templates
+# 智能体模板（Agent Templates）
 
-Agent Templates are the core configuration mechanism in AgentDock, allowing you to define an agent's identity, capabilities, and behavior in a declarative JSON format.
+智能体模板是 AgentDock 中最核心的配置机制，你可以通过一个声明式的 JSON 文件，定义智能体的身份、能力和行为。
 
-## Overview
+## 概览
 
-Each agent in the `/agents` directory has a `template.json` file. This file defines:
+`/agents` 目录下的每个智能体都有一个对应的 `template.json` 文件。这个文件主要包含：
 
-*   Basic identity (ID, name, description)
-*   LLM provider and model selection, including model parameters
-*   System prompt and personality traits
-*   Available tools
-*   Orchestration rules (steps, conditions, sequences)
+*   基本信息（ID、名称、描述）
+*   LLM 提供商与模型选择，以及模型参数
+*   系统提示词与性格设定（personality）
+*   可用工具列表
+*   编排规则（步骤、条件、执行序列）
 
-This templating system makes it easy to create, share, and modify agents without writing extensive code.
+通过这一套模板机制，你可以在几乎不写代码的情况下，快速创建、分享和修改智能体。
 
-See [Contributing Community Agents](./rfa/add-agent.md) for information on how to add your own agent templates to the public repository.
+如何向官方公共仓库贡献自己的智能体模板，可参考：[贡献社区智能体](./rfa/add-agent.md)。
 
-## Template Structure (`template.json`)
+## 模板结构示例（`template.json`）
 
-The `template.json` file follows this general structure:
+`template.json` 大致遵循如下结构：
 
 ```json
 {
@@ -69,19 +69,19 @@ The `template.json` file follows this general structure:
 }
 ```
 
-### Key Configuration Fields
+### 关键配置字段说明
 
-*   **`agentId`, `name`, `description`**: Basic identification.
-*   **`personality`**: Defines the system prompt and core behavior. Crucial for guiding the LLM.
-*   **`nodes`**: Lists all capabilities (LLM provider node, tool nodes) the agent requires.
-*   **`nodeConfigurations`**: Allows setting specific parameters for each node listed in `nodes`.
-    *   For LLM nodes (e.g., `llm.openai`), you **must** specify the `model`.
-    *   You can optionally override default LLM behavior by setting parameters like `temperature`, `maxTokens`, `topP`, `topK`, `frequencyPenalty`, `presencePenalty`, `stopSequences`, and `seed`. The exact behavior and valid ranges for these settings can vary between different LLM providers.
-*   **`chatSettings`**: Controls the user interface behavior, initial state, and prompt suggestions.
+*   **`agentId`, `name`, `description`**：智能体的基本身份信息。
+*   **`personality`**：定义系统提示词与核心行为，是引导 LLM 表现的关键。
+*   **`nodes`**：列出该智能体所需的全部能力节点（LLM 提供商节点、各类工具节点）。
+*   **`nodeConfigurations`**：为 `nodes` 中的每个节点配置具体参数。
+    *   对 LLM 节点（如 `llm.openai`），**必须**指定 `model`。
+    *   可以通过 `temperature`、`maxTokens`、`topP`、`topK`、`frequencyPenalty`、`presencePenalty`、`stopSequences`、`seed` 等参数覆盖默认行为。不同 LLM 提供商对这些参数的支持范围可能略有差异。
+*   **`chatSettings`**：控制聊天界面的行为、初始状态以及推荐提示词。
 
-For detailed explanations of the common LLM settings (`temperature`, `topP`, `maxTokens`, etc.) and their effects, refer to the [Vercel AI SDK Settings Documentation](https://sdk.vercel.ai/docs/ai-sdk-core/settings).
+关于这些通用 LLM 参数（如 `temperature`、`topP`、`maxTokens` 等）的详细解释及影响，可以参考 [Vercel AI SDK 设置文档](https://sdk.vercel.ai/docs/ai-sdk-core/settings)。
 
-## Featured Agents
+## 推荐内置智能体示例
 
 | Agent                                                    | Description                                                                                                                                                                                                                                                         | GitHub                                                                                        |
 | :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------- |
@@ -96,9 +96,9 @@ For detailed explanations of the common LLM settings (`temperature`, `topP`, `ma
 | [Consumer Rights Defender](/chat?agent=consumer-rights) | Helps consumers navigate issues with refunds, warranties, defective products, and unfair billing practices.                                                                                                                                                       | [View Code](https://github.com/agentdock/agentdock/tree/main/agents/consumer-rights)     |
 | [Small Claims Court Guide](/chat?agent=small-claims)   | Assists with small claims court navigation including filing paperwork, preparing evidence, and collecting judgments.                                                                                                                                              | [View Code](https://github.com/agentdock/agentdock/tree/main/agents/small-claims)         |
 
-## Agent File Structure
+## 智能体目录结构
 
-For detailed implementation examples, clone the AgentDock repository and explore the `agents/` directory.
+如需查看更完整的实现示例，可以克隆 AgentDock 仓库并查看 `agents/` 目录：
 
 ```
 agents/
@@ -108,10 +108,10 @@ agents/
     └── assets/           # Optional assets (e.g., avatar.png)
 ```
 
-## Usage
+## 如何使用这些模板
 
-These templates can be:
+这些模板主要可以：
 
-1.  **Tested directly**: Try them out via the chat interface by clicking the agent links above (if running the client).
-2.  **Examined for patterns**: Study their implementations to learn configuration techniques.
-3.  **Used as starting points**: Copy and modify them to create your own specialized agents. 
+1.  **直接体验**：在本地运行客户端时，点击上面的智能体链接，通过聊天界面直接体验。
+2.  **学习范式**：阅读这些模板配置，学习不同场景下的配置技巧与模式。
+3.  **作为起点二次开发**：复制一个现有模板并按需修改，快速创建你自己的专用智能体。 

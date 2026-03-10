@@ -1,14 +1,14 @@
-# Conditional Transitions
+# 条件跳转
 
-This document explains how AgentDock manages transitions between different orchestration steps based on defined conditions.
+本文介绍 AgentDock 如何基于已定义的条件，在不同编排步骤之间进行切换。
 
 ## Core Concept
 
-Conditional transitions allow the agent's behavior (specifically, the active orchestration step and thus the available tools) to change dynamically based on the agent's past actions within the current session.
+条件跳转允许智能体的行为（更具体地说：当前激活步骤 `activeStep`，以及随之变化的“可用工具集合”）根据当前会话中智能体的历史行为动态变化。
 
 ## Configuration
 
-Conditions are defined within each step in the agent's orchestration configuration (`template.json`):
+条件定义在智能体编排配置（`template.json`）的每个步骤中：
 
 ```json
 {
@@ -26,75 +26,78 @@ Conditions are defined within each step in the agent's orchestration configurati
 }
 ```
 
--   Each step can have a `conditions` array.
--   A step becomes active only if **all** conditions within its array are met simultaneously (logical AND).
--   Each condition object has a `type` and a `value`.
+- 每个步骤都可以包含一个 `conditions` 数组。
+- 只有当数组中的条件**同时全部满足**（逻辑 AND）时，该步骤才会被激活。
+- 每个条件对象包含 `type` 与 `value` 字段。
 
 ## Implemented Condition Types
 
-Currently, the following condition types are implemented in `agentdock-core`:
+当前 `agentdock-core` 已实现的条件类型包括：
 
--   **`tool_used`**: Checks if the specified tool name (`value`) exists *anywhere* in the session's `recentlyUsedTools` list.
-    -   Example: `{ "type": "tool_used", "value": "search" }`
--   **`sequence_match`**: Checks if the *end* of the session's `recentlyUsedTools` list exactly matches the `sequence` array defined for the step being evaluated. This is useful for activating steps only after a specific series of tools has been used in order.
-    -   Does *not* use the `value` field.
-    -   Example: `{ "type": "sequence_match" }` (used on a step that has a `sequence` array defined).
+- **`tool_used`**：检查 `value` 指定的工具名是否出现在会话的 `recentlyUsedTools` 列表的任意位置。
+  - 示例：`{ "type": "tool_used", "value": "search" }`
+- **`sequence_match`**：检查 `recentlyUsedTools` 列表的**末尾**是否与当前评估步骤配置的 `sequence` 数组完全一致。适用于“只有当一组工具按顺序执行完成后才激活某步骤”的场景。
+  - 不使用 `value` 字段。
+  - 示例：`{ "type": "sequence_match" }`（用于定义了 `sequence` 的步骤上）
 
 ## Implementation (`OrchestrationManager`)
 
-The logic for evaluating conditions resides within the `OrchestrationManager` (`agentdock-core/src/orchestration/index.ts`).
+条件评估逻辑位于 `OrchestrationManager`（`agentdock-core/src/orchestration/index.ts`）中。
 
 ### Key Logic:
 
--   **Access to State:** The condition evaluation logic needs access to the current `OrchestrationState` for the session (from `OrchestrationStateManager`), specifically the `recentlyUsedTools` list.
--   **Evaluation Flow:**
-    1.  Triggered typically at the beginning of processing a new user message (before determining available tools for the LLM call).
-    2.  **Additionally**, evaluation is now triggered immediately *after* a tool usage event is processed (`processToolUsage`). This ensures that step transitions based on completed sequences happen within the same turn.
-    3.  Iterates through all defined orchestration steps in the configuration.
-    4.  For each step, evaluates **all** of its defined `conditions` (e.g., `tool_used`, `sequence_match`) against the current state.
-    5.  If **all** conditions for a step pass, that step is considered a candidate for activation.
--   **Step Activation:**
-    -   If one or more steps meet their conditions, a strategy selects the active step (typically the first matching step in the configuration order).
-    -   The `OrchestrationStateManager.setActiveStep` method updates the session's state with the name of the newly activated step.
-    -   If no step's conditions are met, the system might fall back to a default step or maintain the current `activeStep`.
+- **状态访问：** 条件评估需要访问会话当前 `OrchestrationState`（来自 `OrchestrationStateManager`），尤其是 `recentlyUsedTools` 列表。
+- **评估流程：**
+  1. 通常在处理新用户消息的开始阶段触发（在确定本轮 LLM 可用工具之前）。
+  2. **额外地**，现在在工具使用事件处理完成后（`processToolUsage`）也会立刻触发一次评估，确保基于“完成序列”的步骤切换能在同一轮内发生。
+  3. 遍历编排配置中定义的全部步骤。
+  4. 对每个步骤，将其 `conditions`（如 `tool_used`、`sequence_match`）与当前状态进行逐项判断。
+  5. 若某步骤的条件**全部通过**，则该步骤成为可被激活的候选项。
+- **步骤激活：**
+  - 如果有一个或多个步骤满足条件，会通过策略选择最终激活步骤（通常是“配置顺序中第一个命中的步骤”）。
+  - 调用 `OrchestrationStateManager.setActiveStep` 将新激活步骤名写入会话状态。
+  - 若没有任何步骤满足条件，系统可能回退到默认步骤，或维持当前 `activeStep`。
 
 ## How it Works (Example Flow)
 
-1.  **Initial State:** Session starts, maybe in a default "general" step. `recentlyUsedTools` is empty.
-2.  **User Action / LLM Response:** The agent uses the `think` tool.
-3.  **State Update:** `OrchestrationStateManager.addUsedTool(sessionId, "think")` is called. `recentlyUsedTools` now contains `["think"]`.
-4.  **Next Interaction - Condition Check:** Before the next LLM call, the `OrchestrationManager` evaluates conditions:
-    -   Step "general" (Default) -> May remain candidate.
-    -   Step "post_analysis_step" (`tool_used`: "think") -> Condition is checked against `recentlyUsedTools`. It passes.
-5.  **Step Activation:** Since conditions for "post_analysis_step" passed, it becomes the active step. `OrchestrationStateManager.setActiveStep(sessionId, "post_analysis_step")` is called.
-6.  **Tool Availability:** On the next turn, when the LLM asks for tools, the system provides only those allowed in "post_analysis_step" (e.g., `summarize`, `save_result`).
+1. **初始状态：** 会话开始，可能处于默认 “general” 步骤；`recentlyUsedTools` 为空。
+2. **用户动作 / LLM 行为：** 智能体使用了 `think` 工具。
+3. **状态更新：** 调用 `OrchestrationStateManager.addUsedTool(sessionId, "think")`，此时 `recentlyUsedTools` 变为 `["think"]`。
+4. **下一次交互前的条件检查：** 在下一次 LLM 调用前，`OrchestrationManager` 会评估条件：
+   - 步骤 “general”（默认）→ 可能仍是候选；
+   - 步骤 “post_analysis_step”（条件 `tool_used: "think"`）→ 在 `recentlyUsedTools` 中命中，通过。
+5. **步骤激活：** 因为 “post_analysis_step” 条件通过，它被设为激活步骤，调用 `OrchestrationStateManager.setActiveStep(sessionId, "post_analysis_step")`。
+6. **工具可用性：** 下一轮 LLM 请求工具时，系统只会提供 “post_analysis_step” 允许的工具（例如 `summarize`、`save_result`）。
 
 ## Multi-Agent Relevance
 
-In the planned [Orchestration-Driven Personas](./../roadmap/multi-agent-collaboration.md) model for multi-agent collaboration:
+在规划中的多智能体协作模型 [Orchestration-Driven Personas](./../roadmap/multi-agent-collaboration.md) 中：
 
--   The `tool_used` condition could trigger transitions between different agent personas/steps.
--   For example, after a "Researcher" persona (step) uses `web_search` and `summarize`, a `tool_used: summarize` condition could activate a "Planner" persona (step) to process the summary.
-
-## Considerations
-
--   **Limited Conditions:** The current implementation only supports `tool_used`. Expanding condition types (e.g., based on message content, state values) would require adding more cases to the `checkCondition` logic in `OrchestrationManager`.
--   **Condition Order:** The order of steps in the configuration matters if multiple steps depend on the same `tool_used` condition.
--   **Statefulness:** Conditions rely heavily on accurate session state (`recentlyUsedTools`).
--   **Relying on Model Intelligence:** As frontier LLMs become increasingly capable of understanding context and following complex instructions, overly rigid constraints (like numerous, complex condition types or strict sequences) might become less necessary or even counterproductive. Future development may explore balancing explicit orchestration rules with leveraging the model's inherent planning and reasoning abilities, potentially simplifying configuration while maintaining reliable task execution. 
-1.  **Initial State:** Session starts, no specific step active (or a default step).
-2.  **User Message:** User sends a message: "Okay, let's plan the project structure."
-3.  **Condition Check:** The orchestration system evaluates conditions for all steps:
-    -   Step "research" (`message_contains`: "research") -> Fails.
-    -   Step "planning_mode" (`message_contains`: "plan") -> Passes.
-    -   Step "planning_mode" (`not_recently_used`: "web_search", `window`: 3) -> Passes (assuming `web_search` wasn't just used).
-4.  **Step Activation:** Since both conditions for "planning_mode" passed, it becomes the active step. `OrchestrationStateManager.setActiveStep(sessionId, "planning_mode")` is called.
-5.  **Tool Availability:** On the next turn, when the LLM asks for tools, the system provides only those allowed in "planning_mode" (e.g., `think`, `list_generation`).
-6.  **Further Interaction:** If the user later says "research caching strategies", the conditions might re-evaluate, potentially activating the "research" step and changing the available tools.
+- `tool_used` 条件可以触发不同 persona/步骤之间的切换。
+- 例如当 “Researcher”（步骤）使用了 `web_search` 与 `summarize` 后，可以用 `tool_used: summarize` 激活 “Planner”（步骤）来处理总结内容。
 
 ## Considerations
 
--   **Condition Order:** The order of steps in the configuration can matter if multiple steps' conditions might be met simultaneously (first match usually wins).
--   **Specificity:** Conditions should be specific enough to avoid unintended step changes but general enough to capture user intent.
--   **Complexity:** Overly complex conditions or numerous steps can make agent behavior hard to predict or debug.
--   **Statefulness:** Conditions rely heavily on accurate session state (`activeStep`, `recentlyUsedTools`). 
+ - **条件类型有限：** 当前实现支持 `tool_used` 与 `sequence_match`。若要扩展更多条件（例如基于消息内容、基于状态值等），需要在 `OrchestrationManager` 的 `checkCondition` 逻辑中增加分支。
+ - **条件顺序：** 若多个步骤依赖相似条件，配置中的步骤顺序会影响最终激活哪个步骤（一般先匹配者优先）。
+ - **强依赖状态：** 条件高度依赖准确的会话状态（`activeStep`、`recentlyUsedTools` 等）。
+ - **对模型智能的依赖：** 随着前沿 LLM 越来越擅长理解上下文与遵循复杂指令，过度刚性的约束（大量复杂条件、过严的序列）可能不再必要，甚至可能适得其反。未来可以探索在“显式编排规则”和“利用模型内在规划/推理能力”之间取得平衡，以在保持可靠性的同时简化配置。
+
+下面是一个概念性的“基于消息内容触发步骤切换”的例子（该文件前文未列为当前已实现条件类型，仅用于说明思路）：
+
+1. **初始状态：** 会话开始，没有明确激活步骤（或处于默认步骤）。
+2. **用户消息：** 用户发送：“Okay, let's plan the project structure.”
+3. **条件检查：** 编排系统评估各步骤条件：
+   - 步骤 “research”（`message_contains: "research"`）→ 不通过；
+   - 步骤 “planning_mode”（`message_contains: "plan"`）→ 通过；
+   - 步骤 “planning_mode”（`not_recently_used: "web_search"`，`window: 3`）→ 通过（假设最近没用过 `web_search`）。
+4. **步骤激活：** “planning_mode” 条件通过，被设为激活步骤：`OrchestrationStateManager.setActiveStep(sessionId, "planning_mode")`。
+5. **工具可用性：** 下一轮 LLM 请求工具时，系统只提供 “planning_mode” 允许的工具（例如 `think`、`list_generation`）。
+6. **继续交互：** 若用户随后说 “research caching strategies”，条件可能再次评估并激活 “research” 步骤，改变可用工具集合。
+
+## 进一步注意事项
+
+- **条件顺序：** 当多个步骤可能同时满足条件时，配置顺序很重要（通常“第一个匹配者获胜”）。
+- **特异性：** 条件应足够具体以避免误触发，但也要足够通用以覆盖用户意图。
+- **复杂度：** 过多步骤或过复杂条件会使智能体行为更难预测与调试。
+- **状态一致性：** 条件依赖准确的会话状态（`activeStep`、`recentlyUsedTools`）。 

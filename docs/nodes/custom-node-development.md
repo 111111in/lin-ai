@@ -1,20 +1,17 @@
-# Custom Node Development
+# 自定义节点开发（Custom Node Development）
 
-This guide explains how to create custom nodes for AgentDock Core.
+本指南介绍如何在 AgentDock Core 中开发**自定义节点**。
 
-## Overview
+## 总览
 
-AgentDock provides two main approaches to extending its capabilities through custom nodes:
+在节点层面扩展能力，大致有两种方式：
 
-1. **Core Extension**: Extending BaseNode from AgentDock Core (covered in this guide)
-2. **Tool Implementation**: Creating tools in the open source reference implementation (see [Custom Tool Development](./custom-tool-development.md))
+1. **扩展 Core**：在 AgentDock Core 中继承 `BaseNode` 实现新节点（本页主要讲这个）；  
+2. **实现工具**：在参考实现（Next.js 客户端）中编写自定义工具，见[自定义工具开发](./custom-tool-development.md)。
 
-## Advanced Node Development
+## 高级节点开发：继承 `BaseNode`
 
-For extending the AgentDock Core directly:
-
-### Extending BaseNode
-
+如果希望直接在 Core 层增加新的节点类型，可以按下面的方式继承 `BaseNode`：
 ```typescript
 import { BaseNode, NodeMetadata, NodePort } from 'agentdock-core';
 import { NodeCategory } from 'agentdock-core/types/node-category';
@@ -82,7 +79,7 @@ export class MyCustomNode extends BaseNode<MyNodeConfig> {
 }
 ```
 
-### Registering Custom Nodes
+### 注册自定义节点
 
 ```typescript
 import { getNodeRegistry } from 'agentdock-core';
@@ -97,13 +94,14 @@ const myNode = getNodeRegistry().createNode('custom.myNode', 'instance-id', {
 });
 ```
 
-## Custom Tools
+## 与自定义工具的关系
 
-For developing tools that can be used by AI agents (which is a more common use case), please refer to the [Custom Tool Development](./custom-tool-development.md) guide, which covers:
+在日常使用中，更常见的扩展方式其实是**编写自定义工具**，供智能体调用。  
+如果你的目标是为 Agent 增加某种「功能按钮」或「API 集成」，建议优先参考  
+[自定义工具开发](./custom-tool-development.md)，其中包含：
 
-- Tool implementation patterns
-- Parameter schemas with Zod
-- Error handling
-- API access
-- Component-based output formatting
-- Complete examples
+- 工具实现模式；  
+- 使用 Zod 定义参数 Schema；  
+- 错误处理与 API 访问；  
+- 前端组件化输出格式；  
+- 多个完整示例。 

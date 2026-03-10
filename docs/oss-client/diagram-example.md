@@ -1,8 +1,8 @@
-# Diagram Examples in the Open Source Client
+# 开源客户端中的图表示例
 
-This page demonstrates how to create and render various types of diagrams using Mermaid in the AgentDock Open Source Client. These diagram examples can be used for visualizing different aspects of your application architecture, workflows, and components when building with AgentDock.
+本页演示如何在 AgentDock 开源客户端中使用 Mermaid 创建并渲染多种类型的图表。这些示例可用于可视化你在使用 AgentDock 构建应用时的架构、工作流与组件等不同方面。
 
-## AgentDock Architecture Flow Chart
+## AgentDock 架构流程图
 
 ```mermaid
 graph TD
@@ -18,7 +18,7 @@ graph TD
     G --> I[End]
 ```
 
-## Request Sequence Diagram
+## 请求时序图
 
 ```mermaid
 sequenceDiagram
@@ -35,7 +35,7 @@ sequenceDiagram
     App->>User: Display result
 ```
 
-## AgentDock Core Class Diagram
+## AgentDock Core 类图
 
 ```mermaid
 classDiagram
@@ -56,7 +56,7 @@ classDiagram
     BaseNode <|-- ToolNode
 ```
 
-## AgentDock State Diagram
+## AgentDock 状态图
 
 ```mermaid
 stateDiagram-v2
@@ -69,7 +69,7 @@ stateDiagram-v2
     Idle --> [*]: shutdown
 ```
 
-## AgentDock Data Model ER Diagram
+## AgentDock 数据模型 ER 图
 
 ```mermaid
 erDiagram
@@ -93,7 +93,7 @@ erDiagram
     }
 ```
 
-## AgentDock Development Roadmap
+## AgentDock 开发路线图
 
 ```mermaid
 gantt
@@ -112,7 +112,7 @@ gantt
     Vector Storage            :         des7, 2023-08-01, 2023-10-01
 ```
 
-## Node Distribution Chart
+## 节点分布图
 
 ```mermaid
 pie title AgentDock Node Usage
@@ -121,7 +121,7 @@ pie title AgentDock Node Usage
     "Custom Nodes" : 30
 ```
 
-## User Journey Diagram
+## 用户旅程图
 
 ```mermaid
 journey
@@ -139,9 +139,9 @@ journey
       Return Result: 5: App, User
 ```
 
-## Adding Diagrams to Your Application
+## 在你的应用中添加图表
 
-These diagrams demonstrate the visualization capabilities available in the AgentDock Open Source Client, helping to visualize concepts when building your own applications. To add a Mermaid diagram to any Markdown content in your application, use the following syntax:
+这些图表展示了 AgentDock 开源客户端支持的可视化能力，便于你在构建应用时呈现复杂概念。要在应用的任意 Markdown 内容中添加 Mermaid 图表，可以使用如下语法：
 
 ```
 ```mermaid
@@ -149,8 +149,8 @@ graph TD
     A[Start] --> B[End]
 ```
 
-For more information on Mermaid syntax, visit the [official Mermaid documentation](https://mermaid.js.org/syntax/flowchart.html). 
+更多 Mermaid 语法请参考 [Mermaid 官方文档](https://mermaid.js.org/syntax/flowchart.html)。
 
-## Open Source Client Rendering
+## 开源客户端渲染
 
-The AgentDock Open Source Client includes built-in support for Mermaid diagrams, automatically rendering them in both light and dark modes. You can use these diagram examples as templates for creating your own visualizations of components and workflows in your AgentDock-based applications. 
+AgentDock 开源客户端内置 Mermaid 渲染支持，并可在浅色/深色模式下自动渲染。你可以直接把这些示例作为模板，用于在基于 AgentDock 的应用中可视化组件与工作流。

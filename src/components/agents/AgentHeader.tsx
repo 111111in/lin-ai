@@ -6,6 +6,7 @@
 import Link from 'next/link';
 import { Plus, Search, X } from 'lucide-react';
 
+import { useLanguage } from '@/components/providers/language-provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,6 +39,8 @@ export function AgentHeader({
   onRemoveCategory,
   isAllAgents = true
 }: AgentHeaderProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="relative">
       {/* 背景装饰 */}
@@ -55,7 +58,7 @@ export function AgentHeader({
             <div className="flex-1">
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none mb-2">
                 <span className="inline-block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
-                  AI Agents
+                  {t('agents.title')}
                 </span>
               </h1>
 
@@ -72,7 +75,7 @@ export function AgentHeader({
                     </span>
                     <X
                       className="h-4 w-4 text-white/70 group-hover:text-white group-hover:rotate-90 transition-all duration-300"
-                      aria-label="Remove category filter"
+                      aria-label={t('agents.badge.removeCategory')}
                     />
                   </Badge>
                 </div>
@@ -83,7 +86,7 @@ export function AgentHeader({
           <div className="flex items-center gap-3">
             <div className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent"></div>
             <p className="text-muted-foreground/90 text-base sm:text-lg font-medium">
-              Discover powerful open source AI agents
+              {t('agents.subtitle')}
             </p>
           </div>
         </div>
@@ -96,7 +99,7 @@ export function AgentHeader({
               <Search className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground/70 group-focus-within:text-primary transition-colors duration-300 z-10" />
               <Input
                 type="search"
-                placeholder="Search agents..."
+                placeholder={t('agents.search.placeholder')}
                 className="pl-14 pr-5 h-14 w-full rounded-2xl border-2 border-border/50 focus:border-primary/50 bg-card/50 backdrop-blur-xl shadow-xl focus:shadow-2xl focus:shadow-primary/20 transition-all duration-300 font-medium text-base"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
@@ -111,7 +114,7 @@ export function AgentHeader({
             <Button className="sm:w-[180px] h-14 rounded-2xl bg-gradient-to-r from-secondary via-secondary to-accent hover:from-secondary/90 hover:via-secondary/90 hover:to-accent/90 text-white font-bold shadow-xl hover:shadow-2xl hover:shadow-secondary/50 transition-all duration-300 border-0 text-base group relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
               <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
-              <span>Add Agent</span>
+              <span>{t('agents.add')}</span>
             </Button>
           </Link>
         </div>

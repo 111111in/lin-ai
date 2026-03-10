@@ -1,62 +1,62 @@
-# Orchestration State Management
+# 编排状态管理
 
-This document details the implementation of orchestration state management within AgentDock, focusing on how session-specific state is handled for controlling agent behavior and tool usage.
+本文介绍 AgentDock 中编排状态管理的实现细节，重点说明如何处理“会话级状态”，以控制智能体行为与工具使用。
 
 ## Core Concepts
 
--   **Session-Scoped State:** All orchestration state (active step, tool sequence progress, recently used tools) is tied to a specific `SessionId` and managed separately for each conversation.
--   **State Interface (`OrchestrationState`):** Defined in `agentdock-core/src/orchestration/state.ts`, this interface extends the base `SessionState` and includes:
-    -   `activeStep?: string`: The name of the currently active orchestration step.
-    -   `recentlyUsedTools: string[]`: A list of tool names used within the session.
-    -   `sequenceIndex?: number`: The current index within a defined tool sequence for the `activeStep`.
-    -   `cumulativeTokenUsage?`: Tracks token counts for the session.
-    -   `lastAccessed: number`: Timestamp for TTL calculation.
-    -   `ttl: number`: Time-to-live for the state.
+- **会话级状态（Session-Scoped State）：** 所有编排状态（当前激活步骤、工具序列进度、最近使用的工具等）都绑定到某个 `SessionId`，并对每个会话分别管理。
+- **状态接口（`OrchestrationState`）：** 定义在 `agentdock-core/src/orchestration/state.ts`。该接口扩展基础 `SessionState`，包含：
+  - `activeStep?: string`：当前激活的编排步骤名；
+  - `recentlyUsedTools: string[]`：该会话中使用过的工具名列表；
+  - `sequenceIndex?: number`：在当前 `activeStep` 定义的工具序列中所处的索引位置；
+  - `cumulativeTokenUsage?`：累计的 token 使用统计；
+  - `lastAccessed: number`：用于 TTL 计算的最近访问时间戳；
+  - `ttl: number`：该状态的存活时间（TTL）。
 
 ## Implementation (`OrchestrationStateManager`)
 
-The `OrchestrationStateManager` class (`agentdock-core/src/orchestration/state.ts`) is the central component for managing `OrchestrationState`.
+`OrchestrationStateManager` 类（`agentdock-core/src/orchestration/state.ts`）是管理 `OrchestrationState` 的核心组件。
 
 ### Key Features:
 
--   **Uses `SessionManager`:** Internally, it leverages the core `SessionManager` specifically configured to handle `OrchestrationState`. It passes a `createDefaultState` function to initialize new orchestration states.
--   **Storage Integration:** Inherits storage capabilities from `SessionManager`, allowing `OrchestrationState` to be persisted using the configured storage provider (Memory, Redis, Vercel KV, etc.) under a specific namespace (default: `orchestration-state`).
--   **Factory Function:** The recommended way to get an instance is via the factory function `createOrchestrationStateManager(options)`, allowing configuration of storage and cleanup.
--   **State Accessors/Mutators:** Provides methods to interact with the state:
-    -   `getState(sessionId)`: Retrieves the full `OrchestrationState`.
-    -   `getOrCreateState(sessionId, config?)`: Retrieves existing state or creates a new default state if needed (and if orchestration is configured).
-    -   `updateState(sessionId, updates)`: Performs a partial, immutable update to the state.
-    -   `setActiveStep(sessionId, stepName)`: Updates the `activeStep` field.
-    -   `addUsedTool(sessionId, toolName)`: Appends a tool name to `recentlyUsedTools`.
-    -   `advanceSequence(sessionId)`: Increments the `sequenceIndex`.
-    -   `resetState(sessionId)`: Resets the state back to its default values.
--   **Conditional Creation:** The `getOrCreateState` method checks if an agent configuration includes orchestration steps before creating state, optimizing for agents without orchestration.
--   **TTL & Cleanup:** The Time-To-Live for orchestration state (and thus the underlying session key in storage) is configurable. 
-       - **Default:** If not explicitly configured, the default TTL is 24 hours of inactivity (defined in `agentdock-core`).
-       - **Configuration:** The TTL can be overridden by setting the `SESSION_TTL_SECONDS` environment variable in the main application (e.g., `agentdock_cursor_starter`). This value (in seconds) is passed down during initialization.
-       - **Mechanism:** The underlying `SessionManager` uses this configured TTL to set the expiration time on the storage key (e.g., via Redis `EXPIRE`). The state is automatically removed from storage after the TTL expires since the last access.
+- **复用 `SessionManager`：** 内部会使用专门为 `OrchestrationState` 配置的核心 `SessionManager`，并传入 `createDefaultState` 函数用于初始化新编排状态。
+- **存储集成：** 继承 `SessionManager` 的存储能力，使 `OrchestrationState` 可以通过配置的存储 Provider（内存、Redis、Vercel KV 等）持久化到指定命名空间（默认：`orchestration-state`）。
+- **工厂函数：** 推荐通过 `createOrchestrationStateManager(options)` 工厂函数创建实例，以便统一配置存储与清理策略。
+- **状态访问/修改方法：** 提供一组方法与状态交互：
+  - `getState(sessionId)`：获取完整 `OrchestrationState`；
+  - `getOrCreateState(sessionId, config?)`：获取已有状态；必要时创建默认状态（且通常要求该智能体确实配置了编排）；
+  - `updateState(sessionId, updates)`：对状态做部分、不可变更新；
+  - `setActiveStep(sessionId, stepName)`：更新 `activeStep`；
+  - `addUsedTool(sessionId, toolName)`：将工具名追加到 `recentlyUsedTools`；
+  - `advanceSequence(sessionId)`：递增 `sequenceIndex`；
+  - `resetState(sessionId)`：将状态重置回默认值。
+- **条件创建：** `getOrCreateState` 会在创建状态前检查智能体配置中是否包含编排步骤，避免为未启用编排的智能体创建状态，从而优化资源使用。
+- **TTL 与清理：** 编排状态（以及底层存储中的 session key）的 TTL 可配置。
+  - **默认值：** 未显式配置时，默认 TTL 为 24 小时未访问（在 `agentdock-core` 中定义）。
+  - **配置方式：** 可通过应用环境变量 `SESSION_TTL_SECONDS`（秒）覆盖默认 TTL，并在初始化时传入。
+  - **机制：** 底层 `SessionManager` 使用该 TTL 设置存储键的过期时间（例如 Redis `EXPIRE`）。超过 TTL 且未访问的状态会被自动清除。
 
 ### Relationship with `StepSequencer`
 
-The `StepSequencer` relies heavily on the `OrchestrationStateManager` to:
--   Get the current `sequenceIndex` for a session (`getState`).
--   Update the `sequenceIndex` when a sequence step is completed (`advanceSequence`).
--   Track which tools have been used (`addUsedTool`).
+`StepSequencer` 高度依赖 `OrchestrationStateManager` 来：
+- 获取当前会话的 `sequenceIndex`（通过 `getState`）；
+- 当序列步骤完成时更新 `sequenceIndex`（通过 `advanceSequence`）；
+- 记录使用过的工具（通过 `addUsedTool`）。
 
 ## State Lifecycle
 
-1.  **Initialization:** State is typically created lazily via `getOrCreateState` when the orchestration system first needs to access or modify state for a session, provided the agent has orchestration configured.
-2.  **Updates:** State fields (`activeStep`, `recentlyUsedTools`, `sequenceIndex`, `lastAccessed`) are updated throughout the agent's interaction via specific `OrchestrationStateManager` methods.
-3.  **Retrieval:** Components needing orchestration context (like the `StepSequencer` or condition checkers) use `getState`.
-4.  **Cleanup:** Expired state is automatically removed based on the `ttl` and `lastAccessed` timestamps by the underlying `SessionManager`'s cleanup process.
+1. **初始化：** 当编排系统首次需要访问或修改某个会话的状态时，通常会通过 `getOrCreateState` 惰性创建（前提是该智能体确实配置了编排）。
+2. **更新：** 在交互过程中，`activeStep`、`recentlyUsedTools`、`sequenceIndex`、`lastAccessed` 等字段会通过 `OrchestrationStateManager` 的方法被持续更新。
+3. **读取：** 需要编排上下文的组件（例如 `StepSequencer` 或条件检查器）会调用 `getState`。
+4. **清理：** 过期状态会由底层 `SessionManager` 的清理流程基于 `ttl` 与 `lastAccessed` 自动移除。
 
 ## Session Persistence & Long-Lived Agents
 
-The TTL mechanism is designed for typical web session expiry. For agents intended to persist indefinitely (like a personal assistant):
+TTL 机制主要面向典型 Web 会话过期场景。对于希望长期存在的智能体（例如个人助理）：
 
-1.  **Set a Very Long TTL:** Configure `SESSION_TTL_SECONDS` to a very large value (e.g., years in seconds).
-2.  **Regular Interaction:** Ensure the agent's session is accessed periodically (e.g., through a scheduled task or user interaction). Each access updates the `lastAccessed` timestamp, effectively resetting the TTL countdown.
-3.  **Disable TTL (Use with Caution):** While possible to modify the core code to disable TTL (`ttlSeconds = undefined` in `SessionManager`), this is generally discouraged as it can lead to orphaned state accumulating in the storage provider if sessions are never explicitly deleted.
+1. **设置很长的 TTL：** 将 `SESSION_TTL_SECONDS` 配置为很大的值（例如按“年”换算成秒）。
+2. **保持周期性访问：** 确保会话会被周期性访问（例如定时任务或用户交互）。每次访问都会刷新 `lastAccessed`，从而重置 TTL 倒计时。
+3. **禁用 TTL（谨慎）：** 虽然可以通过修改核心代码来禁用 TTL（例如在 `SessionManager` 中令 `ttlSeconds = undefined`），但一般不建议这样做，因为如果从不显式删除，可能导致存储中堆积孤立状态。
 
 ```mermaid
 sequenceDiagram
@@ -79,14 +79,14 @@ sequenceDiagram
 
 ## Configuration
 
-The `OrchestrationStateManager` can be configured during instantiation using `createOrchestrationStateManager(options)`:
+可以在实例化时通过 `createOrchestrationStateManager(options)` 配置 `OrchestrationStateManager`：
 
--   `storageProvider`: Provide a specific storage instance (e.g., a configured `RedisStorageProvider`).
--   `storageNamespace`: Change the namespace used in the storage backend.
--   `cleanup`: Configure the cleanup *check* interval and enable/disable the automatic cleanup timer. Note: The actual session **TTL** is primarily controlled by `SESSION_TTL_SECONDS` passed during initialization.
+- `storageProvider`：传入具体的存储实例（例如已配置好的 `RedisStorageProvider`）。
+- `storageNamespace`：修改底层存储使用的命名空间。
+- `cleanup`：配置清理“检查”间隔，并启用/禁用自动清理定时器。注意：实际的 session **TTL** 主要由初始化时传入的 `SESSION_TTL_SECONDS` 控制。
 
 ## Best Practices
 
--   Use the factory `createOrchestrationStateManager(options)` for proper configuration.
--   Leverage conditional state creation logic where applicable.
--   Ensure the underlying storage provider is configured correctly for the deployment environment. 
+- 使用工厂函数 `createOrchestrationStateManager(options)` 进行规范配置。
+- 在适用场景下利用“条件创建状态”逻辑。
+- 确保底层存储 Provider 针对部署环境正确配置。 

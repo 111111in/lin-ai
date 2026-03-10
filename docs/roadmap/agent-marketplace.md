@@ -1,27 +1,27 @@
-# Agent Marketplace
+# Agent 市场（Agent Marketplace）
 
-The Agent Marketplace enables creators to publish, distribute, and monetize their AI agent templates and workflows, while helping users discover high-quality solutions tailored to their needs.
+Agent 市场用于让创作者发布、分发并商业化自己的智能体模板与工作流，同时帮助用户发现适合自身需求的高质量方案。
 
-## Current Status
+## 当前状态
 
-**Status: Planned**
+**状态：规划中（Planned）**
 
-The Agent Marketplace is currently in the design phase, with implementation planned to follow the Natural Language AI Agent Builder.
+Agent 市场目前处于设计阶段，计划在自然语言智能体构建器之后推进实现。
 
-## Feature Overview
+## 功能概览
 
-The Agent Marketplace will provide:
+Agent 市场将提供：
 
-- **Template Publishing**: Publish agent templates and workflows for others to use
-- **Perpetual Revenue**: Earn ongoing revenue when others use your templates
-- **Discovery System**: Find the right templates for specific use cases
-- **Quality Ratings**: Community-driven rating and feedback system
-- **Version Management**: Update templates while maintaining backward compatibility
-- **Integration with NL Builder**: Seamless connection with the Natural Language AI Agent Builder
+- **模板发布**：发布智能体模板与工作流供他人使用；  
+- **持续收益**：他人使用模板时创作者获得持续收入；  
+- **发现系统**：按需求快速找到合适模板；  
+- **质量评分**：社区驱动的评分与反馈；  
+- **版本管理**：在保持兼容的前提下更新模板；  
+- **与 NL Builder 集成**：与自然语言智能体构建器无缝衔接。
 
-## Architecture Diagrams
+## 架构图
 
-### Marketplace Ecosystem
+### 市场生态
 
 ```mermaid
 graph TD
@@ -37,7 +37,7 @@ graph TD
     style NLBuilder fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Publication Workflow
+### 发布流程
 
 ```mermaid
 sequenceDiagram
@@ -54,42 +54,42 @@ sequenceDiagram
     Creator->>Store: Update/Version
 ```
 
-## Implementation Details
+## 实现细节
 
-The Agent Marketplace will be implemented through:
+Agent 市场计划通过以下模块实现：
 
-### 1. Template Publishing System
+### 1. 模板发布系统
 
-The system allows creators to prepare and publish their templates:
+创作者可以在发布前完善并提交模板：
 
-- **Metadata Creation**: Add descriptions, categories, and usage examples
-- **Version Management**: Control updates while maintaining compatibility
-- **Documentation Tools**: Provide clear usage instructions for consumers
-- **Analytics Dashboard**: Monitor usage and earnings
+- **元数据**：补充描述、分类、用法示例；  
+- **版本管理**：控制更新并保持兼容性；  
+- **文档工具**：为使用者提供清晰的使用说明；  
+- **数据面板**：监控使用量与收益。
 
-### 2. Discovery Engine
+### 2. 发现引擎
 
-The discovery engine helps users find the right templates:
+帮助用户找到合适模板：
 
-- **Smart Search**: Natural language search for template discovery
-- **Category Navigation**: Browse by use case, industry, or function
-- **Recommendation System**: AI-powered suggestions based on user needs
-- **Similar Templates**: Find alternatives to compare functionality
-- **Filter System**: Narrow results by features, ratings, or popularity
+- **智能搜索**：支持自然语言检索；  
+- **分类导航**：按场景/行业/功能浏览；  
+- **推荐系统**：基于需求的 AI 推荐；  
+- **相似模板**：对比不同方案；  
+- **过滤器**：按特性、评分、热度筛选。
 
-### 3. Monetization Framework
+### 3. 商业化框架
 
-The monetization framework enables creators to earn from their work:
+让创作者从作品中获得回报：
 
-- **Revenue Share Model**: Earn a percentage of usage fees
-- **Usage Tracking**: Transparent accounting of template usage
-- **Flexible Pricing**: Set pricing tiers based on features or volume
-- **Promotion Tools**: Highlight your templates to potential users
-- **Usage Analytics**: Understand how your templates are being used
+- **分成模型**：按使用费用分成；  
+- **使用追踪**：透明的使用与结算；  
+- **灵活定价**：按功能/用量设置价格档位；  
+- **推广工具**：帮助模板触达更多用户；  
+- **使用分析**：洞察模板的真实使用方式与效果。
 
-## Benefits to the Ecosystem
+## 对生态的价值
 
-### For Template Creators
+### 对模板创作者
 
 ```mermaid
 graph LR
@@ -108,7 +108,7 @@ graph LR
 4. **Build Reputation**: Establish yourself as an expert in specific domains
 5. **Feedback Loop**: Gain insights from real-world usage to improve offerings
 
-### For End Users
+### 对终端用户
 
 ```mermaid
 graph LR
@@ -126,7 +126,7 @@ graph LR
 4. **Customization Options**: Adapt templates to specific needs
 5. **Consistent Updates**: Benefit from ongoing improvements by creators
 
-### For AgentDock Platform
+### 对 AgentDock 平台
 
 1. **Expanded Ecosystem**: Growing library of specialized templates
 2. **Network Effects**: More creators attract more users and vice versa
@@ -134,7 +134,7 @@ graph LR
 4. **Discoverability Solution**: Address the challenge of finding the right agent for specific needs
 5. **Ecosystem Growth**: Sustainable model for continuous expansion
 
-## Solving the Discoverability Challenge
+## 解决「发现难」问题
 
 A key challenge in AI agent ecosystems is helping users find the right agent for their specific needs:
 
@@ -161,9 +161,9 @@ The Agent Marketplace addresses this challenge by:
 4. **Usage Analytics**: Understanding which templates deliver results in real-world scenarios
 5. **Integration with Builder**: Suggesting templates during natural language agent creation
 
-## Example User Journey
+## 典型用户旅程
 
-### Template Creator
+### 模板创作者
 An HR specialist creates an "Employee Onboarding Assistant" template that handles document collection, policy explanations, and IT setup requests. After publishing to the marketplace:
 
 1. The template is discovered by HR departments across multiple organizations
@@ -172,7 +172,7 @@ An HR specialist creates an "Employee Onboarding Assistant" template that handle
 4. The creator builds a reputation as an HR automation expert
 5. The creator develops additional HR templates based on market demand
 
-### Template User
+### 模板使用者
 A small business owner needs to automate customer support:
 
 1. Searches the marketplace for "customer support automation"
@@ -182,7 +182,7 @@ A small business owner needs to automate customer support:
 5. Deploys a production-ready customer support agent in minutes
 6. The original template creator receives compensation
 
-## Integration with Natural Language AI Agent Builder
+## 与自然语言智能体构建器的联动
 
 The Marketplace and NL Builder work together to enhance the agent creation process:
 
@@ -209,7 +209,7 @@ When a user describes an agent they want to create:
 4. The user can choose a template and customize it or create a custom solution
 5. Template creators earn revenue when their templates are selected
 
-## Timeline
+## 时间线
 
 | Phase | Description |
 |-------|-------------|
@@ -219,7 +219,7 @@ When a user describes an agent they want to create:
 | Launch | Full monetization and integration with Natural Language Builder |
 | Expansion | Advanced analytics and promotional tools for creators |
 
-## Connection to Other Roadmap Items
+## 与其他路线图项的关系
 
 - **Natural Language AI Agent Builder**: Direct integration for template suggestions
 - **AgentDock Pro**: Enterprise marketplace features and private template repositories

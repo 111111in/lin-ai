@@ -19,6 +19,7 @@ import { AgentGrid } from '@/components/agents/AgentGrid';
 import { AgentHeader } from '@/components/agents/AgentHeader';
 import { AgentLoading } from '@/components/agents/AgentLoading';
 import { ApiKeyDialog } from '@/components/api-key-dialog';
+import { useLanguage } from '@/components/providers/language-provider';
 import { templates } from '@/generated/templates';
 import { useAgentFiltering } from '@/lib/hooks/useAgentFiltering';
 import { useAgentNavigation } from '@/lib/hooks/useAgentNavigation';
@@ -27,6 +28,7 @@ import type { AgentTemplate } from '@/lib/store/types';
 
 // Separate the actual implementation into its own component
 function AllAgentsPageContent() {
+  const { t } = useLanguage();
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
   const { isInitialized, templatesValidated, templatesError } = useAgents();
@@ -70,7 +72,7 @@ function AllAgentsPageContent() {
       <AgentHeader
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        categoryConfig={{ id: 'all', name: 'All Agents' }}
+        categoryConfig={{ id: 'all', name: t('nav.agents.all') }}
         isAllAgents={true}
       />
 
@@ -80,7 +82,7 @@ function AllAgentsPageContent() {
         onChat={handleChat}
         onSettings={handleConfigure}
         onGithub={handleGithub}
-        categoryName="All Agents"
+        categoryName={t('nav.agents.all')}
       />
 
       {/* API Key dialog */}

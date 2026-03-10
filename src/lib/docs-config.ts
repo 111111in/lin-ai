@@ -26,238 +26,238 @@ export interface DocSection {
 export const docSections: DocSection[] = [
   // Main page
   {
-    title: 'Overview',
+    title: '概览',
     items: [
-      { path: '/', title: 'Introduction' },
-      { path: 'getting-started', title: 'Getting Started' },
-      { path: 'agent-templates', title: 'Agent Templates' },
+      { path: '/', title: '简介' },
+      { path: 'getting-started', title: '快速开始' },
+      { path: 'agent-templates', title: '智能体模板' },
       { path: 'agentdock-pro', title: 'AgentDock Pro' },
-      { path: 'roadmap/workflow-nodes', title: 'Workflows & Node Types' },
-      { path: 'roadmap', title: 'Roadmap' }
+      { path: 'roadmap/workflow-nodes', title: '工作流与节点类型' },
+      { path: 'roadmap', title: '路线图' }
     ]
   },
 
   // Architecture section with specific items
   {
-    title: 'Architecture',
+    title: '架构',
     items: [
-      { path: 'architecture/', title: 'Architecture Overview' },
-      { path: 'architecture/agent-node', title: 'Agent Node' },
+      { path: 'architecture/', title: '架构总览' },
+      { path: 'architecture/agent-node', title: 'Agent 节点' },
       {
         path: 'architecture/provider-agnostic-api',
-        title: 'Provider-Agnostic API'
+        title: '多提供商统一 API'
       },
       {
         path: 'architecture/adding-new-provider',
-        title: 'Adding a New LLM Provider'
+        title: '新增 LLM 提供商'
       },
-      { path: 'architecture/model-system', title: 'Model Architecture' },
-      { path: 'architecture/core/overview', title: 'Core Architecture' },
-      { path: 'architecture/core/request-flow', title: 'Request Flow' },
-      { path: 'architecture/core/technology-stack', title: 'Technology Stack' },
+      { path: 'architecture/model-system', title: '模型架构' },
+      { path: 'architecture/core/overview', title: '核心架构' },
+      { path: 'architecture/core/request-flow', title: '请求流转' },
+      { path: 'architecture/core/technology-stack', title: '技术栈' },
       {
         path: 'architecture/core/response-streaming',
-        title: 'Response Streaming'
+        title: '流式响应'
       }
     ]
   },
 
   // Nodes section
   {
-    title: 'Node System',
+    title: '节点系统',
     items: [
-      { path: 'nodes/', title: 'Node System Overview' },
+      { path: 'nodes/', title: '节点系统总览' },
       {
         path: 'nodes/custom-node-development',
-        title: 'Custom Node Development'
+        title: '自定义节点开发'
       },
       {
         path: 'nodes/custom-tool-development',
-        title: 'Custom Tool Development'
+        title: '自定义工具开发'
       }
     ]
   },
 
   // Storage section
   {
-    title: 'Storage',
+    title: '存储系统',
     items: [
-      { path: 'storage/', title: 'Storage Overview' },
-      { path: 'storage/getting-started', title: 'Getting Started' },
-      { path: 'storage/message-persistence', title: 'Message Persistence' },
-      { path: 'storage/message-history', title: 'Message History Management' },
+      { path: 'storage/', title: '存储总览' },
+      { path: 'storage/getting-started', title: '快速上手' },
+      { path: 'storage/message-persistence', title: '消息持久化' },
+      { path: 'storage/message-history', title: '历史记录管理' },
       {
         path: 'storage/storage-abstraction',
-        title: 'Storage Abstraction Layer'
+        title: '存储抽象层'
       },
-      { path: 'storage/vector-storage', title: 'Vector Storage Integration' }
+      { path: 'storage/vector-storage', title: '向量存储集成' }
     ]
   },
 
   // Memory Systems section
   {
-    title: 'Memory Systems',
+    title: '记忆系统',
     items: [
-      { path: 'memory/', title: 'Memory Overview' },
+      { path: 'memory/', title: '记忆系统总览' },
       {
         path: 'memory/complete-configuration-guide',
-        title: 'Configuration Guide'
+        title: '配置指南'
       },
-      { path: 'memory/architecture-overview', title: 'Architecture Overview' },
+      { path: 'memory/architecture-overview', title: '架构概览' },
       {
         path: 'memory/retrieval-augmented-generation',
-        title: 'Conversational RAG'
+        title: '对话式 RAG'
       },
-      { path: 'memory/memory-connections', title: 'Memory Connections' },
-      { path: 'memory/graph-architecture', title: 'Graph Architecture' },
-      { path: 'memory/consolidation-guide', title: 'Memory Consolidation' },
-      { path: 'memory/research-foundations', title: 'Research Foundations' }
+      { path: 'memory/memory-connections', title: '记忆连接' },
+      { path: 'memory/graph-architecture', title: '图结构架构' },
+      { path: 'memory/consolidation-guide', title: '记忆巩固' },
+      { path: 'memory/research-foundations', title: '研究基础' }
     ]
   },
 
   // Evaluation Framework section - NEW
   {
-    title: 'Evaluation Framework',
+    title: '评估框架',
     items: [
-      { path: 'evaluations/', title: 'Framework Overview' },
-      { path: 'evaluations/custom-evaluators', title: 'Custom Evaluators' },
+      { path: 'evaluations/', title: '框架总览' },
+      { path: 'evaluations/custom-evaluators', title: '自定义评估器' },
       {
         path: 'evaluations/evaluators/llm-judge',
-        title: 'LLM Judge Evaluator'
+        title: 'LLM 裁判评估器'
       },
       {
         path: 'evaluations/evaluators/nlp-accuracy',
-        title: 'NLP Accuracy Evaluator'
+        title: 'NLP 准确率评估器'
       },
       {
         path: 'evaluations/evaluators/rule-based',
-        title: 'Rule-Based Evaluator'
+        title: '规则评估器'
       },
       {
         path: 'evaluations/evaluators/tool-usage',
-        title: 'Tool Usage Evaluator'
+        title: '工具使用评估器'
       },
       {
         path: 'evaluations/evaluators/lexical-evaluators',
-        title: 'Lexical Evaluators Overview'
+        title: '词汇评估器总览'
       },
       {
         path: 'evaluations/evaluators/lexical-similarity',
-        title: 'Lexical Similarity'
+        title: '词汇相似度'
       },
       {
         path: 'evaluations/evaluators/keyword-coverage',
-        title: 'Keyword Coverage'
+        title: '关键词覆盖率'
       },
-      { path: 'evaluations/evaluators/sentiment', title: 'Sentiment Analysis' },
-      { path: 'evaluations/evaluators/toxicity', title: 'Toxicity Check' }
+      { path: 'evaluations/evaluators/sentiment', title: '情感分析' },
+      { path: 'evaluations/evaluators/toxicity', title: '毒性检测' }
     ]
   },
 
   // Error Handling section - Consolidated
   {
-    title: 'Error Handling',
+    title: '错误处理',
     items: [
-      { path: 'error-handling/overview', title: 'Error Handling Overview' },
-      { path: 'error-handling/llm-errors', title: 'LLM Error Handling' },
+      { path: 'error-handling/overview', title: '错误处理总览' },
+      { path: 'error-handling/llm-errors', title: 'LLM 错误处理' },
       {
         path: 'error-handling/core-implementation',
-        title: 'Implementation Details'
+        title: '实现细节'
       }
     ]
   },
 
   // Sessions & Orchestration combined
   {
-    title: 'Sessions & Orchestration',
+    title: '会话与编排',
     items: [
       // Session Section
       {
         path: 'architecture/sessions/session-management',
-        title: 'Session Management'
+        title: '会话管理'
       },
       {
         path: 'architecture/sessions/nextjs-integration',
-        title: 'Next.js Integration'
+        title: 'Next.js 集成'
       },
       // Orchestration Section
       {
         path: 'architecture/orchestration/orchestration-overview',
-        title: 'Orchestration Overview'
+        title: '编排总览'
       },
       {
         path: 'architecture/orchestration/orchestration-config',
-        title: 'Orchestration Configuration'
+        title: '编排配置'
       },
       {
         path: 'architecture/orchestration/state-management',
-        title: 'State Management'
+        title: '状态管理'
       },
       {
         path: 'architecture/orchestration/conditional-transitions',
-        title: 'Conditional Transitions'
+        title: '条件跳转'
       },
       {
         path: 'architecture/orchestration/step-sequencing',
-        title: 'Step Sequencing'
+        title: '步骤编排'
       },
       {
         path: 'architecture/orchestration/llm-orchestration',
-        title: 'LLM Orchestration'
+        title: 'LLM 编排'
       }
     ]
   },
 
   // Request For Agents (RFA) section
   {
-    title: 'Request For Agents',
+    title: 'Agent 招募（RFA）',
     items: [
-      { path: 'rfa/', title: 'RFA Overview' },
-      { path: 'rfa/add-agent', title: 'Contributing Agents' }
+      { path: 'rfa/', title: 'RFA 总览' },
+      { path: 'rfa/add-agent', title: '贡献智能体' }
     ]
   },
 
   // Additional Features section
   {
-    title: 'Additional Features',
+    title: '更多特性',
     items: [
-      { path: 'token-usage-tracking', title: 'Token Usage Tracking' },
-      { path: 'analytics', title: 'Analytics' }
+      { path: 'token-usage-tracking', title: 'Token 使用统计' },
+      { path: 'analytics', title: '分析与统计' }
     ]
   },
 
   // Open Source Client section
   {
-    title: 'Open Source Client',
+    title: '开源客户端',
     items: [
       {
         path: 'oss-client/nextjs-implementation',
-        title: 'Next.js Implementation'
+        title: 'Next.js 实现'
       },
-      { path: 'oss-client/byok-mode', title: 'BYOK Mode' },
-      { path: 'oss-client/image-generation', title: 'Image Generation' },
-      { path: 'oss-client/diagram-example', title: 'Diagram Examples' }
+      { path: 'oss-client/byok-mode', title: 'BYOK 模式' },
+      { path: 'oss-client/image-generation', title: '图像生成' },
+      { path: 'oss-client/diagram-example', title: '流程图示例' }
     ]
   },
 
   // Roadmap Items section
   {
-    title: 'Roadmap Features',
+    title: '路线图特性',
     items: [
-      { path: 'roadmap/evaluation-framework', title: 'Evaluation Framework' },
-      { path: 'roadmap/platform-integration', title: 'Platform Integration' },
+      { path: 'roadmap/evaluation-framework', title: '评估框架' },
+      { path: 'roadmap/platform-integration', title: '平台集成' },
       {
         path: 'roadmap/multi-agent-collaboration',
-        title: 'Multi-Agent Collaboration'
+        title: '多智能体协作'
       },
-      { path: 'roadmap/mcp-integration', title: 'MCP Integration' },
-      { path: 'roadmap/voice-agents', title: 'Voice AI Agents' },
-      { path: 'roadmap/telemetry', title: 'Telemetry & Traceability' },
+      { path: 'roadmap/mcp-integration', title: 'MCP 集成' },
+      { path: 'roadmap/voice-agents', title: '语音智能体' },
+      { path: 'roadmap/telemetry', title: '遥测与追踪' },
       {
         path: 'roadmap/workflow-nodes',
-        title: 'Workflow Runtime & Node Types'
+        title: '工作流运行时与节点类型'
       },
-      { path: 'roadmap/code-playground', title: 'Code Playground' },
+      { path: 'roadmap/code-playground', title: '代码演练场' },
       {
         path: 'roadmap/nl-agent-builder',
         title: 'Natural Language Agent Builder'

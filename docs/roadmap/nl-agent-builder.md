@@ -1,27 +1,27 @@
-# Natural Language AI Agent Builder
+# 自然语言智能体构建器（Natural Language AI Agent Builder）
 
-The Natural Language AI Agent Builder allows users to create sophisticated AI agents and workflows using plain language descriptions instead of complex coding or visual programming.
+自然语言智能体构建器允许用户用「自然语言描述」来创建复杂的 AI 智能体与工作流，而不是依赖繁琐编码或纯可视化配置。
 
-## Current Status
+## 当前状态
 
-**Status: Planned**
+**状态：规划中（Planned）**
 
-The Natural Language AI Agent Builder is currently in the design phase, with implementation planned for the Pro version.
+该功能目前处于设计阶段，计划优先在 Pro 版本中实现。
 
-## Feature Overview
+## 功能概览
 
-The Natural Language AI Agent Builder will provide:
+自然语言智能体构建器将提供：
 
-- **Language-Based Creation**: Describe agents and workflows in your own words
-- **Instant Prototyping**: Test your agents immediately after creation
-- **Automatic Tool Selection**: Smart configuration of appropriate tools
-- **Visual Builder Integration**: Seamless transition between natural language and visual editing
-- **Multi-Language Support**: Create agents using any language, not just English
-- **Workflow Generation**: Create complex, multi-step workflows through description
+- **自然语言创建**：用自己的话描述想要的智能体/工作流；  
+- **即时原型**：创建后即可马上测试；  
+- **自动选工具**：智能选择并配置合适的工具；  
+- **可视化编辑联动**：自然语言与可视化编辑之间无缝切换；  
+- **多语言支持**：不限于英文，支持任意语言创建；  
+- **工作流生成**：通过描述生成复杂多步骤流程。
 
-## Architecture Diagrams
+## 架构图
 
-### Creation Process
+### 创建流程
 
 ```mermaid
 sequenceDiagram
@@ -39,7 +39,7 @@ sequenceDiagram
     User->>Builder: Makes adjustments (if needed)
 ```
 
-### Implementation Architecture
+### 实现架构
 
 ```mermaid
 graph TD
@@ -53,7 +53,7 @@ graph TD
     style C fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Agent Example
+### 智能体示例
 
 ```mermaid
 graph TD
@@ -73,13 +73,13 @@ graph TD
     style I fill:#e6f2ff,stroke:#99ccff
 ```
 
-## Implementation Details
+## 实现细节
 
-The Natural Language AI Agent Builder will be implemented through:
+自然语言智能体构建器计划包含：
 
 ### 1. System Prompt
 
-A carefully crafted system prompt provides instructions and context to the LLM:
+通过精心设计的 system prompt 向 LLM 提供指令与上下文：
 
 ```typescript
 const systemPrompt = {
@@ -112,30 +112,30 @@ const systemPrompt = {
 };
 ```
 
-### 2. LLM Processing
+### 2. LLM 处理逻辑
 
-The LLM analyzes the description to determine:
+LLM 会解析用户描述并推导：
 
-- Agent's purpose and personality
-- Required tools and capabilities
-- System prompt for optimal behavior
-- Memory requirements
-- Appropriate connectors to platforms
+- 智能体的目标与 persona；  
+- 所需工具与能力；  
+- 最优 system prompt；  
+- 记忆系统需求；  
+- 需要连接的平台与连接器。
 
-### 3. Visual Builder Integration
+### 3. 可视化构建器联动
 
-The generated agent appears in the visual builder for inspection and refinement:
+生成的智能体会自动出现在可视化构建器中，便于检查与微调：
 
-- Node connections automatically created
-- Tool configurations pre-populated
-- System prompt displayed for editing
-- Memory systems attached as needed
+- 自动创建节点连接；  
+- 预填工具配置；  
+- 展示 system prompt 供编辑；  
+- 按需挂载记忆系统。
 
-## Workflow Examples
+## 工作流示例
 
-### Customer Support Agent
+### 客服智能体
 
-**Natural Language Input:**
+**自然语言输入：**
 "Create an agent that handles customer support requests, can search our knowledge base, and escalates to human agents when necessary."
 
 ```mermaid
@@ -152,9 +152,9 @@ graph TD
     style B fill:#0066cc,color:#ffffff,stroke:#0033cc
 ```
 
-### Research Assistant Workflow
+### 研究助手工作流
 
-**Natural Language Input:**
+**自然语言输入：**
 "I need a workflow that researches topics, summarizes findings, and sends daily reports by email."
 
 ```mermaid
@@ -168,9 +168,9 @@ graph LR
     style B fill:#0066cc,color:#ffffff,stroke:#0033cc
 ```
 
-### Trading Monitor Workflow
+### 交易监控工作流
 
-**Natural Language Input:**
+**自然语言输入：**
 "Build a workflow that monitors stock prices, analyzes market trends, and alerts me on Telegram when specific conditions are met."
 
 ```mermaid
@@ -185,11 +185,11 @@ graph TD
     style D fill:#e6f2ff,stroke:#99ccff
 ```
 
-## Key Features
+## 关键特性
 
-### 1. Multi-Language Support
+### 1. 多语言支持
 
-Create agents in any language:
+支持使用任意语言创建：
 
 ```
 English: "Create a customer support agent with knowledge base access"
@@ -197,9 +197,9 @@ Spanish: "Crea un agente de atención al cliente con acceso a la base de conocim
 Japanese: "ナレッジベースにアクセスできるカスタマーサポートエージェントを作成する"
 ```
 
-### 2. Canvas Selection Enhancement
+### 2. 画布选区增强
 
-Select specific parts of an existing workflow and modify them with natural language:
+可选中已有工作流的一部分并用自然语言进行修改：
 
 ```
 "Add error handling to this section of the workflow"
@@ -207,9 +207,9 @@ Select specific parts of an existing workflow and modify them with natural langu
 "Make this agent more creative in its responses"
 ```
 
-### 3. Template Integration
+### 3. 模板联动
 
-The system suggests templates based on your description:
+系统会根据描述推荐合适模板：
 
 ```
 Input: "Create an agent that helps with scheduling meetings"
@@ -219,7 +219,7 @@ System: "I found these templates that match your needs:
   3. Executive Assistant"
 ```
 
-## Integration with AgentDock Core
+## 与 AgentDock Core 的关系
 
 Core users can access Pro-created agents with API keys:
 
@@ -239,7 +239,7 @@ graph LR
     style B fill:#e6f2ff,stroke:#99ccff
 ```
 
-## Benefits
+## 价值
 
 1. **Accessibility**: Create agents without coding or technical knowledge
 2. **Rapid Prototyping**: Move from idea to working agent in minutes
@@ -247,7 +247,7 @@ graph LR
 4. **Reduced Cognitive Load**: Focus on what you want, not implementation details
 5. **Enhanced Productivity**: Build complex workflows with simple descriptions
 
-## Timeline
+## 时间线
 
 | Phase | Status | Description |
 |-------|--------|-------------|
@@ -258,7 +258,7 @@ graph LR
 | Advanced Workflow Generation | Future | Complex multi-step workflow creation |
 | Pattern Learning | Future | Improving generation through successful patterns |
 
-## Connection to Other Roadmap Items
+## 与其他路线图项的关系
 
 - **Platform Integration**: Easily configure agent connections to platforms
 - **Advanced Memory Systems**: Natural language setup of memory requirements

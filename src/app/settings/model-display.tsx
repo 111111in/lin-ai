@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import { SecureStorage } from 'agentdock-core/storage/secure-storage';
 
+import { useLanguage } from '@/components/providers/language-provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -37,6 +38,8 @@ const ModelsTable = memo(
     // Determine if we need scrolling (more than 7 models to show exactly 8)
     const needsScrolling = models.length > 7;
 
+    const { t } = useLanguage();
+
     return (
       <>
         <div className="flex items-center justify-between mb-4">
@@ -46,7 +49,7 @@ const ModelsTable = memo(
               variant="outline"
               className="bg-primary/10 hover:bg-primary/20 transition-colors px-2.5 py-0.5 text-xs font-medium"
             >
-              {models.length} models available
+              {models.length} {t('settings.models.badge')}
             </Badge>
           </div>
           <Button
@@ -59,12 +62,12 @@ const ModelsTable = memo(
             {isLoading ? (
               <>
                 <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent opacity-70" />
-                <span>Refreshing</span>
+                <span>{t('settings.models.refreshing')}</span>
               </>
             ) : (
               <>
                 <RefreshCw className="h-3.5 w-3.5" />
-                <span>Refresh</span>
+                <span>{t('settings.models.refresh')}</span>
               </>
             )}
           </Button>

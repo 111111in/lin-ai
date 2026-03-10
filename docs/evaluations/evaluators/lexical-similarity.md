@@ -1,12 +1,12 @@
-# Lexical Similarity Evaluator
+# 词汇相似度评估器
 
-The `LexicalSimilarityEvaluator` compares two strings and calculates a score representing their textual similarity. This is distinct from semantic similarity (handled by `NLPAccuracyEvaluator`) as it focuses on the character-level or token-level makeup of the strings. Experience suggests this is useful for cases where specific phrasing or structure is expected, but minor variations are tolerable, or for comparing against known textual patterns.
+`LexicalSimilarityEvaluator` 用于比较两段字符串，并计算一个代表它们**文本相似度**的分数。这与“语义相似度”（由 `NLPAccuracyEvaluator` 处理）不同：它关注的是字符串在**字符层面**或**分词/Token 层面**的组成。实践中，这在“需要特定措辞或结构，但允许小幅变化”的场景很有用，也适合用来与已知文本模式进行对比。
 
-It typically employs various string comparison algorithms like Levenshtein distance, Jaro-Winkler, or others available through libraries.
+它通常会使用多种字符串相似度算法，例如 Levenshtein 距离、Jaro-Winkler，或其它库中提供的算法。
 
-## Core Workflow
+## 核心工作流
 
-The `LexicalSimilarityEvaluator` takes two text inputs (e.g., an agent's response and a ground truth reference) and a selected similarity algorithm (specified in its configuration). It applies the algorithm to compare the two texts and calculates a numerical similarity score, which is then reported in the `EvaluationResult`.
+`LexicalSimilarityEvaluator` 接收两段文本输入（例如智能体回复与标准答案/参考文本），以及在配置中指定的相似度算法。评估器会应用该算法对两段文本进行比较，计算出一个数值型相似度分数，并写入 `EvaluationResult`。
 
 ```mermaid
 graph TD
@@ -32,21 +32,21 @@ graph TD
 
 ## Use Cases
 
-The `LexicalSimilarityEvaluator` is useful for:
+`LexicalSimilarityEvaluator` 适用于：
 
-*   Checking how closely an agent's response matches an expected template or a known answer, allowing for some flexibility.
-*   Assessing adherence to specific phrasing guidelines.
-*   Identifying minor typos or variations in user input when comparing against a knowledge base.
-*   Measuring the difference between two versions of a text.
+* 检查智能体回复与期望模板或已知答案的接近程度（允许一定灵活性）。
+* 评估是否遵循特定措辞规范。
+* 在与知识库对比时识别用户输入中的小拼写错误或细微差异。
+* 衡量同一文本的两个版本之间的差异。
 
 ## Configuration
 
-Configuration primarily involves selecting the algorithm and specifying the source of the texts to compare from the `EvaluationInput`:
+配置主要包括：选择算法，并指定从 `EvaluationInput` 中取哪两段文本进行对比：
 
-*   `sourceField`: A string (e.g., 'response', 'context.someData') indicating which field from `EvaluationInput` provides the primary text.
-*   `referenceField`: A string (e.g., 'groundTruth', 'context.expectedAnswer') indicating which field from `EvaluationInput` provides the reference text.
-*   `algorithm`: The string similarity algorithm to use (e.g., 'levenshtein', 'jaroWinkler', 'sorensenDice').
-*   Potentially, algorithm-specific parameters like `caseSensitive` or `normalizeWhitespace`.
+* `sourceField`：字符串（例如 `'response'`、`'context.someData'`），表示 `EvaluationInput` 中作为“主文本”的字段路径。
+* `referenceField`：字符串（例如 `'groundTruth'`、`'context.expectedAnswer'`），表示 `EvaluationInput` 中作为“参考文本”的字段路径。
+* `algorithm`：要使用的字符串相似度算法（例如 `'levenshtein'`、`'jaroWinkler'`、`'sorensenDice'`）。
+* 可能还包含算法相关参数，例如 `caseSensitive`、`normalizeWhitespace`。
 
 ```typescript
 // Example configuration structure (to be detailed)
@@ -61,12 +61,12 @@ Configuration primarily involves selecting the algorithm and specifying the sour
 
 ## Output (`EvaluationResult`)
 
-The `LexicalSimilarityEvaluator` produces an `EvaluationResult`:
+`LexicalSimilarityEvaluator` 产生的 `EvaluationResult` 通常包含：
 
-*   **`criterionName`**: A name reflecting the comparison being made (e.g., "ResponseTemplateSimilarity").
-*   **`score`**: A numeric value representing the similarity, often normalized (e.g., 0 to 1, where 1 is a perfect match).
-*   **`reasoning`**: May include the raw score from the algorithm if different from the normalized score, or the algorithm used.
-*   **`evaluatorType`**: `'LexicalSimilarity'`.
-*   **`error`**: For issues like an unsupported algorithm or problems accessing the source/target texts.
+* **`criterionName`**：反映正在进行的对比项名称（例如 `"ResponseTemplateSimilarity"`）。
+* **`score`**：代表相似度的数值，通常会被归一化（例如 0 到 1，其中 1 表示完全匹配）。
+* **`reasoning`**：可包含算法的原始分数（若与归一化分数不同）或所使用的算法信息。
+* **`evaluatorType`**：`'LexicalSimilarity'`。
+* **`error`**：用于表示如算法不支持或读取源/目标文本失败等问题。
 
-This evaluator provides a quantitative measure of textual closeness, useful when exact matches are too strict but semantic understanding is not required.
+当“完全一致匹配”过于严格、但又不需要语义理解时，该评估器提供了一个量化的“文本接近程度”指标。

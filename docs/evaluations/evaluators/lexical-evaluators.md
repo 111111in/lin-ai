@@ -1,34 +1,34 @@
-# Lexical Evaluator Suite
+# 词汇评估器套件
 
-The AgentDock Evaluation Framework includes a suite of **Lexical Evaluators** designed for fast, deterministic, and cost-effective analysis of textual content. These evaluators operate directly on the text of agent responses or other inputs, without relying on complex NLP models or LLMs. Practical experience shows that these kinds of checks are invaluable for quick feedback loops and for validating basic textual properties before engaging more resource-intensive evaluations.
+AgentDock 评估框架包含一组 **词汇评估器（Lexical Evaluators）**，用于对文本内容进行**快速、确定性强、成本低**的分析。这些评估器直接在智能体输出（或其它输入）的文本上运行，不依赖复杂的 NLP 模型或 LLM。实践经验表明，这类检查非常适合用于快速反馈回路，并可在进行更高成本的评估之前，先验证一些基础文本属性。
 
-They are particularly useful for:
+它们特别适用于：
 
-*   Quick sanity checks on output format and content.
-*   Identifying the presence or absence of specific terms.
-*   Basic sentiment and toxicity screening.
-*   Measuring superficial textual similarity.
+* 对输出格式与内容做快速“合理性检查”（sanity check）。
+* 判断特定词/短语是否出现（或缺失）。
+* 基础的情感与毒性筛查。
+* 衡量表层的文本相似度。
 
-While they don't capture deep semantic meaning, they provide a crucial layer of assessment for many common requirements.
+虽然它们无法捕捉深层语义，但对许多常见需求来说，它们提供了非常关键的一层评估能力。
 
-## Evaluators in this Suite
+## 套件包含的评估器
 
-This suite currently comprises the following evaluators. Each has its own detailed documentation page:
+当前套件包含以下评估器，每个评估器都有独立的详细文档：
 
-*   [Lexical Similarity Evaluator](./lexical-similarity.md):
-    *   Compares string similarity using various algorithms (e.g., Levenshtein, Jaro-Winkler).
-    *   Useful for checking how closely a response matches an expected template or a piece of known text, without requiring exact matches.
+* [词汇相似度评估器](./lexical-similarity.md)：
+  * 使用多种算法比较字符串相似度（例如 Levenshtein、Jaro-Winkler）。
+  * 适合用于检查响应与期望模板/已知文本的接近程度，不要求完全一致。
 
-*   [Keyword Coverage Evaluator](./keyword-coverage.md):
-    *   Checks for the presence, frequency, or coverage of specified keywords or phrases within the text.
-    *   Helpful for ensuring key information is included or for flagging forbidden terms (though `ToxicityEvaluator` is more specialized for the latter).
+* [关键词覆盖率评估器](./keyword-coverage.md)：
+  * 检查文本中指定关键词或短语的出现情况、频次或覆盖率。
+  * 可用于确保关键内容被包含，或标记禁用词（后者 `ToxicityEvaluator` 更专门）。
 
-*   [Sentiment Evaluator](./sentiment.md):
-    *   Analyzes the sentiment of the text, typically classifying it as positive, negative, or neutral.
-    *   Useful for gauging the emotional tone of an agent's response.
+* [情感评估器](./sentiment.md)：
+  * 分析文本情绪倾向，通常分类为正向/负向/中性。
+  * 用于衡量智能体回复的情绪基调。
 
-*   [Toxicity Evaluator](./toxicity.md):
-    *   Scans text for predefined toxic terms or patterns from a blocklist.
-    *   A basic but important check for safety and appropriateness.
+* [毒性评估器](./toxicity.md)：
+  * 基于黑名单扫描文本中预定义的有害/冒犯性词语或模式。
+  * 一个基础但重要的安全与合规检查。
 
-These evaluators can be used individually or in combination to build a comprehensive picture of an agent's textual output characteristics. 
+这些评估器既可以单独使用，也可以组合使用，从而更全面地刻画智能体文本输出的特征。

@@ -1,6 +1,6 @@
-# NextJS Session Integration
+# Next.js 会话集成
 
-This document explains how AgentDock's session management integrates with Next.js applications, focusing on API routes, client-side handling, and runtime considerations.
+本文介绍 AgentDock 的会话管理如何与 Next.js 应用集成，重点包括 API 路由、客户端处理以及运行时注意事项。
 
 ## Orchestration Adapter (`src/lib/orchestration-adapter.ts`)
 

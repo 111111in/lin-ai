@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Bot, Github, MessageSquare, Settings } from 'lucide-react';
 
+import { useLanguage } from '@/components/providers/language-provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,6 +35,32 @@ export function AgentCard({
   onGithub,
   currentCategory
 }: AgentCardProps) {
+  const { t } = useLanguage();
+
+  // 支持多语言的名称与描述：
+  // 1. 优先使用基于 agentId 的通用 key：agent.{agentId}.name / agent.{agentId}.description
+  // 2. 其次兼容模板中自定义的 nameKey / descriptionKey
+  // 3. 最后回退到模板里原始的英文 name/description
+  const anyTemplate = template as any;
+  const baseAgentKey = `agent.${template.agentId}`;
+
+  const translatedNameById = t(`${baseAgentKey}.name`);
+  const translatedDescById = t(`${baseAgentKey}.description`);
+
+  const displayName: string =
+    translatedNameById !== `${baseAgentKey}.name`
+      ? translatedNameById
+      : typeof anyTemplate.nameKey === 'string'
+        ? t(anyTemplate.nameKey)
+        : template.name;
+
+  const displayDescription: string =
+    translatedDescById !== `${baseAgentKey}.description`
+      ? translatedDescById
+      : typeof anyTemplate.descriptionKey === 'string'
+        ? t(anyTemplate.descriptionKey)
+        : template.description;
+
   return (
     <motion.div
       key={template.agentId}
@@ -74,11 +101,11 @@ export function AgentCard({
                   <Bot className="h-5 w-5 text-white relative z-10" />
                 </motion.div>
                 <span className="text-base font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80 bg-clip-text group-hover:from-primary group-hover:via-secondary group-hover:to-accent transition-all duration-500 truncate">
-                  {template.name}
+                  {displayName}
                 </span>
               </CardTitle>
               <CardDescription className="text-muted-foreground/90 text-xs leading-relaxed line-clamp-2">
-                {template.description}
+                {displayDescription}
               </CardDescription>
             </div>
             <motion.div
@@ -105,7 +132,7 @@ export function AgentCard({
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative">
                 <div className="text-[10px] font-semibold text-primary/80 uppercase tracking-wider mb-0.5">
-                  Model
+                  {t('agents.card.model')}
                 </div>
                 <div className="text-xs text-foreground font-bold">
                   {getLLMInfo(template).displayName}
@@ -117,7 +144,7 @@ export function AgentCard({
             {template.tags && template.tags.length > 0 && (
               <div className="pt-0.5">
                 <div className="text-[10px] font-semibold text-foreground/70 uppercase tracking-wider mb-2">
-                  Categories
+                  {t('agents.card.categories')}
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {AGENT_TAGS.filter((tag) => template.tags?.includes(tag.id))
@@ -142,7 +169,7 @@ export function AgentCard({
                                 'from-primary/20 to-primary/15 hover:from-primary/30 hover:to-primary/25 text-primary border-primary/40 shadow-primary/20'
                             )}
                           >
-                            {tag.name}
+                            {t(`nav.category.${tag.id}`) || tag.name}
                           </Badge>
                         </motion.div>
                       </Link>
@@ -170,7 +197,8 @@ export function AgentCard({
                                 'from-primary/20 to-primary/15 hover:from-primary/30 hover:to-primary/25 text-primary border-primary/40 shadow-primary/20'
                             )}
                           >
-                            {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                            {t(`tag.${tag}`) ||
+                              tag.charAt(0).toUpperCase() + tag.slice(1)}
                           </Badge>
                         </motion.div>
                       </Link>
@@ -184,7 +212,7 @@ export function AgentCard({
                 {template.nodes.some((node) => node in allTools) && (
                   <div className="pt-0.5">
                     <div className="text-[10px] font-semibold text-foreground/70 uppercase tracking-wider mb-2">
-                      Tools
+                      {t('agents.card.tools')}
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {template.nodes
@@ -201,7 +229,7 @@ export function AgentCard({
                               variant="outline"
                               className="bg-gradient-to-r from-accent/10 to-accent/5 text-[10px] px-2 py-0.5 rounded-lg border-accent/30 text-accent font-medium hover:from-accent/20 hover:to-accent/10 hover:border-accent/50 transition-all duration-300 shadow-sm backdrop-blur-sm"
                             >
-                              {node}
+                              {t(`tool.${node}`) || node}
                             </Badge>
                           </motion.div>
                         ))}
@@ -224,7 +252,7 @@ export function AgentCard({
               variant="default"
             >
               <MessageSquare className="h-4 w-4 mr-1.5" />
-              Chat
+              {t('agents.card.chat')}
             </Button>
           </motion.div>
 

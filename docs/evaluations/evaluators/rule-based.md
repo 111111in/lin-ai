@@ -1,23 +1,25 @@
-# Rule-Based Evaluator
+# 规则评估器（Rule-Based Evaluator）
 
-The `RuleBasedEvaluator` provides essential, low-cost checks for agent outputs. Its purpose is straightforward: enforce deterministic constraints and basic validations without incurring the latency or cost of LLM calls. Experience shows that establishing these kinds of guardrails early is fundamental for building any semblance of predictable agent behavior.
+`RuleBasedEvaluator` 为智能体输出提供一组**成本极低但非常关键的基础检查**。  
+目的很直接：在**不调用 LLM** 的前提下，对回复施加确定性的约束与验证。实践表明，越早建立这些“硬护栏”，越容易获得可预期的智能体行为。
 
-Think of it as the first line of defense: Does the response meet minimum length? Does it contain required keywords? Is the generated structure valid? These aren't complex semantic judgments, but they are critical for filtering out basic failures quickly.
+可以把它视作“第一道防线”：  
+回复是否满足最小长度？是否包含必须的关键词？结构是否合法？这些虽然不是复杂语义判断，却能迅速过滤掉大量基础错误。
 
-## Use Cases
+## 适用场景
 
-This evaluator excels at checks like:
+该评估器特别适用于：
 
-*   **Format Validation:** Ensuring output is valid JSON, respects length constraints (min/max characters), or matches a specific regular expression.
-*   **Keyword Enforcement:** Verifying the presence (or absence) of specific required terms, product names, or identifiers.
-*   **Basic Safety/Compliance:** Flagging responses containing blacklisted terms (though the dedicated `ToxicityEvaluator` is often better suited for more nuanced checks).
-*   **Instruction Adherence (Simple):** Checking if simple instructions, like including a specific phrase, were followed.
+* **格式校验**：确保输出为合法 JSON、满足长度上下限、或匹配指定正则；  
+* **关键词约束**：验证是否包含/不包含某些关键术语、产品名或标识符；  
+* **基础安全/合规**：拦截包含黑名单词汇的回复（更细粒度可交给 `ToxicityEvaluator`）；  
+* **简单指令遵循**：例如检查是否按要求包含某个短语。
 
-It's fast, cheap, and deterministic—essential characteristics for checks you might run frequently, perhaps even in CI/CD pipelines.
+它的特性是**快、便宜且确定性强**，非常适合作为高频运行、甚至集成到 CI/CD 流水线中的基础检查。
 
-## Configuration
+## 配置
 
-To use the `RuleBasedEvaluator`, you include its configuration in the `evaluatorConfigs` array within your `EvaluationRunConfig`.
+在 `EvaluationRunConfig.evaluatorConfigs` 中加入如下配置即可启用 `RuleBasedEvaluator`：
 
 ```typescript
 // In your EvaluationRunConfig
@@ -31,11 +33,11 @@ To use the `RuleBasedEvaluator`, you include its configuration in the `evaluator
 }
 ```
 
-The core of the configuration lies in the `rules` array, which contains `EvaluationRule` objects.
+配置的核心在于 `rules` 数组，其中包含若干 `EvaluationRule`：
 
-### `EvaluationRule` Interface
+### `EvaluationRule` 接口
 
-Each rule links a specific check to a defined evaluation criterion:
+每条规则会把一次检查与某个评估指标绑定：
 
 ```typescript
 interface EvaluationRule {
@@ -46,9 +48,9 @@ interface EvaluationRule {
 }
 ```
 
-### `RuleConfig` Union Type
+### `RuleConfig` 联合类型
 
-The `config` field within an `EvaluationRule` specifies the actual check. It's a discriminated union based on the `type` property.
+`EvaluationRule.config` 决定了实际要执行的检查，是以 `type` 为鉴别字段的联合类型：
 
 ```mermaid
 graph TD
@@ -58,16 +60,16 @@ graph TD
     RuleConfig --> JSON_Parse
 ```
 
-**Common Optional Property:**
+**通用可选字段：**
 
-*   `sourceField?: 'response' | 'prompt' | 'groundTruth' | string;`
-    *   Specifies which field from the `EvaluationInput` the rule should check.
-    *   Defaults to `'response'`. 
-    *   Use dot notation for nested context fields, e.g., `'context.extractedData'`. If the field doesn't exist or isn't a string when one is expected, the rule will typically fail.
+* `sourceField?: 'response' | 'prompt' | 'groundTruth' | string;`  
+  - 指定从 `EvaluationInput` 的哪个字段读取文本；  
+  - 默认值为 `'response'`；  
+  - 嵌套字段可使用点号，如 `'context.extractedData'`。若字段不存在或非字符串，则该规则通常视为失败。
 
-**Supported Rule Types:**
+**支持的规则类型：**
 
-1.  **`length`**: Checks the string length of the `sourceField`.
+1. **`length`**：检查 `sourceField` 的字符串长度：
     ```typescript
     type LengthRuleConfig = {
       type: 'length';
@@ -78,7 +80,7 @@ graph TD
     ```
     *Example:* `{ type: 'length', min: 10, max: 150, sourceField: 'response' }`
 
-2.  **`regex`**: Checks if the `sourceField` matches a given regular expression.
+2. **`regex`**：检查 `sourceField` 是否匹配给定正则：
     ```typescript
     type RegexRuleConfig = {
       type: 'regex';
@@ -89,7 +91,7 @@ graph TD
     ```
     *Example:* `{ type: 'regex', pattern: '^\{.*\}$', flags: 's', sourceField: 'response' }` (Checks if response is a JSON object)
 
-3.  **`includes`**: Checks for the presence of keywords in the `sourceField`.
+3. **`includes`**：检查 `sourceField` 中关键词的出现情况：
     ```typescript
     type IncludesRuleConfig = {
       type: 'includes';
@@ -101,7 +103,7 @@ graph TD
     ```
     *Example:* `{ type: 'includes', keywords: ['AgentDock', 'API key'], caseSensitive: true, expectedOutcome: 'all', sourceField: 'response' }`
 
-4.  **`json_parse`**: Checks if the `sourceField` contains a valid JSON string.
+4. **`json_parse`**：检查 `sourceField` 是否为可解析的 JSON 字符串：
     ```typescript
     type JsonParseRuleConfig = {
       type: 'json_parse';
@@ -110,9 +112,9 @@ graph TD
     ```
     *Example:* `{ type: 'json_parse', sourceField: 'response' }`
 
-### Configuration Example
+### 配置示例
 
-Here's how you might configure the `RuleBasedEvaluator` for two criteria: `IsConcise` and `MentionsProductName`.
+下面示例展示如何为两个指标 `IsConcise` 与 `MentionsProductName` 配置 `RuleBasedEvaluator`：
 
 ```typescript
 import type { EvaluationRunConfig, EvaluationRule, RuleConfig } from 'agentdock-core';
@@ -151,14 +153,14 @@ const runConfig: EvaluationRunConfig = {
 };
 ```
 
-## Output (`EvaluationResult`)
+## 输出结构（`EvaluationResult`）
 
-The `RuleBasedEvaluator` produces an `EvaluationResult` for each `EvaluationRule` whose `criterionName` matches a criterion defined in the `EvaluationInput`.
+`RuleBasedEvaluator` 会为每一条 `EvaluationRule`（且其 `criterionName` 存在于 `EvaluationInput.criteria` 中）生成一个 `EvaluationResult`：
 
-*   **`criterionName`**: Matches the name from the `EvaluationRule`.
-*   **`score`**: `true` if the rule check passed, `false` otherwise.
-*   **`reasoning`**: A simple string indicating which rule type passed or failed (e.g., "Rule length passed", "Rule regex failed").
-*   **`evaluatorType`**: `'RuleBased'`.
-*   **`error`**: Populated only if there was an unexpected issue processing the rule itself (e.g., invalid regex pattern provided in config), not for simple rule failures.
+* **`criterionName`**：来自对应的 `EvaluationRule`；  
+* **`score`**：规则检查通过为 `true`，否则为 `false`；  
+* **`reasoning`**：简单说明规则类型与检查结果（如 “Rule length passed” / “Rule regex failed”）；  
+* **`evaluatorType`**：固定为 `'RuleBased'`；  
+* **`error`**：仅在规则本身处理出错（例如配置了非法正则）时填充，普通规则失败不会写入这里。
 
-This evaluator is foundational. While it doesn't assess semantic meaning or complex reasoning, it provides essential, cost-effective guardrails that are indispensable for operational stability. 
+虽然该评估器不涉及语义理解或复杂推理，但它提供了**高性价比的基础护栏**，对于保证系统稳定与输出质量非常重要。 

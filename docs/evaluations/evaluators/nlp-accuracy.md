@@ -1,12 +1,13 @@
-# NLP Accuracy Evaluator
+# NLP 准确率评估器（NLP Accuracy Evaluator）
 
-The `NLPAccuracyEvaluator` measures the semantic similarity between an agent's response and a provided ground truth. This is crucial for tasks where the exact wording isn't as important as the meaning or intent conveyed. Experience indicates that for question answering, summarization, or any task requiring semantic understanding, this kind of evaluation is far more insightful than simple lexical matches.
+`NLPAccuracyEvaluator` 用于度量智能体回复与标准答案（ground truth）之间的**语义相似度**。  
+在很多场景下，字面是否完全一致并不重要，更关键的是“表达的意思是否一致”。在问答、摘要等需要语义理解的任务中，基于语义的评估往往比纯词面匹配更有价值。
 
-It typically works by generating embeddings (vector representations) for both the agent's response and the ground truth, and then calculating the cosine similarity between these embeddings. A higher cosine similarity indicates greater semantic closeness.
+典型做法是：先为回复和标准答案分别生成 Embedding（向量表示），再计算它们之间的余弦相似度；相似度越高，语义越接近。
 
-## Core Workflow
+## 核心流程
 
-The `NLPAccuracyEvaluator` takes an agent's response and a ground truth text as input. Both texts are then processed by a specified embedding model to generate their respective vector embeddings. The cosine similarity between these two embeddings is calculated, yielding a score that quantifies their semantic closeness. This score forms the core of the `EvaluationResult`.
+`NLPAccuracyEvaluator` 接收智能体回复与 ground truth 文本作为输入，使用指定的 Embedding 模型分别生成向量，然后计算它们的余弦相似度，得到一个量化语义接近程度的分数，这个分数就是 `EvaluationResult` 的核心。
 
 ```mermaid
 graph TD
@@ -35,18 +36,18 @@ graph TD
     style ER fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
-## Use Cases
+## 适用场景
 
-The `NLPAccuracyEvaluator` is ideal for:
+`NLPAccuracyEvaluator` 非常适合：
 
-*   Evaluating the relevance and accuracy of answers in question-answering systems.
-*   Assessing the quality of summaries against reference summaries.
-*   Measuring how well an agent's response captures the meaning of a target text.
-*   Comparing different phrasings of a concept for semantic equivalence.
+* 评估问答系统中答案的相关性与准确性；  
+* 将生成的摘要与参考摘要做对比；  
+* 度量回复在多大程度上捕捉了目标文本的含义；  
+* 对不同表述是否在语义上等价进行比较。
 
-## Configuration
+## 配置
 
-Configuring this evaluator primarily involves specifying how embeddings are generated:
+配置该评估器时，主要是声明 Embedding 的生成方式：
 
 *   The embedding model to use (via `CoreLLM` or a dedicated embedding service configuration).
 *   Potentially, parameters for the embedding generation.
@@ -73,14 +74,14 @@ Configuring this evaluator primarily involves specifying how embeddings are gene
 }
 ```
 
-## Output (`EvaluationResult`)
+## 输出结构（`EvaluationResult`）
 
-The `NLPAccuracyEvaluator` produces an `EvaluationResult`:
+`NLPAccuracyEvaluator` 的输出包括：
 
-*   **`criterionName`**: Typically a name like "SemanticSimilarity" or "NLPAccuracy".
-*   **`score`**: A numeric value (usually between 0 and 1, or -1 and 1 for cosine similarity) representing the semantic similarity. Higher is generally better.
-*   **`reasoning`**: May include details like the actual cosine similarity score if the scaled score is different, or notes about the embedding process.
-*   **`evaluatorType`**: `'NLPAccuracy'`.
-*   **`error`**: Populated if there were issues generating embeddings or calculating similarity.
+* **`criterionName`**：通常为 `"SemanticSimilarity"`、`"NLPAccuracy"` 等；  
+* **`score`**：数值分数（通常在 0–1 或 -1–1 区间，取决于余弦相似度），值越大语义越相近；  
+* **`reasoning`**：可包含实际相似度值、是否做过缩放、以及 Embedding 过程说明；  
+* **`evaluatorType`**：固定为 `'NLPAccuracy'`；  
+* **`error`**：在生成 Embedding 或计算相似度时出错时填充。
 
-This evaluator helps quantify how well an agent understands and reproduces meaning, a key aspect of advanced agent performance. 
+该评估器可以量化“智能体是否真正理解并复现了目标含义”，是衡量高级智能体表现的重要一环。 

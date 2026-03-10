@@ -3,6 +3,7 @@
 import { memo } from 'react';
 import { Type } from 'lucide-react';
 
+import { useLanguage } from '@/components/providers/language-provider';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import {
@@ -31,31 +32,33 @@ function FontSettingsComponent({
   onPrimaryFontChange,
   onMonoFontChange
 }: FontSettingsProps) {
+  const { t } = useLanguage();
+
   return (
     <Card>
       <div className="p-6 space-y-6">
         <div className="flex items-center gap-2 mb-2">
           <Type className="h-5 w-5" />
-          <h3 className="text-lg font-medium">Font Settings</h3>
+          <h3 className="text-lg font-medium">{t('settings.font.title')}</h3>
         </div>
         <p className="text-sm text-muted-foreground mb-4">
-          Customize the application typography
+          {t('settings.font.subtitle')}
         </p>
 
         <div className="grid gap-6">
           {/* Primary Font Selection */}
           <div className="grid gap-2">
             <div className="space-y-2">
-              <Label>Primary Font</Label>
+              <Label>{t('settings.font.primary.label')}</Label>
               <p className="text-sm text-muted-foreground">
-                The main font used throughout the application
+                {t('settings.font.primary.description')}
               </p>
               <Select
                 value={settings.fonts.primary}
                 onValueChange={onPrimaryFontChange as any}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a font" />
+                  <SelectValue placeholder={t('settings.font.primary.label')} />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(fontOptions).map(([key, font]) => (
@@ -69,7 +72,8 @@ function FontSettingsComponent({
                 </SelectContent>
               </Select>
               <p className="text-xs text-primary mt-2">
-                Current font: {fontOptions[settings.fonts.primary]?.name}
+                {t('settings.font.primary.current')}:{' '}
+                {fontOptions[settings.fonts.primary]?.name}
               </p>
             </div>
           </div>
@@ -79,20 +83,22 @@ function FontSettingsComponent({
           {/* Monospace Font Selection */}
           <div className="grid gap-2">
             <div className="space-y-2">
-              <Label>Code Font</Label>
+              <Label>{t('settings.font.mono.label')}</Label>
               <p className="text-sm text-muted-foreground">
-                Font used for code blocks and monospace content
+                {t('settings.font.mono.description')}
               </p>
               <Select
                 value={settings.fonts.mono}
                 onValueChange={onMonoFontChange}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a monospace font" />
+                  <SelectValue
+                    placeholder={t('settings.font.mono.placeholder')}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="default">
-                    <span>Default Monospace</span>
+                    <span>{t('settings.font.mono.default')}</span>
                   </SelectItem>
                   {Object.entries(monoFonts).map(([key, font]) => (
                     <SelectItem
@@ -105,9 +111,9 @@ function FontSettingsComponent({
                 </SelectContent>
               </Select>
               <p className="text-xs text-primary mt-2">
-                Current font:{' '}
+                {t('settings.font.mono.current')}:{' '}
                 {settings.fonts.mono === 'default'
-                  ? 'Default Monospace'
+                  ? t('settings.font.mono.default')
                   : monoFonts[settings.fonts.mono as keyof typeof monoFonts]
                       ?.name || 'Default'}
               </p>

@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { SecureStorage } from 'agentdock-core/storage/secure-storage';
 
 import { ErrorBoundary } from '@/components/error-boundary';
+import { useLanguage } from '@/components/providers/language-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -31,41 +32,39 @@ const storage = SecureStorage.getInstance('agentdock');
 const API_KEY_PROVIDERS: ApiKeyProvider[] = [
   {
     key: 'openai',
-    label: 'OpenAI API Key',
+    label: 'OpenAI 接口密钥',
     icon: KeyRound,
-    description: 'Used for OpenAI models like GPT-4 and GPT-3.5'
+    description: '用于调用 OpenAI 模型（如 GPT‑4、GPT‑3.5 等）'
   },
   {
     key: 'anthropic',
-    label: 'Anthropic API Key',
+    label: 'Anthropic 接口密钥',
     icon: KeyRound,
-    description: 'Used for Anthropic Claude models'
+    description: '用于调用 Anthropic Claude 系列模型'
   },
   {
     key: 'cerebras',
-    label: 'Cerebras API Key',
+    label: 'Cerebras 接口密钥',
     icon: KeyRound,
-    description:
-      'Used for models hosted by Cerebras, such as LLaMA 3.3, and Qwen 3'
+    description: '用于调用 Cerebras 托管的 LLaMA 3.3、Qwen 3 等模型'
   },
   {
     key: 'gemini',
-    label: 'Google Gemini API Key',
+    label: 'Google Gemini 接口密钥',
     icon: KeyRound,
-    description: 'Used for Google Gemini models'
+    description: '用于调用 Google Gemini 系列模型'
   },
   {
     key: 'deepseek',
-    label: 'DeepSeek API Key',
+    label: 'DeepSeek 接口密钥',
     icon: KeyRound,
-    description:
-      'Used for DeepSeek models including DeepSeek-V3 and DeepSeek-R1'
+    description: '用于调用 DeepSeek‑V3、DeepSeek‑R1 等模型'
   },
   {
     key: 'groq',
-    label: 'Groq API Key',
+    label: 'Groq 接口密钥',
     icon: KeyRound,
-    description: 'Used for Groq models like Llama 3 and Mixtral'
+    description: '用于调用 Groq 平台上的 Llama 3、Mixtral 等模型'
   }
 ];
 
@@ -75,6 +74,7 @@ function SettingsPage() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [modelsRefreshTrigger, setModelsRefreshTrigger] = useState(0);
+  const { t } = useLanguage();
 
   // Load settings on mount
   useEffect(() => {
@@ -102,7 +102,7 @@ function SettingsPage() {
         logger.error(LogCategory.LLM, '[Settings]', 'Error loading settings:', {
           error
         });
-        setError('Failed to load settings');
+        setError('加载设置失败');
       } finally {
         setInitialLoading(false);
       }
@@ -137,7 +137,7 @@ function SettingsPage() {
             // Save settings
             await storage.set('global_settings', updatedSettings);
             setSettings(updatedSettings);
-            toast.success('Settings saved successfully');
+            toast.success('设置已保存');
           }
           return;
         }
@@ -161,9 +161,7 @@ function SettingsPage() {
           // Save settings if requested
           if (shouldSave) {
             await storage.set('global_settings', updatedSettings);
-            toast.success(
-              `Valid ${provider} API key - Settings saved automatically`
-            );
+            toast.success('API Key 有效，设置已自动保存');
           }
 
           // Update state
@@ -172,13 +170,11 @@ function SettingsPage() {
           // Trigger model refresh AFTER settings are updated and saved
           setModelsRefreshTrigger((prev) => prev + 1);
         } else {
-          toast.error(`Invalid ${provider} API key`);
+          toast.error('API Key 无效');
         }
       } catch (error) {
         const message =
-          error instanceof Error
-            ? error.message
-            : `Error processing ${provider} API key`;
+          error instanceof Error ? error.message : '处理 API Key 时出错';
         logger.error(LogCategory.LLM, '[Settings]', message, { error });
         setError(message);
         toast.error(message);
@@ -234,20 +230,18 @@ function SettingsPage() {
       const invalidKeys = results.filter((result) => !result.isValid);
 
       if (invalidKeys.length > 0) {
-        const invalidProviders = invalidKeys.map((k) => k.provider).join(', ');
-        toast.error(`Invalid API keys: ${invalidProviders}`);
+        toast.error('存在无效的 API Key，请检查后重试');
         return;
       }
 
       // All keys are valid or empty, save settings
       await storage.set('global_settings', settings);
-      toast.success('Settings saved successfully');
+      toast.success('设置已保存');
 
       // Refresh models after save
       setModelsRefreshTrigger((prev) => prev + 1);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Failed to save settings';
+      const message = error instanceof Error ? error.message : '保存设置失败';
       setError(message);
       toast.error(message);
     } finally {
@@ -425,13 +419,13 @@ function SettingsPage() {
             <div className="space-y-3">
               <h1 className="text-5xl sm:text-6xl font-black tracking-tight">
                 <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
-                  Settings
+                  {t('settings.title')}
                 </span>
               </h1>
               <div className="flex items-center gap-3">
                 <div className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent"></div>
                 <p className="text-muted-foreground/90 text-base sm:text-lg font-medium">
-                  Manage your API keys and application preferences
+                  {t('settings.subtitle')}
                 </p>
               </div>
             </div>
@@ -443,12 +437,12 @@ function SettingsPage() {
               {loading ? (
                 <div className="flex items-center gap-2">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  <span>Saving...</span>
+                  <span>{t('settings.saving')}</span>
                 </div>
               ) : (
                 <>
                   <Save className="mr-2 h-5 w-5" />
-                  Save Changes
+                  {t('settings.save')}
                 </>
               )}
             </Button>
@@ -463,7 +457,7 @@ function SettingsPage() {
                 <AlertCircle className="h-5 w-5 text-destructive" />
                 <div className="space-y-1">
                   <p className="font-medium leading-none text-destructive">
-                    Error Saving Settings
+                    {t('settings.error.title')}
                   </p>
                   <p className="text-sm text-destructive/80">{error}</p>
                 </div>
@@ -497,10 +491,10 @@ function SettingsPage() {
                   <div className="p-2 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl">
                     <KeyRound className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold">API Keys</h3>
+                  <h3 className="text-xl font-bold">API 密钥</h3>
                 </div>
                 <p className="text-sm text-muted-foreground/90">
-                  Configure API keys for language models and other services
+                  为各家语言模型和相关服务配置访问密钥
                 </p>
 
                 <div className="grid gap-6">
@@ -521,7 +515,7 @@ function SettingsPage() {
                           <Input
                             id={key.toString()}
                             type="password"
-                            placeholder={`Enter your ${key} API key`}
+                            placeholder="请输入对应服务的 API 密钥"
                             value={settings.apiKeys[key]}
                             onChange={(e) =>
                               handleApiKeyChange(key, e.target.value)
@@ -548,7 +542,7 @@ function SettingsPage() {
                               className="absolute right-1 top-1 h-7 hover:bg-destructive/20 hover:text-destructive"
                               onClick={() => handleApiKeyValidate(key, '')}
                             >
-                              Clear
+                              清空
                             </Button>
                           )}
                         </div>

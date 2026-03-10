@@ -1,27 +1,27 @@
-# Telemetry & Observability
+# 遥测与可观测性（Telemetry & Observability）
 
-The Telemetry & Observability feature provides monitoring, tracing, and evaluation capabilities for AgentDock agents, enabling developers to gain insights into agent behavior and optimize performance.
+遥测与可观测性功能为 AgentDock 智能体提供**监控、链路追踪与评估**能力，帮助开发者洞察智能体行为并持续优化性能、成本与质量。
 
-## Current Status
+## 当前状态
 
-**Status: Planned**
+**状态：规划中（Planned）**
 
-We're exploring different approaches for implementing the Telemetry & Observability system, evaluating both third-party open source solutions and custom implementations. Regardless of which path we choose, the system will deliver comprehensive monitoring and tracing capabilities.
+我们正在评估多种实现路径：包括集成第三方开源方案与自研实现。无论采用哪一种路线，最终目标都是提供完整的监控与追踪能力。
 
-## Feature Overview
+## 功能概览
 
-Key capabilities will include:
+关键能力包括：
 
-- **Tracing**: Track agent interactions, LLM calls, and tool executions
-- **Performance Metrics**: Monitor latency, token usage, and resource utilization
-- **Cost Tracking**: Measure API usage costs across providers
-- **Evaluations**: Assess agent output quality with customizable metrics (see [Evaluation Framework](./evaluation-framework.md) for details)
-- **Session Monitoring**: Group related interactions into sessions for cohesive analysis
-- **Visualization**: Display trace data in intuitive dashboards
+- **链路追踪（Tracing）**：追踪智能体交互、LLM 调用与工具执行；  
+- **性能指标（Performance Metrics）**：监控延迟、token 使用量与资源占用；  
+- **成本统计（Cost Tracking）**：按提供商维度量化 API 调用成本；  
+- **评估（Evaluations）**：用可配置指标评估输出质量（详见[评估框架](./evaluation-framework.md)）；  
+- **会话监控（Session Monitoring）**：将相关交互按 session 聚合，便于整体分析；  
+- **可视化（Visualization）**：在直观的仪表盘中展示 trace 与指标数据。
 
-## Architecture Diagrams
+## 架构图
 
-### Telemetry Architecture
+### 遥测总体架构
 
 ```mermaid
 graph TD
@@ -40,7 +40,7 @@ graph TD
     style E fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Tracing Pipeline
+### 追踪流水线
 
 ```mermaid
 graph TD
@@ -63,53 +63,53 @@ graph TD
     style C fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Evaluation Flow
+### 评估流（与遥测集成）
 
 The evaluation system is integrated with telemetry for comprehensive agent assessment. For detailed information on the evaluation architecture and components, please refer to the [Evaluation Framework](./evaluation-framework.md) document.
 
-## Implementation Approaches
+## 实现方案
 
-We're evaluating two main approaches:
+目前主要评估两类方案：
 
-### 1. Third-Party Integration
+### 1. 第三方集成
 
-Using open source platforms like Laminar or OpenTelemetry-based solutions:
+使用 Laminar、基于 OpenTelemetry 的可观测平台等开源方案：
 
-- Standardized tracing protocols and formats
-- Pre-built visualization and analysis tools
-- Lower development overhead
-- Community-supported extensions
+- 标准化的追踪协议与数据格式；  
+- 现成的可视化与分析工具；  
+- 开发成本更低；  
+- 社区生态扩展更丰富。
 
-### 2. Custom Implementation
+### 2. 自研实现
 
-Building a tailored solution specific to AgentDock:
+构建更贴合 AgentDock 的定制方案：
 
-- Complete control over data collection and storage
-- Custom visualization specific to LLM agent needs
-- Tighter integration with existing AgentDock components
-- Specialized features for agent evaluation
+- 对数据采集与存储拥有完全控制；  
+- 面向 LLM 智能体场景的定制化可视化；  
+- 与现有 AgentDock 组件更紧密的集成；  
+- 针对智能体评估的专用能力。
 
-## Key Features
+## 关键特性
 
-### Comprehensive Tracing
+### 全链路追踪
 
-The system will provide detailed visibility into agent operations:
+系统将提供对智能体运行过程的细粒度可见性：
 
-- **LLM Call Tracing**: Track prompt construction, model invocation, and response processing
-- **Tool Execution Monitoring**: Log tool calls, parameters, and results
-- **Message Flow Visualization**: See the complete conversation flow with timing information
-- **Error Tracking**: Capture and analyze errors with full context
+- **LLM 调用追踪**：记录 prompt 构建、模型调用与响应处理；  
+- **工具执行监控**：记录工具调用、参数与结果；  
+- **消息流可视化**：展示完整对话链路及耗时；  
+- **错误追踪**：捕获错误并保留完整上下文以便定位。
 
-### Performance Metrics
+### 性能指标
 
-Monitor and optimize agent performance:
+监控并优化智能体性能：
 
-- **Latency Breakdown**: Identify bottlenecks in the processing pipeline
-- **Token Usage**: Track token consumption by component and operation
-- **Resource Utilization**: Monitor CPU, memory, and network usage
-- **Cost Analysis**: Calculate expenses based on provider-specific pricing
+- **延迟拆解**：定位处理流水线中的瓶颈；  
+- **Token 使用**：按组件/操作维度统计 token 消耗；  
+- **资源占用**：监控 CPU、内存、网络等；  
+- **成本分析**：按提供商定价规则估算与汇总费用。
 
-## Timeline
+## 时间线
 
 | Phase | Status | Description |
 |-------|--------|-------------|
@@ -119,7 +119,7 @@ Monitor and optimize agent performance:
 | Evaluation Framework | Planned | Tools for assessing agent output quality |
 | Advanced Features | Future | Enhanced analytics and visualization |
 
-## Connection to Other Roadmap Items
+## 与其他路线图项的关系
 
 The Telemetry & Observability feature connects with other roadmap items:
 
@@ -128,9 +128,9 @@ The Telemetry & Observability feature connects with other roadmap items:
 - **Voice AI Agents**: Measure voice processing latency and quality
 - **Evaluation Framework**: Provides data for the [Agent Evaluation Framework](./evaluation-framework.md)
 
-## Use Cases
+## 使用场景
 
-### Development & Debugging
+### 开发与调试
 
 Accelerate agent development with comprehensive tracing:
 
@@ -147,7 +147,7 @@ graph TD
     style E fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Production Monitoring
+### 生产监控
 
 Ensure reliability and performance in production:
 
@@ -164,13 +164,13 @@ graph LR
     style F fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Quality Assurance
+### 质量保障
 
 Continuously evaluate and improve agent outputs. This use case is shared with the Evaluation Framework - see the [Evaluation Framework](./evaluation-framework.md) document for more details on assessment criteria and methods.
 
-## Technical Considerations
+## 技术考量
 
-### Data Privacy and Security
+### 数据隐私与安全
 
 Regardless of the implementation approach, the telemetry system will:
 
@@ -179,7 +179,7 @@ Regardless of the implementation approach, the telemetry system will:
 - Provide configurable sampling rates to control data volume
 - Ensure compliance with privacy regulations
 
-### Performance Impact
+### 性能影响
 
 The telemetry system is designed to have minimal overhead:
 
@@ -188,4 +188,5 @@ The telemetry system is designed to have minimal overhead:
 - Batched exports to minimize API calls
 - Memory-efficient trace storage
 
-The final architecture will be determined based on further evaluation of existing open source solutions like Laminar, weighing their capabilities against the specific needs of AgentDock agents. Whether we build our own solution or leverage third-party tools, the telemetry system will provide the comprehensive observability needed to optimize agent performance and reliability. 
+最终架构会基于对现有开源方案（如 Laminar）的进一步评估来确定，并结合 AgentDock 智能体的实际需求做取舍。  
+无论选择自研还是第三方集成，遥测系统都会提供足够完整的可观测能力，用于持续优化智能体的性能、稳定性与成本。 

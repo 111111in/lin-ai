@@ -236,18 +236,18 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
       }
     } catch (error) {
       console.error('Error selecting gallery image:', error);
-      setError('Failed to load the selected image for editing.');
+      setError('加载所选图片用于编辑失败。');
     }
   };
 
   const handlePromptSubmit = async (promptText: string) => {
     if (!promptText.trim() && !uploadedImage) {
-      setError('Please provide a prompt or upload an image.');
+      setError('请填写提示词或上传一张图片。');
       return;
     }
 
     if (!sessionId) {
-      setError('Session not available. Please try reloading.');
+      setError('会话不可用，请刷新页面后重试。');
       setLoading(false);
       return;
     }
@@ -320,7 +320,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
         // ------------------------------------------
       } else {
         setHistoryItems(historyItems);
-        setError('Image generation completed but returned no image.');
+        setError('图片生成完成，但没有返回图片结果。');
       }
     } catch (actionError) {
       setHistoryItems(historyItems);
@@ -328,7 +328,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
       const message =
         actionError instanceof Error
           ? actionError.message
-          : 'Failed to generate/save history.';
+          : '生成或保存历史记录失败。';
       setError(message);
     } finally {
       setLoading(false);
@@ -399,7 +399,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
       );
     } catch (err) {
       console.error('Failed to clear history via action:', err);
-      setError('Could not clear the generation history.');
+      setError('清空生成历史失败。');
     }
   }, [sessionId]);
 
@@ -416,14 +416,14 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none mb-4">
           <span className="inline-block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
-            Image Generation
+            图像生成
           </span>
         </h1>
 
         <div className="flex items-center gap-3 mb-4">
           <div className="h-px w-12 bg-gradient-to-r from-primary/50 to-transparent"></div>
           <p className="text-muted-foreground/90 text-base sm:text-lg font-medium">
-            Create and edit images with Gemini AI
+            使用 Gemini AI 创建与编辑图片
           </p>
           <div className="h-px w-12 bg-gradient-to-l from-primary/50 to-transparent"></div>
         </div>
@@ -474,7 +474,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                         onClick={handleScrollToGallery}
                         className="text-sm font-medium text-muted-foreground flex items-center gap-2 hover:text-primary transition-all duration-300 hover:bg-primary/5 rounded-xl px-4 py-2"
                       >
-                        <span>Browse image gallery</span>
+                        <span>浏览图片库</span>
                         <ChevronUp className="h-4 w-4 rotate-180 transition-transform group-hover:translate-y-1" />
                       </Button>
                     </div>
@@ -493,10 +493,10 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                   </div>
                   <div className="text-center">
                     <p className="text-lg font-bold text-foreground mb-2">
-                      Creating your image...
+                      正在生成图片...
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      This may take a few moments
+                      可能需要一点时间
                     </p>
                   </div>
                 </div>
@@ -541,14 +541,14 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
               </div>
               <h2 className="text-3xl font-black tracking-tight">
                 <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  Gallery
+                  图片库
                 </span>
               </h2>
             </div>
             <div className="flex items-center gap-2 ml-1">
               <div className="h-px w-8 bg-gradient-to-r from-primary/50 to-transparent"></div>
               <p className="text-sm text-muted-foreground/80 font-medium">
-                Browse and edit your images
+                浏览并编辑你的图片
               </p>
             </div>
           </div>
@@ -566,12 +566,10 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
                       <Trash2 className="h-4 w-4 mr-2 relative z-10" />
-                      <span className="relative z-10">Clear History</span>
+                      <span className="relative z-10">清空历史</span>
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    Clear generation history and reset session
-                  </TooltipContent>
+                  <TooltipContent>清空生成历史并重置会话</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             )}
@@ -584,7 +582,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
               <span className="relative z-10">
-                {galleryLoading ? 'Refreshing...' : 'Refresh Gallery'}
+                {galleryLoading ? '刷新中...' : '刷新图片库'}
               </span>
             </Button>
           </div>
@@ -602,10 +600,10 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                 <ImageIcon className="w-10 h-10 text-primary" />
               </div>
               <p className="text-lg font-bold text-foreground mb-2">
-                No images yet
+                还没有图片
               </p>
               <p className="text-sm text-muted-foreground max-w-md text-center">
-                Create your first image with the tools above
+                使用上方工具创建你的第一张图片
               </p>
             </div>
           </div>
@@ -631,7 +629,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
                     <img
                       src={imageUrl} // Always use imageUrl directly
-                      alt={`Generated image ${imageId}`}
+                      alt={`生成的图片 ${imageId}`}
                       className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                       loading="lazy"
                     />
@@ -693,8 +691,8 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                             <TooltipContent>
                               <p>
                                 {IS_HUB_CLIENT
-                                  ? 'Editing from gallery disabled in Hub mode'
-                                  : 'Edit this image'}
+                                  ? 'Hub 模式下暂不支持从图片库直接编辑'
+                                  : '编辑这张图片'}
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -718,7 +716,7 @@ function ImageGenerationWithParams(props: { editIdFromUrl?: string | null }) {
                               </a>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>View full size</p>
+                              <p>查看大图</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -744,7 +742,7 @@ export default function ImageGenerationPage() {
           <div className="animate-spin mr-2">
             <ImageIcon className="h-6 w-6 text-primary" />
           </div>
-          <span>Loading image editor...</span>
+          <span>正在加载图片编辑器...</span>
         </div>
       }
     >

@@ -101,13 +101,13 @@ export function DocsSidebar({ sidebarSections }: DocsSidebarProps) {
           <div className="relative">
             <h2 className="text-2xl font-black tracking-tight mb-1">
               <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Documentation
+                文档中心
               </span>
             </h2>
             <div className="flex items-center gap-2">
               <div className="h-px w-8 bg-gradient-to-r from-primary/50 to-transparent"></div>
               <p className="text-xs text-muted-foreground/80 font-medium">
-                LinAI Core
+                LinAI 核心
               </p>
             </div>
           </div>

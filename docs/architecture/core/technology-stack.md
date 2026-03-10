@@ -1,101 +1,107 @@
-# Technology Stack
+# 技术栈（Technology Stack）
 
-This document outlines the core technologies used in AgentDock Core and its reference implementation.
+本文档概述 AgentDock Core 及其参考实现所使用的**核心技术栈**。
 
-## Core Framework
+## 核心框架（Core Framework）
 
-- **TypeScript**: Primary language, providing type safety and modern JavaScript features
-- **Node.js**: Server-side runtime (>= 20.11.0)
-- **Vercel AI SDK**: For LLM provider integrations
+- **TypeScript**：主力语言，提供类型安全与现代 JavaScript 特性；  
+- **Node.js**：服务端运行时（推荐版本 ≥ 20.11.0）；  
+- **Vercel AI SDK**：统一接入多家 LLM 提供商的核心依赖。
 
-## State Management
+## 状态管理
 
-- **Zod**: Schema validation and runtime type checking
-- **Zustand**: UI state management in the reference implementation
+- **Zod**：用于 Schema 校验与运行时类型检查；  
+- **Zustand**：在参考实现中用于部分 UI 状态管理。
 
-## Development Environment
+## 开发环境
 
-- **pnpm**: Package manager (>= 9.15.0)
-- **ESLint & TypeScript-ESLint**: Code quality and type checking
-- **Jest**: Testing framework
-- **Husky**: Git hooks for code quality
+- **pnpm**：包管理工具（推荐版本 ≥ 9.15.0）；  
+- **ESLint & TypeScript-ESLint**：代码质量与类型检查；  
+- **Jest**：单元测试框架；  
+- **Husky**：通过 Git hooks 强制执行代码规范。
 
-## Reference Implementation
+## 前端参考实现
 
-For details about the open source client implementation built with Next.js, see [Next.js Implementation](../../oss-client/nextjs-implementation.md).
+关于基于 Next.js 构建的开源客户端实现，可参考文档：  
+[Next.js 实现](../../oss-client/nextjs-implementation.md)。
 
-### Key Technologies
+### 关键前端技术
 
-- **Next.js**: React framework with App Router
-- **React**: UI library (^18.2.0)
-- **Shadcn/ui & Radix UI**: Component primitives
-- **Tailwind CSS**: Utility-first styling
-- **React Hook Form**: Form handling
-- **React Markdown**: Documentation rendering
+- **Next.js**：带 App Router 的 React 框架；  
+- **React**：UI 库（^18.2.0）；  
+- **shadcn/ui & Radix UI**：高质量的基础组件库；  
+- **Tailwind CSS**：原子化 CSS 框架；  
+- **React Hook Form**：表单管理；  
+- **React Markdown**：文档渲染。
 
-## AgentDock Core
+## AgentDock Core 主要依赖
 
--   **Language:** TypeScript
-    -   Provides strong typing, compile-time checks, and improved maintainability for the core library.
--   **Runtime:** Node.js (LTS versions recommended)
-    -   The primary execution environment for the core logic when run server-side.
--   **LLM Interaction:** Vercel AI SDK (`ai` package)
-    -   Provides a unified, stream-first interface to interact with various LLM providers (OpenAI, Anthropic, Google Gemini, Groq, etc.).
-    -   Handles the complexities of different provider APIs for text generation, streaming, and function/tool calling.
--   **Storage (Defaults & Included):**
-    -   In-Memory: Default key-value store for sessions/orchestration if no external provider is configured.
-    -   Redis (`@upstash/redis`): Included provider for persistent key-value storage, often used with Docker for development.
-    -   Vercel KV (`@vercel/kv`): Included provider for Vercel's key-value store.
--   **Schema Validation (for Tools):** Zod
-    -   Used within tool definitions to define and validate input parameters expected from the LLM, ensuring type safety and providing clear error messages.
--   **Logging:** Custom logger utilities (`agentdock-core/src/logging`)
-    -   Provides structured logging capabilities within the core library.
--   **Package Manager:** pnpm
-    -   Used for managing dependencies and ensuring efficient installation. AgentDock Core will be released as a separate NPM package when it's ready for release.
+- **语言：TypeScript**  
+  - 为核心库提供强类型、编译期检查与更好的可维护性。  
+- **运行时：Node.js（推荐 LTS）**  
+  - 作为在服务端部署 core 逻辑的主要执行环境。  
+- **LLM 交互：Vercel AI SDK（`ai` 包）**  
+  - 提供统一的、以流式优先的接口来调用多家 LLM 提供商（OpenAI、Anthropic、Google Gemini、Groq 等）；  
+  - 处理文本生成、流式输出、函数/工具调用等跨提供商差异。  
+- **存储（默认与内置）**  
+  - 内存存储：在未配置外部存储时，用作会话/编排状态的默认 KV；  
+  - Redis（`@upstash/redis`）：适合本地与云端持久化存储，常配合 Docker 使用；  
+  - Vercel KV（`@vercel/kv`）：适配 Vercel 平台的 KV 存储。  
+- **Schema 校验（工具参数）：Zod**  
+  - 在工具定义中用于描述与校验 LLM 传入的参数，确保安全与可调试性。  
+- **日志：自定义 Logger（`agentdock-core/src/logging`）**  
+  - 提供结构化日志能力，方便排查问题与监控运行状态。  
+- **包管理：pnpm**  
+  - 管理依赖并提供高效的安装过程；AgentDock Core 计划以独立 NPM 包形式发布。
 
-## Open Source Client (Reference Implementation)
+## 开源客户端（参考实现）
 
-This web application demonstrates how to use AgentDock Core.
+该 Web 应用展示了如何在实践中使用 AgentDock Core：
 
--   **Framework:** Next.js (App Router)
-    -   Provides the foundation for the web application, including routing, server components, client components, and API routes.
--   **UI Components:** Shadcn/ui & Radix UI
-    -   Used for building the user interface components (buttons, inputs, layout, etc.). Built on top of Tailwind CSS.
--   **Styling:** Tailwind CSS
-    -   A utility-first CSS framework for styling the application.
--   **State Management (UI):** Primarily React state/context, potentially Zustand for more complex global state if needed.
--   **Client-Side Storage:** `localStorage` (potentially secured via `SecureStorage` from Core for sensitive items like API keys).
+- **框架：Next.js（App Router）**  
+  - 提供路由、服务端组件、客户端组件以及 API 路由能力。  
+- **UI 组件：shadcn/ui & Radix UI**  
+  - 用于按钮、输入框、布局等基础组件，基于 Tailwind CSS 构建。  
+- **样式：Tailwind CSS**  
+  - 提供便捷的原子化样式体系。  
+- **UI 状态管理**：以 React state/context 为主，必要时辅以 Zustand；  
+- **客户端存储**：`localStorage`（对于敏感信息可结合 Core 中的 `SecureStorage` 做加密存储）。
 
-## Development & Build Tools
+## 开发与构建工具
 
--   **Package Management:** pnpm
-    -   Manages dependencies with efficient node_modules structure and consistent installs.
--   **Task Running/Scripting:** pnpm scripts (defined in `package.json`)
-    -   Used for build, test, dev, linting, and other development tasks.
--   **Testing:** Vitest
-    -   Used for running unit and integration tests.
--   **Linting/Formatting:** ESLint & Prettier
-    -   Ensures code quality and consistent formatting.
+- **依赖管理：pnpm**  
+  - 使用高效的 node_modules 结构，保证安装与缓存的一致性。  
+- **脚本与任务：pnpm scripts**  
+  - 用于运行构建、测试、开发、Lint 等任务。  
+- **测试框架：Vitest**  
+  - 执行单元与集成测试。  
+- **代码规范：ESLint & Prettier**  
+  - 保证代码质量与统一的格式风格。
 
-## Optional Backend Services (for Development)
+## 可选后端服务（开发环境）
 
--   **Redis:** (As mentioned in Core) Typically run via Docker Compose (`docker-compose.yaml`) for persistent session/orchestration state during development.
--   **Redis Commander:** A simple web UI (included in `docker-compose.yaml`) for inspecting data stored in the development Redis instance.
+- **Redis**：  
+  - 如前文所述，用于在开发环境持久化会话与编排状态，通常通过 `docker-compose.yaml` 启动；  
+- **Redis Commander**：  
+  - 简单的 Web UI，方便在开发过程中查看 Redis 中的数据，同样包含在 `docker-compose.yaml` 中。
 
-### Extended Vercel AI SDK Capabilities
+## Vercel AI SDK 的增强能力
 
-AgentDock extends the Vercel AI SDK with enhanced capabilities:
+AgentDock 在 Vercel AI SDK 之上做了多项增强：
 
-- **AgentDockStreamResult**: Extends the standard `StreamTextResult` with:
-  - Orchestration state tracking
-  - Enhanced error handling
-  - Custom response transformations
+- **`AgentDockStreamResult`**  
+  - 在标准 `StreamTextResult` 基础上扩展：  
+    - 编排状态追踪（如已使用工具、累积 token 消耗）；  
+    - 更丰富的错误信息；  
+    - 自定义流式响应转换能力。  
 
-- **LLMOrchestrationService**: Bridges the SDK's streaming capabilities with orchestration:
-  - Automatically updates token usage in session state
-  - Tracks tools used during conversations
-  - Provides this state to orchestration rules
+- **`LLMOrchestrationService`**  
+  - 将 SDK 的流式能力与编排逻辑打通：  
+    - 自动在会话状态中更新 token 使用量；  
+    - 记录对话过程中的工具使用情况；  
+    - 为编排规则提供最新的状态输入。
 
-For more details, see:
-- [Response Streaming](./response-streaming.md)
-- [LLM Orchestration](../orchestration/llm-orchestration.md) 
+更多内容可继续阅读：
+
+- [流式响应（Response Streaming）](./response-streaming.md)  
+- [LLM 编排（LLM Orchestration）](../orchestration/llm-orchestration.md)

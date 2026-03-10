@@ -22,6 +22,7 @@ import {
   Zap
 } from 'lucide-react';
 
+import { useLanguage } from '@/components/providers/language-provider';
 import { Button } from '@/components/ui/button';
 import { ROUTES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
@@ -32,15 +33,15 @@ import { cn } from '@/lib/utils';
 const features = [
   {
     icon: Bot,
-    title: 'AI Agents',
-    description: '与多种预配置的 AI Agent 对话，获得专业的帮助和建议',
+    title: '智能体广场',
+    description: '与多种预配置的 AI 智能体对话，获得专业的帮助和建议',
     href: ROUTES.AGENTS,
     color: 'from-blue-500 to-cyan-500',
     gradient: 'from-blue-500/20 to-cyan-500/20'
   },
   {
     icon: GitCompare,
-    title: 'Model Compare',
+    title: '模型对比',
     description: '同时测试多个 AI 模型，对比响应质量和速度',
     href: ROUTES.COMPARE,
     color: 'from-purple-500 to-pink-500',
@@ -48,7 +49,7 @@ const features = [
   },
   {
     icon: History,
-    title: 'History Management',
+    title: '历史管理',
     description: '管理所有对话历史，支持搜索、过滤和导出',
     href: ROUTES.HISTORY,
     color: 'from-green-500 to-emerald-500',
@@ -56,7 +57,7 @@ const features = [
   },
   {
     icon: Image,
-    title: 'Image Generation',
+    title: '图像生成',
     description: '使用 AI 生成和编辑图像，释放创造力',
     href: ROUTES.IMAGE_GEN,
     color: 'from-orange-500 to-red-500',
@@ -89,9 +90,9 @@ const highlights = [
  * 统计数据
  */
 const stats = [
-  { label: 'AI Models', value: '4+' },
-  { label: 'Features', value: '8+' },
-  { label: 'Agents', value: '20+' }
+  { label: 'AI 模型', value: '4+' },
+  { label: '功能模块', value: '8+' },
+  { label: '预置智能体', value: '20+' }
 ];
 
 /**
@@ -100,6 +101,7 @@ const stats = [
 export default function HomePage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -136,16 +138,16 @@ export default function HomePage() {
             {/* 主标题 */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none mb-6 md:mb-8">
               <span className="inline-block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
-                Welcome to LinAI
+                {t('home.hero.title')}
               </span>
             </h1>
 
             {/* 副标题 */}
             <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground/90 font-medium mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed">
-              Your Personal AI Agent Platform
+              {t('home.hero.subtitle.main')}
               <br />
               <span className="text-lg sm:text-xl text-muted-foreground/70">
-                Build, Deploy, and Scale AI Agents with Ease
+                {t('home.hero.subtitle.sub')}
               </span>
             </p>
 
@@ -157,7 +159,9 @@ export default function HomePage() {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
                 <Sparkles className="mr-2 h-5 w-5 relative z-10" />
-                <span className="relative z-10">Start Exploring</span>
+                <span className="relative z-10">
+                  {t('home.hero.cta.primary')}
+                </span>
                 <ArrowRight className="ml-2 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
               </Button>
 
@@ -168,7 +172,9 @@ export default function HomePage() {
               >
                 <Link href="/docs">
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-                  <span className="relative z-10">View Documentation</span>
+                  <span className="relative z-10">
+                    {t('home.hero.cta.secondary')}
+                  </span>
                 </Link>
               </Button>
             </div>
@@ -184,7 +190,13 @@ export default function HomePage() {
                     {stat.value}
                   </div>
                   <div className="text-sm text-muted-foreground font-medium">
-                    {stat.label}
+                    {stat.label === 'AI Models'
+                      ? t('home.stats.models')
+                      : stat.label === 'Features'
+                        ? t('home.stats.features')
+                        : stat.label === 'Agents'
+                          ? t('home.stats.agents')
+                          : stat.label}
                   </div>
                 </div>
               ))}
@@ -199,7 +211,7 @@ export default function HomePage() {
             <div className="text-center mb-12 md:mb-16">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4">
                 <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  Core Features
+                  {t('home.features.title')}
                 </span>
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

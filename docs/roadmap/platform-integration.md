@@ -1,33 +1,37 @@
-# Platform Integration
+# 平台集成（Platform Integration）
 
-The Platform Integration feature extends AgentDock agents to interact with users through external messaging platforms such as Telegram, WhatsApp, and Slack.
+平台集成功能旨在让 AgentDock 智能体通过外部消息平台与用户交互，例如 Telegram、WhatsApp、Slack 等。
 
-## Current Status
+## 当前状态
 
-**Status: Blocked - Requires HTTP Adapter Framework**
+**状态：阻塞中（Blocked）— 依赖 HTTP 适配器框架**
 
-Development of the platform integration system is **blocked** pending implementation of the HTTP Adapter Framework Abstraction. Platform Integration cannot begin until the foundational HTTP adapter infrastructure is completed.
+平台集成的开发目前被 **阻塞**，需要先完成「HTTP Adapter Framework Abstraction」。  
+在统一的 HTTP 适配层完成之前，平台 Webhook 能力无法稳定、通用地落地。
 
-**Critical Dependency:** [HTTP Adapter Framework Abstraction](./http-adapter-framework-abstraction.md)
+**关键依赖**：[HTTP Adapter Framework Abstraction](./http-adapter-framework-abstraction.md)
 
-**Reason for Dependency:** Platform Integration requires framework-agnostic HTTP handling to support webhooks across NextJS (open source) and Hono (commercial platform). The current NextJS-specific implementation cannot be extended to support platform webhooks without the unified HTTP adapter layer.
+**依赖原因**：平台集成需要「与框架无关」的 HTTP 处理能力，才能同时支持 Next.js（开源参考实现）与 Hono（商业平台）等不同运行环境。当前以 Next.js 为中心的实现方式无法直接扩展为通用的 Webhook 基础设施，因此必须先补齐统一的 HTTP 适配层。
 
-## Feature Overview
+## 功能概览
 
-The Platform Integration will provide:
+平台集成将提供：
 
-- **Framework-Agnostic Design**: Core logic that works across different HTTP frameworks
-- **Platform Node Abstraction**: Standard interface for implementing platform integrations
-- **Webhook Handling**: Robust webhook implementation for real-time updates
-- **Message Transformation**: Conversion between platform-specific and AgentDock message formats
-- **Conversation Management**: State tracking across user interactions
-- **HTTP Adapters**: Framework-specific adapters for different deployment environments
+- **框架无关设计**：核心逻辑可运行在不同 HTTP 框架上；  
+- **平台节点抽象**：用统一接口实现不同平台的集成；  
+- **Webhook 处理**：可靠的 Webhook 处理与实时更新；  
+- **消息转换**：平台消息格式与 AgentDock 消息格式之间的双向转换；  
+- **会话管理**：跨用户交互的状态追踪与管理；  
+- **HTTP 适配器**：面向不同部署环境的框架适配层（Next.js / Express / Hono / 自定义等）。
 
-Beyond standard messaging apps (Telegram, WhatsApp, Slack), the underlying `PlatformNode` abstraction or custom nodes built on `BaseNode` can be leveraged to create integrations with various other platforms, including social media networks like X (formerly Twitter), TikTok, LinkedIn, etc. Interaction can be achieved either through direct API calls (where available and permitted by the platform's terms of service) or potentially by utilizing browser automation tools for platforms lacking suitable APIs or for more complex interactions.
+除常见消息平台外（Telegram、WhatsApp、Slack），也可以基于 `PlatformNode` 抽象或基于 `BaseNode` 的自定义节点，扩展到更多平台，例如 X（原 Twitter）、TikTok、LinkedIn 等。具体交互方式可以是：
 
-## Architecture Diagrams
+- 直接调用平台 API（在平台条款允许且提供 API 的情况下）；  
+- 对于无 API 或复杂交互场景，结合浏览器自动化工具实现。
 
-### Platform Node Architecture
+## 架构图
+
+### 平台节点架构
 
 ```mermaid
 graph LR
@@ -41,7 +45,7 @@ graph LR
     style C fill:#e6f2ff,stroke:#99ccff
 ```
 
-### HTTP Framework Adapters
+### HTTP 框架适配器
 
 ```mermaid
 graph LR
@@ -55,7 +59,7 @@ graph LR
     style B fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Message Flow
+### 消息流转
 
 ```mermaid
 graph TD
@@ -74,27 +78,27 @@ graph TD
     style G fill:#0066cc,color:#ffffff,stroke:#0033cc
 ```
 
-## Implementation Details
+## 实现细节
 
-The platform integration system will be implemented with the following components:
+平台集成系统计划包含以下核心组件：
 
 ```typescript
-// Base abstract class for all platform integrations
+// 所有平台集成的抽象基类
 abstract class PlatformNode extends BaseNode {
-  // Transform platform message to agent message
+  // 平台消息 -> Agent 消息
   abstract transformMessageToAgent(message: unknown): Promise<Message>;
   
-  // Transform agent response to platform message
+  // Agent 响应 -> 平台消息
   abstract transformResponseToPlatform(response: Message): Promise<unknown>;
   
-  // Send message to platform
+  // 发送消息到平台
   abstract sendMessageToPlatform(message: unknown): Promise<void>;
   
-  // Handle webhook payload
+  // 处理 webhook payload
   async handleWebhookPayload(payload: unknown): Promise<void>;
 }
 
-// HTTP adapter interface for framework-specific handling
+// 面向不同框架的 HTTP 适配器接口
 interface HttpAdapter {
   parseWebhookRequest(request: unknown): Promise<unknown>;
   createSuccessResponse(): unknown;
@@ -103,17 +107,17 @@ interface HttpAdapter {
 }
 ```
 
-## Initial Platform Support
+## 首批支持的平台
 
-The first version will include the following platform integrations:
+第一版计划优先支持：
 
-1. **Telegram**: Complete implementation as reference design
-2. **WhatsApp**: Basic integration with WhatsApp Business API
-3. **Slack**: Integration with Slack Bot API
+1. **Telegram**：作为参考实现，提供完整示范；  
+2. **WhatsApp**：基于 WhatsApp Business API 的基础接入；  
+3. **Slack**：基于 Slack Bot API 的集成。
 
-## Telegram Integration Example
+## Telegram 集成示例
 
-The Telegram integration will serve as the reference implementation:
+Telegram 会作为第一版的参考实现：
 
 ```typescript
 // Example of creating a Telegram node
@@ -128,19 +132,19 @@ const telegramNode = createTelegramNode('telegram-1', agentNode, {
 await telegramNode.setupWebhook();
 ```
 
-## Key Features of Platform Integration
+## 平台集成的关键特性
 
-### Framework Agnosticism
+### 框架无关
 
-The core platform logic operates independently of the HTTP framework, allowing for:
+平台集成的核心逻辑与 HTTP 框架解耦，因此可以：
 
-- Use in Next.js for the reference Open Source Client.
-- Support for frameworks like Hono or Express.js for custom backend deployments.
-- Easy extension to other frameworks by implementing the `HttpAdapter` interface.
+- 在 Next.js 中用于开源参考客户端；  
+- 在 Hono / Express.js 等框架中用于自建后端部署；  
+- 通过实现 `HttpAdapter` 接口，轻松扩展到其他框架。
 
-### Single Message Exchange
+### 单次消息交换
 
-Platform messaging works with discrete message exchange:
+平台消息交互通常以“单次交换”为单位：
 
 ```typescript
 async handleMessage(chatId: number, message: string): Promise<void> {
@@ -182,17 +186,17 @@ interface PlatformConfig {
 }
 ```
 
-## Benefits
+## 收益
 
-The platform integration feature delivers several important benefits:
+平台集成带来：
 
-1. **Extended Reach**: Make agents accessible beyond the AgentDock UI
-2. **Familiar Interfaces**: Users interact with agents in platforms they already use
-3. **Unified Development**: Single agent works across multiple platforms
-4. **Framework Flexibility**: Deploy using your preferred HTTP framework
-5. **Consistent Experience**: Maintain agent capabilities across platforms
+1. **覆盖范围更广**：智能体不再局限于 AgentDock UI；  
+2. **用户更熟悉**：在用户已有的平台里直接对话；  
+3. **统一开发**：同一个智能体可复用到多个平台；  
+4. **框架更灵活**：可按需选择不同 HTTP 框架部署；  
+5. **体验一致**：跨平台保持一致的能力与行为。
 
-## Timeline
+## 时间线
 
 | Phase | Status | Description | Dependencies |
 |-------|--------|-------------|--------------|
@@ -205,9 +209,9 @@ The platform integration feature delivers several important benefits:
 | Slack Integration | Blocked | Slack Bot implementation | HTTP Adapter Framework |
 | Additional Platforms | Future | Discord, Teams, etc. | All above phases |
 
-**CRITICAL:** All Platform Integration phases are blocked until HTTP Adapter Framework is implemented.
+**关键点：在 HTTP Adapter Framework 完成之前，平台集成的所有阶段都会保持阻塞。**
 
-## Connection to Other Roadmap Items
+## 与其他路线图项的关系
 
 The Platform Integration connects with other roadmap items:
 
@@ -217,9 +221,9 @@ The Platform Integration connects with other roadmap items:
 - **Multi-Agent Collaboration**: Enables collaboration via messaging platforms
 - **Voice AI Agents**: Foundation for voice platform integration
 
-## Impact on Open Source Client
+## 对开源参考客户端的影响
 
-**Required Changes After HTTP Adapter Implementation:**
+**在 HTTP Adapter 实现完成后，需要进行的改动：**
 
 1. **Route Simplification**
    - `src/app/api/chat/[agentId]/route.ts` - Replace with HTTP adapter usage
@@ -235,9 +239,9 @@ The Platform Integration connects with other roadmap items:
    - Update environment variables for platform integrations
    - Add platform-specific configuration management
 
-## Getting Started (Preview)
+## 快速上手（预览）
 
-Once released, getting started will be straightforward:
+功能发布后，使用步骤将非常直接：
 
 1. Obtain API credentials for your chosen platform
 2. Create a platform node with an existing agent

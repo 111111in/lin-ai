@@ -14,6 +14,7 @@ import {
   TokenWarning,
   TokenWarningDialog
 } from '@/components/chat/token-warning-dialog';
+import { useLanguage } from '@/components/providers/language-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
@@ -57,6 +58,8 @@ function ChatPageContent() {
   const [tokenWarning, setTokenWarning] = useState<TokenWarning | null>(null);
   const [hasShown50kWarning, setHasShown50kWarning] = useState(false);
   const [hasShown100kWarning, setHasShown100kWarning] = useState(false);
+
+  const { t } = useLanguage();
 
   // Effect to initialize state from storage once
   useEffect(() => {
@@ -237,11 +240,13 @@ function ChatPageContent() {
       <div className="container mx-auto p-4">
         <Card className="p-6">
           <CardHeader>
-            <CardTitle>Error Loading Chat</CardTitle>
+            <CardTitle>{t('chat.error.title')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-destructive">{error}</p>
-            <Button onClick={() => window.location.reload()}>Try Again</Button>
+            <Button onClick={() => window.location.reload()}>
+              {t('chat.error.retry')}
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -270,7 +275,7 @@ function ChatPageContent() {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Reset Chat</p>
+                    <p>{t('chat.header.reset')}</p>
                   </TooltipContent>
                 </Tooltip>
 
@@ -291,7 +296,7 @@ function ChatPageContent() {
                       </DialogTrigger>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Show Session ID</p>
+                      <p>{t('chat.header.sessionId')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </Dialog>

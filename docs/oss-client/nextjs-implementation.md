@@ -1,55 +1,55 @@
-# Open Source Client (Next.js Implementation)
+# 开源客户端（Next.js 实现）
 
-This reference implementation, built with Next.js and the App Router, serves as a practical example of how to consume and interact with the AgentDock Core framework to build a full-featured web application for conversational AI agents.
+这个参考实现基于 Next.js（App Router）构建，用于演示如何接入并使用 AgentDock Core 框架，从而搭建一个具备完整功能的对话式 AI 智能体 Web 应用。
 
-**Important Note:**
-*   AgentDock Core is currently in a pre-release stage. We are treating it as a local package (`file:./agentdock-core`) within this repository for now. It will be published as a versioned NPM package once it reaches a stable release.
-*   As Core evolves, the separation of concerns between the framework and this Next.js Client implementation is actively being improved.
-*   If you notice areas where the integration could be cleaner or have suggestions, please don't hesitate to reach out or open an issue on GitHub!
+**重要说明：**
+- AgentDock Core 目前处于预发布阶段。当前我们在仓库内将其作为本地包（`file:./agentdock-core`）使用；当达到稳定版本后会发布为带版本号的 NPM 包。
+- 随着 Core 的演进，框架与该 Next.js 客户端实现之间的职责边界也在持续优化。
+- 如果你发现集成方式可以更清晰、或有改进建议，欢迎在 GitHub 提 Issue！
 
-See the main [AgentDock Roadmap](./../roadmap.md) for planned features across both Core and the Client.
+Core 与 Client 的整体规划可参考 [AgentDock Roadmap](./../roadmap.md)。
 
-## Core Purpose
+## 核心目的
 
--   **Demonstrate Core Integration:** Showcases how to connect a frontend application to AgentDock Core's capabilities (agents, tools, session management, orchestration).
--   **Provide a User Interface:** Offers a functional chat interface, agent selection, and settings management.
--   **Reference Architecture:** Provides patterns for handling API communication, streaming responses, state management, and configuration in a web context.
+- **演示 Core 集成：** 展示如何将前端应用接入 AgentDock Core 的能力（智能体、工具、会话管理、编排等）。
+- **提供可用 UI：** 提供可用的聊天界面、智能体选择与设置管理等。
+- **参考架构：** 给出 Web 场景下处理 API 通信、流式响应、状态管理与配置的实现模式。
 
-## Key Features & Implementation Details
+## 关键特性与实现细节
 
--   **Framework:** Next.js (App Router)
-    -   Utilizes Server Components, Client Components, and API Routes.
-    -   Leverages file-based routing (`/app` directory).
--   **API Routes (`/app/api`):**
-    -   `/api/chat/[agentId]/route.ts`: The primary endpoint for handling chat messages. It receives messages, instantiates the corresponding `AgentNode` from AgentDock Core, manages the `sessionId`, handles streaming responses, and potentially returns session/token usage information.
-    -   Other routes might exist for configuration, image handling, etc.
--   **AgentDock Core Integration (`/lib/agent-adapter.ts` or similar):**
-    -   Contains logic to load agent templates (`template.json`).
-    -   Instantiates `AgentNode` with appropriate configuration (API keys, provider settings).
-    -   Calls `AgentNode.handleMessage` to process user input and generate responses.
-    -   Manages the flow of data (messages, session IDs) between the API route and the Core library.
--   **Session ID Handling:**
-    -   The API route handler is responsible for extracting the `sessionId` from request headers/body or generating a new one if needed (maintaining the Single Source of Truth principle).
-    -   The `sessionId` is passed to `AgentNode` and potentially returned in response headers for the client to persist (e.g., in `localStorage` or session storage) for subsequent requests.
--   **Session Management:**
-    -   The API route handler manages the `sessionId` (extracting or generating).
-    -   The `sessionId` is passed to `AgentNode` and returned in response headers.
-    -   **Session TTL** is configured via the `SESSION_TTL_SECONDS` environment variable, as detailed in the [Next.js Session Integration docs](../architecture/sessions/nextjs-integration.md#environment-based-ttl-configuration).
--   **UI Components (`/components`):**
-    -   Built using React, Shadcn/ui, Radix UI, and Tailwind CSS.
-    -   Includes components for the chat interface (message display, input, streaming), agent selection, settings panels, etc.
--   **State Management (UI):**
-    -   Uses standard React state and context management.
-    -   May use libraries like Zustand for more complex global UI state if necessary.
--   **Client-Side Storage & API Keys (BYOK):**
-    -   This open source client uses `localStorage` or `sessionStorage` for user preferences and potentially the session ID.
-    -   For Bring Your Own Key (BYOK) mode, user-provided API keys are stored client-side using the `SecureStorage` utility from `agentdock-core`.
-    -   **Security Considerations (`SecureStorage`):** `SecureStorage` enhances security by encrypting API keys using AES-GCM and adding an HMAC signature to detect tampering before use. However, to decrypt the data, the necessary encryption keys are also stored within the browser's `localStorage`. This is a standard technique for client-side encryption but carries an inherent risk: if a Cross-Site Scripting (XSS) vulnerability exists in *any* part of the application (or potentially a browser extension), malicious JavaScript could gain access to `localStorage`, read the encryption keys, and potentially decrypt the stored API keys.
-    -   **Risk Context:** The practical risk depends on the overall security of the user's browser environment and the application itself against XSS attacks. If the browser and application environment are secure (e.g., up-to-date browser, no malicious extensions, robust application XSS defenses), the likelihood of exploitation is lower. However, the vulnerability exists if an XSS attack *can* be successfully executed.
-    -   **Recommendation:** Users employing BYOK mode should be aware of this XSS risk associated with storing sensitive data like API keys in `localStorage`, even when encrypted. Evaluate this risk based on your specific security requirements and environment. For maximum security, configuring API keys server-side via environment variables is the preferred approach. If using client-side storage, ensuring the application is well-protected against XSS vulnerabilities is crucial.
--   **Image Generation:** Includes a dedicated page for image generation and editing using Gemini, demonstrating advanced feature integration. Image persistence uses Vercel Blob when deployed and `localStorage` locally. See the [Image Generation docs](./image-generation.md) for details.
+- **框架：** Next.js（App Router）
+  - 使用 Server Components、Client Components 与 API Routes
+  - 使用基于文件的路由（`/app` 目录）
+- **API Routes（`/app/api`）：**
+  - `/api/chat/[agentId]/route.ts`：处理聊天消息的主入口。它接收消息、实例化 AgentDock Core 中对应的 `AgentNode`、管理 `sessionId`、处理流式响应，并可能返回会话 / token 使用信息。
+  - 还可能存在用于配置、图像处理等的其它路由。
+- **AgentDock Core 集成（`/lib/agent-adapter.ts` 或类似文件）：**
+  - 包含加载智能体模板（`template.json`）的逻辑
+  - 用合适的配置（API key、Provider 设置等）实例化 `AgentNode`
+  - 调用 `AgentNode.handleMessage` 处理用户输入并生成响应
+  - 管理 API 路由与 Core 库之间的数据流（消息、Session ID 等）
+- **Session ID 处理：**
+  - API 路由处理器负责从请求头/请求体提取 `sessionId`，或在必要时生成新 ID（遵循“单一事实来源”原则）。
+  - `sessionId` 会被传给 `AgentNode`，并可能在响应头中返回给客户端以便持久化（例如 `localStorage` / session storage），用于后续请求。
+- **会话管理：**
+  - API 路由处理器负责 `sessionId` 管理（提取或生成）
+  - `sessionId` 传入 `AgentNode` 并在响应头中返回
+  - **Session TTL** 通过环境变量 `SESSION_TTL_SECONDS` 配置，详见 [Next.js 会话集成文档](../architecture/sessions/nextjs-integration.md#environment-based-ttl-configuration)
+- **UI 组件（`/components`）：**
+  - 使用 React、Shadcn/ui、Radix UI、Tailwind CSS 构建
+  - 包含聊天界面（消息展示、输入、流式渲染）、智能体选择、设置面板等组件
+- **状态管理（UI）：**
+  - 使用标准 React state 与 context 管理
+  - 如需更复杂的全局 UI 状态，也可使用 Zustand 等库
+- **客户端存储与 API Key（BYOK）：**
+  - 开源客户端使用 `localStorage` / `sessionStorage` 存储用户偏好设置（以及可能的 Session ID）。
+  - BYOK（Bring Your Own Key）模式下，用户提供的 API Key 会通过 `agentdock-core` 的 `SecureStorage` 在客户端存储。
+  - **安全注意事项（`SecureStorage`）：** `SecureStorage` 使用 AES-GCM 加密 API Key，并在使用前通过 HMAC 签名检测篡改。但为了能解密数据，所需的加密密钥也会存储在浏览器的 `localStorage` 中。这是常见的客户端加密技术，但存在固有风险：如果应用任意位置存在 XSS（或某些浏览器扩展注入恶意脚本），攻击者可能读取 `localStorage` 中的密钥并解密出 API Key。
+  - **风险背景：** 实际风险取决于浏览器环境与应用对 XSS 的整体防护能力（例如浏览器是否更新、是否存在恶意扩展、应用是否有稳健的 XSS 防护）。如果 XSS 无法成功执行，风险会显著降低；但只要 XSS 可执行，风险就存在。
+  - **建议：** 使用 BYOK 的用户应了解：即便加密，把 API Key 放在 `localStorage` 中仍存在 XSS 风险。请结合你的安全要求评估该风险。若追求最高安全性，更推荐在服务端通过环境变量配置 API Key；若必须客户端存储，请务必强化 XSS 防护。
+- **图像生成：** 包含一个使用 Gemini 进行图像生成与编辑的独立页面，用于展示高级能力的集成方式。部署到 Vercel 时使用 Vercel Blob 持久化图像；本地开发时使用 `localStorage`。详见 [图像生成文档](./image-generation.md)。
 
-## File Structure (`/src`)
+## 目录结构（`/src`）
 
 ```
 /src
@@ -70,6 +70,6 @@ See the main [AgentDock Roadmap](./../roadmap.md) for planned features across bo
 └── templates/            # Agent template definitions (e.g., *.json)
 ```
 
-## Using This Implementation
+## 如何使用该实现
 
-Refer to the [Getting Started Guide](../getting-started.md) for instructions on setting up, configuring (including environment variables for API keys and storage), and running the Open Source Client locally. 
+请参考 [快速上手](../getting-started.md)，了解如何安装、配置（包括 API Key 与存储相关环境变量），并在本地运行开源客户端。

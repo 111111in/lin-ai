@@ -8,6 +8,7 @@ import { AgentGrid } from '@/components/agents/AgentGrid';
 import { AgentHeader } from '@/components/agents/AgentHeader';
 import { AgentLoading } from '@/components/agents/AgentLoading';
 import { ApiKeyDialog } from '@/components/api-key-dialog';
+import { useLanguage } from '@/components/providers/language-provider';
 import { useAgentFiltering } from '@/lib/hooks/useAgentFiltering';
 import { useAgentNavigation } from '@/lib/hooks/useAgentNavigation';
 import { useAgents } from '@/lib/store';
@@ -25,9 +26,20 @@ export function CategoryPage({
   templates
 }: CategoryPageProps) {
   const router = useRouter();
+  const { t } = useLanguage();
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
   const { isInitialized, templatesValidated, templatesError } = useAgents();
+
+  // Resolve the display name for the current category using i18n.
+  // - 'all' 和 'featured' 使用已有的导航文案 key
+  // - 其他分类使用 nav.category.{id}
+  const displayCategoryName =
+    category === 'all'
+      ? t('nav.agents.all')
+      : category === 'featured'
+        ? t('nav.agents.featured')
+        : t(`nav.category.${categoryName}`);
 
   // Local filtering/sorting (client-side)
   const { searchTerm, setSearchTerm, sortedTemplates } = useAgentFiltering({
@@ -75,7 +87,7 @@ export function CategoryPage({
         onSearchChange={setSearchTerm}
         categoryConfig={{
           id: category,
-          name: categoryName
+          name: displayCategoryName
         }}
         onRemoveCategory={handleRemoveCategory}
         isAllAgents={false}
@@ -88,7 +100,7 @@ export function CategoryPage({
         onSettings={handleConfigure}
         onGithub={handleGithub}
         currentCategory={category}
-        categoryName={categoryName}
+        categoryName={displayCategoryName}
       />
 
       {/* API Key dialog */}

@@ -1,55 +1,55 @@
-# Orchestration Framework Overview
+# 编排框架总览
 
-Orchestration in AgentDock provides a structured way to control agent behavior, manage tool availability across different states (steps), and define sequences for complex tasks. It enables more guided, reliable, and focused agent interactions compared to allowing unrestricted tool use.
+AgentDock 的编排（Orchestration）提供了一种结构化方式，用于控制智能体行为、在不同状态（步骤）下管理可用工具，并为复杂任务定义执行序列。相较于“工具无限制可用”，编排能带来更可引导、更可靠、更聚焦的智能体交互。
 
 ## Core Concepts
 
--   **Steps (or Modes):** Discrete states within an agent's workflow (e.g., `research`, `planning`, `code_generation`). Each step defines specific behaviors.
--   **Conditions:** Rules that trigger transitions *between* steps based on context (user messages, tool usage). See [Conditional Transitions](./conditional-transitions.md).
--   **Tool Availability:** Each step configuration dictates which tools are allowed or denied when that step is active.
--   **Sequencing:** Within a step, a specific order of tool execution can be enforced. See [Step Sequencing](./step-sequencing.md).
--   **Session State:** Orchestration relies heavily on session-specific state (`OrchestrationState`) to track the active step, tool usage history, and sequence progress. See [State Management](./state-management.md).
+ - **步骤（Steps/模式 Modes）：** 智能体工作流中的离散状态（例如 `research`、`planning`、`code_generation`）。每个步骤定义该状态下的行为与约束。
+ - **条件（Conditions）：** 基于上下文（用户消息、工具使用等）触发“步骤之间”切换的规则。见 [条件跳转](./conditional-transitions.md)。
+ - **工具可用性（Tool Availability）：** 每个步骤的配置决定该步骤激活时，哪些工具允许/禁止。
+ - **序列（Sequencing）：** 在某个步骤内部，可以强制工具以指定顺序执行。见 [步骤编排（序列）](./step-sequencing.md)。
+ - **会话状态（Session State）：** 编排高度依赖每个会话的状态（`OrchestrationState`），用于跟踪当前激活步骤、工具使用历史以及序列推进进度。见 [状态管理](./state-management.md)。
 
 ## Architecture & Implementation
 
 Key components work together, managed primarily within the `agentdock-core/src/orchestration` directory:
 
-1.  **Configuration:** Defined in the agent template (`template.json`), specifying steps, conditions, tool availability, and sequences. See [Orchestration Configuration](./orchestration-config.md).
-2.  **`OrchestrationStateManager`:** Manages the `OrchestrationState` for each session, using the core `SessionManager` and configured storage provider.
-3.  **`StepSequencer`:** Enforces tool sequences defined within steps, interacting with the `OrchestrationStateManager` to track progress (`sequenceIndex`).
-4.  **Condition Evaluation Logic:** Determines which step should be active based on configured conditions and current context (message content, `OrchestrationState`). This logic coordinates reading state and triggering state updates.
-5.  **Tool Filtering:** Combines the `availableTools` configuration from the active step and the `StepSequencer`'s filtering to determine the exact set of tools available to the LLM at any given moment.
+1. **配置（Configuration）：** 在智能体模板（`template.json` 等）中定义，包含步骤、条件、工具可用性与序列等。见 [编排配置](./orchestration-config.md)。
+2. **`OrchestrationStateManager`：** 使用核心 `SessionManager` 与配置好的存储 Provider，为每个会话管理 `OrchestrationState`。
+3. **`StepSequencer`：** 强制执行步骤内定义的工具序列，并通过与 `OrchestrationStateManager` 交互来跟踪进度（`sequenceIndex`）。
+4. **条件评估逻辑（Condition Evaluation Logic）：** 基于配置条件与当前上下文（消息内容、`OrchestrationState`）判断应激活哪个步骤；该逻辑会协调读取状态并触发状态更新。
+5. **工具过滤（Tool Filtering）：** 将当前激活步骤的 `availableTools` 配置与 `StepSequencer` 的过滤结果组合起来，得到“此刻提供给 LLM 的精确工具集合”。
 
 ## Flow of Operation
 
-1.  **Initialization:** An agent instance loads its orchestration configuration.
-2.  **Interaction Received (e.g., User Message):**
-    a.  The system retrieves or creates the `OrchestrationState` for the session using `OrchestrationStateManager`.
-    b.  Condition evaluation logic checks the message content and current state against the conditions defined for all steps.
-    c.  If conditions for a new step are met, `OrchestrationStateManager.setActiveStep` updates the state.
-3.  **Tool Availability Determination:**
-    a.  The system identifies the `activeStep` from the `OrchestrationState`.
-    b.  It retrieves the `availableTools` (allowed/denied lists) from the active step's configuration.
-    c.  It applies initial filtering based on `availableTools`.
-    d.  It calls `StepSequencer.filterToolsBySequence` with the filtered list. If a sequence is active, this further restricts the list, often to a single tool.
-    e.  The final, filtered list of tools is provided to the LLM.
-4.  **Tool Execution:**
-    a.  The LLM selects and invokes a tool from the provided list.
-    b.  The tool executes.
-5.  **Post-Tool Processing:**
-    a.  `OrchestrationStateManager.addUsedTool` records the tool usage.
-    b.  If a sequence was active, `StepSequencer.processTool` is called to potentially advance the `sequenceIndex`.
-    c.  Condition evaluation logic *may* run again to check if the tool usage triggers a step transition.
+1. **初始化：** 智能体实例加载其编排配置。
+2. **收到交互（例如用户消息）：**
+   a. 系统通过 `OrchestrationStateManager` 读取或创建该会话的 `OrchestrationState`。  
+   b. 条件评估逻辑将消息内容与当前状态对照所有步骤中定义的条件进行检查。  
+   c. 若满足某个新步骤的条件，则通过 `OrchestrationStateManager.setActiveStep` 更新会话状态。  
+3. **确定可用工具集合：**
+   a. 系统从 `OrchestrationState` 中得到 `activeStep`。  
+   b. 从该步骤配置中读取 `availableTools`（允许/禁止列表）。  
+   c. 先基于 `availableTools` 做第一轮过滤。  
+   d. 对过滤后的结果调用 `StepSequencer.filterToolsBySequence`；若当前步骤存在活动序列，会进一步收窄工具列表（常见情况只剩一个工具）。  
+   e. 将最终工具列表提供给 LLM。  
+4. **执行工具：**
+   a. LLM 从提供的工具列表中选择并调用工具。  
+   b. 工具执行完成。  
+5. **工具调用后的处理：**
+   a. `OrchestrationStateManager.addUsedTool` 记录该次工具使用。  
+   b. 若步骤序列处于活动状态，调用 `StepSequencer.processTool`，可能推进 `sequenceIndex`。  
+   c. 条件评估逻辑可能再次运行，以检查“工具使用”是否触发步骤切换。  
 
 ## Benefits
 
--   **Guided Workflows:** Ensures agents follow specific processes for complex tasks.
--   **Improved Reliability:** Prevents agents from using inappropriate tools or getting stuck.
--   **Focused Interactions:** Limits the LLM's choices, potentially improving response quality and reducing hallucination.
--   **Stateful Control:** Enables dynamic behavior changes based on conversation history and context.
+ - **引导式工作流：** 确保智能体在复杂任务中遵循指定流程。
+ - **更高可靠性：** 防止智能体使用不恰当工具或陷入卡死。
+ - **更聚焦的交互：** 限制 LLM 可选项，有助于提高回复质量并降低幻觉风险。
+ - **有状态控制：** 能根据会话历史与上下文动态调整行为。
 
 ## Integration Points
 
--   **Session Management:** Relies fundamentally on session state isolation and management.
--   **Agent Configuration:** Defined via agent templates.
--   **LLM Interaction:** Controls the tools presented to the LLM.
+ - **会话管理：** 编排依赖会话状态的隔离与管理。
+ - **智能体配置：** 通过智能体模板定义。
+ - **LLM 交互：** 控制呈现给 LLM 的工具集合。

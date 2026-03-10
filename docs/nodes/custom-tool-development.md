@@ -1,14 +1,16 @@
-# Custom Tool Development
+# 自定义工具开发（Custom Tool Development）
 
-This guide provides a comprehensive overview of creating custom tools for AgentDock, with complete examples and best practices.
+本指南全面介绍如何在 AgentDock 中编写**自定义工具**，并给出完整示例和最佳实践。
 
-## Introduction
+## 简介
 
-Custom tools extend the capabilities of AI agents in AgentDock, allowing them to perform specialized tasks such as searching the web, analyzing data, or integrating with external APIs. Tools are essentially specialized nodes that follow a consistent pattern, making them easy to create and maintain.
+自定义工具可以扩展智能体的能力，让其执行更加专门的任务，例如：  
+搜索网页、分析数据、调用外部业务系统 API 等。  
+从架构角度看，工具是一类「专用节点」，遵循统一的结构，便于编写与维护。
 
-## Tool Structure in the Reference Implementation
+## 参考实现中的目录结构
 
-In the AgentDock reference implementation, tools are organized as follows:
+在参考实现中，工具的目录组织通常如下：
 
 ```
 src/nodes/[tool-name]/
@@ -17,11 +19,11 @@ src/nodes/[tool-name]/
 └── utils.ts        # Helper functions (optional)
 ```
 
-## Complete Custom Tool Example: Weather Tool
+## 完整示例：天气查询工具
 
-Let's walk through creating a complete weather forecasting tool.
+下面以一个「天气预报工具」为例，展示从目录到实现的完整流程。
 
-### Step 1: Create Directory Structure
+### 第一步：创建目录结构
 
 ```
 src/nodes/weather/
@@ -30,7 +32,7 @@ src/nodes/weather/
 └── utils.ts        # API utilities
 ```
 
-### Step 2: Implement the Tool
+### 第二步：实现工具逻辑
 
 ```typescript
 // index.ts
@@ -92,7 +94,7 @@ export const tools = {
 };
 ```
 
-### Step 3: Create Output Components
+### 第三步：输出组件
 
 ```typescript
 // components.tsx
@@ -117,7 +119,7 @@ export interface WeatherForecastProps {
   days: WeatherDay[];
 }
 
-// Component to format weather forecast output
+// 用于格式化天气预报输出的组件
 export function WeatherForecast(props: WeatherForecastProps) {
   const { location, days } = props;
   
@@ -146,13 +148,13 @@ Chance of rain: ${day.day.daily_chance_of_rain}%`;
 }
 ```
 
-### Step 4: Implement API Utilities
+### 第四步：API 工具函数
 
 ```typescript
 // utils.ts
 import { z } from 'zod';
 
-// Type validation for API response
+// 使用 Zod 对接口响应做类型校验
 const weatherResponseSchema = z.object({
   location: z.object({
     name: z.string(),
@@ -175,7 +177,7 @@ const weatherResponseSchema = z.object({
   })
 });
 
-// Function to fetch weather data from API
+// 调用天气 API 的工具函数
 export async function fetchWeatherData(location: string, days: number) {
   // Get API key from environment variable
   const apiKey = process.env.WEATHER_API_KEY;
@@ -208,12 +210,12 @@ export async function fetchWeatherData(location: string, days: number) {
 }
 ```
 
-## Using the LLM in Custom Tools
+## 在工具中使用 LLM
 
-Custom tools can access the agent's LLM instance for generating content or analyzing data:
+自定义工具可以复用当前智能体的 LLM 实例，用于生成内容或分析数据：
 
 ```typescript
-// Example: Using LLM in a news summarization tool
+// 示例：在新闻摘要工具中使用 LLM
 async execute({ query }, options) {
   try {
     // Fetch news articles
@@ -269,9 +271,9 @@ async execute({ query }, options) {
 }
 ```
 
-## Tool Registration Process
+## 工具注册流程
 
-Tools are automatically registered when imported by the `src/nodes/init.ts` file:
+在参考实现中，`src/nodes/init.ts` 会集中导入并注册所有工具：
 
 ```typescript
 // src/nodes/init.ts example
@@ -280,7 +282,7 @@ import { tools as weatherTools } from './weather';
 import { tools as stockPriceTools } from './stock-price';
 // ... other tool imports
 
-// Combine all tools into a single object
+// 汇总所有工具
 export const allTools = {
   ...searchTools,
   ...weatherTools,
@@ -288,7 +290,7 @@ export const allTools = {
   // ... other tools
 };
 
-// Register tools with the registry
+// 注册到 ToolRegistry
 export function registerTools() {
   const registry = getToolRegistry();
   Object.entries(allTools).forEach(([name, tool]) => {
@@ -297,14 +299,14 @@ export function registerTools() {
 }
 ```
 
-## Advanced Tool Features
+## 进阶能力
 
-### 1. Tool Chaining
+### 1. 工具链（Tool Chaining）
 
-Tools can use the results of previous tools:
+一个工具可以消费前一个工具的结果，形成链式调用：
 
 ```typescript
-// Research tool using search results
+// 研究工具：基于搜索结果继续分析
 export const researchTool: Tool = {
   name: 'research',
   description: 'Research a topic in depth',
@@ -336,12 +338,12 @@ export const researchTool: Tool = {
 };
 ```
 
-### 2. Multi-Step Tools
+### 2. 多步骤工具（Multi-Step Tools）
 
-Tools can implement multi-step processes:
+工具内部也可以拆分为多个步骤：
 
 ```typescript
-// Multi-step data analysis tool
+// 多步骤数据分析工具
 export const dataAnalysisTool: Tool = {
   name: 'analyze_data',
   description: 'Analyze data in multiple steps',
@@ -389,11 +391,11 @@ export const dataAnalysisTool: Tool = {
 };
 ```
 
-## Best Practices
+## 最佳实践
 
-### 1. Input Validation
+### 1. 输入校验
 
-Always validate inputs with Zod schemas:
+始终使用 Zod Schema 校验输入参数：
 
 ```typescript
 const stockPriceSchema = z.object({
@@ -404,9 +406,9 @@ const stockPriceSchema = z.object({
 });
 ```
 
-### 2. Error Handling
+### 2. 错误处理
 
-Implement comprehensive error handling:
+实现统一、友好的错误处理：
 
 ```typescript
 try {
@@ -429,9 +431,9 @@ try {
 }
 ```
 
-### 3. Output Formatting
+### 3. 输出格式化
 
-Format outputs consistently:
+使用统一的工具方法格式化输出：
 
 ```typescript
 return createToolResult(
@@ -444,38 +446,38 @@ return createToolResult(
 );
 ```
 
-### 4. API Security
+### 4. API 安全
 
-Secure API access:
+安全地访问外部 API：
 
 ```typescript
-// Never include API keys in the code
+// 不要把 API Key 写死在代码里
 const apiKey = process.env.MY_API_KEY;
 if (!apiKey) {
   throw new Error('API key not configured');
 }
 
-// Use HTTPS for all external requests
+// 始终使用 HTTPS
 const response = await fetch(`https://api.example.com/data?key=${apiKey}&q=${encodeURIComponent(query)}`);
 
-// Validate API responses
+// 校验 API 返回结果
 if (!response.ok) {
   throw new Error(`API error: ${response.status}`);
 }
 ```
 
-### 5. Performance
+### 5. 性能优化
 
-Optimize performance:
+在工具中注意性能和资源使用：
 
 ```typescript
-// Cache expensive operations
+// 缓存高成本操作
 const cachedResults = await redis.get(`cache:${cacheKey}`);
 if (cachedResults) {
   return JSON.parse(cachedResults);
 }
 
-// Set reasonable timeouts
+// 设置合理的超时时间
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 5000);
 try {
@@ -486,52 +488,48 @@ try {
 }
 ```
 
-## Troubleshooting
+## 常见问题排查
 
-Common issues and solutions:
+下面是一些常见问题及解决思路。
 
-### 1. Tool Not Registered
-
-If your tool isn't appearing in the agent:
+### 1. 工具没有出现在智能体中
 
 ```typescript
-// Make sure you're exporting the tools object
+// 确认导出了 tools 对象
 export const tools = {
   my_tool: myTool
 };
 
-// Check that your tool is imported in src/nodes/init.ts
+// 并确保在 src/nodes/init.ts 中被正确引入
 ```
 
-### 2. Parameter Errors
+### 2. 参数错误
 
-If parameters aren't working correctly:
+参数不生效或结构异常时，可以：
 
 ```typescript
-// Use descriptive parameter names
+// 使用有语义的参数名，便于 LLM 理解
 const searchSchema = z.object({
   query: z.string().describe('Search query to look up'),
   // NOT: q: z.string().describe('Search query')
 });
 
-// Set reasonable defaults for optional parameters
+// 为可选参数设置合理默认值
 const limit = z.number().optional().default(10).describe('Maximum results');
 ```
 
-### 3. Output Not Displaying
-
-If tool output isn't displaying correctly:
+### 3. 输出未正确渲染
 
 ```typescript
-// Make sure you're using createToolResult
+// 必须返回 createToolResult 包裹后的结果
 return createToolResult('my_tool_result', formattedOutput);
 
 // NOT: return formattedOutput;
 ```
 
-## More Examples
+## 更多示例
 
-### Stock Price Tool
+### 股票价格工具（Stock Price Tool）
 
 ```typescript
 // stock-price/index.ts
@@ -569,7 +567,7 @@ export const tools = {
 };
 ```
 
-### Image Analysis Tool
+### 图像分析工具（Image Analysis Tool）
 
 ```typescript
 // image-analysis/index.ts
@@ -607,8 +605,8 @@ export const tools = {
 };
 ```
 
-## Conclusion
+## 总结
 
-Custom tools are a powerful way to extend AgentDock's capabilities. By following the patterns and practices outlined in this guide, you can create sophisticated tools that enhance your AI agents with specialized functionality.
-
-For more information, refer to the Node System documentation and the AgentDock Core API reference. 
+自定义工具是扩展 AgentDock 能力最直接、最常用的方式。  
+按照本指南中的结构与最佳实践，你可以为智能体增加各类专业功能——从简单查询、数据分析，到复杂的多步骤自动化流程。  
+如需了解底层节点体系，可结合「节点系统总览」文档与 AgentDock Core 的 API 参考一起阅读。 

@@ -1,68 +1,68 @@
-# Getting Started with AgentDock
+# 使用 AgentDock 的快速开始
 
-This guide will help you set up and run AgentDock on your local machine for development and testing purposes.
+本指南将帮助你在本地机器上完成 AgentDock 的安装与运行，用于开发和测试。
 
-## Components
+## 组件组成
 
-AgentDock consists of two main components:
+AgentDock 主要由两个核心组件构成：
 
-1. **AgentDock Core** - The foundation library that powers agent functionality
-2. **Open Source Client** - A complete reference implementation built with Next.js that provides a web interface for interacting with agents
+1. **AgentDock Core** —— 提供所有智能体能力的核心基础库
+2. **开源客户端（Open Source Client）** —— 基于 Next.js 实现的完整 Web 应用，用来与智能体进行交互
 
-This repository includes both components, allowing you to use them together or separately.
+本仓库同时包含这两个部分，你可以一起使用，也可以按需拆分使用。
 
-## Requirements
+## 环境要求
 
-- Node.js ≥ 20.11.0 (LTS)
-- pnpm ≥ 9.15.0 (Required)
-- Docker and Docker Compose (Recommended for stateful features)
-- API keys for at least one LLM provider (Anthropic, OpenAI, Gemini, etc.)
+- Node.js ≥ 20.11.0（LTS）
+- pnpm ≥ 9.15.0（必需）
+- Docker 与 Docker Compose（推荐开启，用于有状态特性）
+- 至少一个 LLM 提供商的 API Key（Anthropic、OpenAI、Gemini 等）
 
-## Installation & Setup
+## 安装与启动
 
-1. **Clone the Repository**:
+1. **克隆仓库**：
 
    ```bash
    git clone https://github.com/AgentDock/AgentDock.git
    cd AgentDock
    ```
 
-2. **Install pnpm** (if not already installed):
+2. **安装 pnpm（如尚未安装）**：
 
    ```bash
    corepack enable
    corepack prepare pnpm@latest --activate
    ```
 
-3. **Install Dependencies**:
+3. **安装依赖**：
 
    ```bash
    pnpm install
    ```
 
-4. **(Recommended) Start Backend Services (Redis via Docker)**
+4. **（推荐）启动后端服务（通过 Docker 运行 Redis）**
 
-   For features requiring persistent state across interactions (like session management, orchestration state, and cumulative token usage tracking), running a Redis instance via Docker is highly recommended.
+   对于需要在多轮交互之间保持状态的功能（例如会话管理、编排状态、累计 Token 统计），强烈建议通过 Docker 启动 Redis。
 
-   - **Why Docker/Redis?** AgentDock Core uses a configurable storage layer. By default (without Docker), it uses **in-memory storage**. This means session state, orchestration progress, and cumulative token counts **will be lost** between server restarts or even potentially between requests in some deployment models. While the app might run, stateful features won't work reliably.
-   - Using Redis provides a persistent backend store for this data during development.
+   - **为什么需要 Docker/Redis？** AgentDock Core 使用可配置的存储层。默认情况下（未配置 Docker）会使用**内存存储**，这意味着会话状态、编排进度和 Token 计数在服务重启后会**全部丢失**，在某些部署模式下甚至可能在请求之间丢失。虽然应用看起来能跑，但所有依赖持久状态的功能都不可靠。
+   - 使用 Redis 可以在开发过程中为这些数据提供持久化存储。
 
-   - **Using Docker Desktop:** If you're new to Docker, using [Docker Desktop](https://www.docker.com/products/docker-desktop/) provides a graphical interface to easily manage your containers (start, stop, view logs, etc.).
+   - **使用 Docker Desktop：** 如果你刚接触 Docker，可以使用 [Docker Desktop](https://www.docker.com/products/docker-desktop/) 这种带图形界面的工具来启动/停止容器、查看日志等。
 
-   - **Start Services:**
-     Navigate to the root of the cloned repository where `docker-compose.yaml` is located and run:
+   - **启动服务：**
+     在仓库根目录（`docker-compose.yaml` 所在目录）执行：
      ```bash
      docker compose up -d
      ```
-     This command starts Redis (and related services like Redis Commander for viewing data) in the background.
+     该命令会在后台启动 Redis（以及用于查看数据的 Redis Commander 等相关服务）。
 
-   - **Stopping Redis:**
-     When you're done developing, you can stop the services:
+   - **停止 Redis：**
+     开发结束后，可通过以下命令关闭服务：
      ```bash
      docker compose down
      ```
 
-5. **Configure environment variables**:
+5. **配置环境变量**：
 
    Create an environment file (`.env` or `.env.local`) in the root directory:
 
@@ -74,11 +74,11 @@ This repository includes both components, allowing you to use them together or s
    cp .env.example .env
    ```
 
-   Edit your environment file:
-   - Add your LLM provider API keys (at least one is required).
-   - **(If using Docker/Redis from step 4)** Choose ONE storage configuration option below:
+   编辑环境变量文件：
+   - 添加各个 LLM 提供商的 API Key（至少需要一个）。
+   - **（如果按第 4 步使用了 Docker/Redis）** 从下面两种存储配置方式中选择 **一种**：
      
-     **Option A: Direct Redis Connection (Recommended for most local development)**
+     **方案 A：直连 Redis（本地开发推荐）**
      ```dotenv
      # --- Key-Value Storage --- 
      # Connect directly to the Redis container
@@ -87,8 +87,8 @@ This repository includes both components, allowing you to use them together or s
      # REDIS_TOKEN=... (Leave commented out unless you set a password in docker-compose.yaml)
      ```
      
-     **Option B: Redis HTTP Proxy Connection (For simulating edge/serverless environments locally)**
-     The `docker-compose.yaml` also starts `redis-http-proxy` (on port 8079), which provides an HTTP interface to Redis, similar to services like Upstash used in production/edge deployments. Use this if you specifically need to test interaction via an HTTP proxy.
+     **方案 B：通过 Redis HTTP 代理连接（用于本地模拟 edge/serverless 环境）**
+     `docker-compose.yaml` 还会启动 `redis-http-proxy`（端口 8079），它为 Redis 提供 HTTP 接口，类似生产环境中 Upstash 之类的服务。如果你需要专门测试通过 HTTP 代理访问 Redis，可以使用该方案。
      ```dotenv
      # --- Key-Value Storage --- 
      # Connect via the local Redis HTTP Proxy container
@@ -96,7 +96,7 @@ This repository includes both components, allowing you to use them together or s
      REDIS_URL="http://localhost:8079" # Note: Using HTTP URL for the proxy
      REDIS_TOKEN="test_token" # Use the token defined for the proxy in docker-compose.yaml
      ```
-   - **(If NOT using Docker/Redis)** The application will default to `KV_STORE_PROVIDER=memory`. Ensure this variable is either set to `memory` or omitted entirely.
+   - **（如果不使用 Docker/Redis）** 应用会默认使用 `KV_STORE_PROVIDER=memory`。你可以显式设置为 `memory`，或直接不配置该变量。
 
    Example snippet for `.env.local` (using Option A - Direct Redis):
    ```dotenv
@@ -110,36 +110,36 @@ This repository includes both components, allowing you to use them together or s
    REDIS_URL="redis://localhost:6380"
    ```
 
-6. **Start the development server**:
+6. **启动开发服务器**：
 
    ```bash
    pnpm dev
    ```
 
-7. **Access the application**:
+7. **访问应用**：
 
-   Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+   在浏览器中打开 [http://localhost:3000](http://localhost:3000)。
 
-## Creating Your First Agent
+## 创建你的第一个智能体
 
-AgentDock uses agent templates to define agent behavior. Here's how to create your own agent:
+AgentDock 通过「智能体模板」来描述智能体的行为。下面是创建自定义智能体的步骤：
 
-### 1. Create Agent Template
+### 1. 创建智能体模板
 
-Create a new directory in the `agents` folder for your agent:
+在仓库根目录下的 `agents` 文件夹中新建一个目录：
 
 ```
 agents/my-first-agent/
 ```
 
-Create a `template.json` file in this directory with your agent configuration:
+在该目录下新建 `template.json` 文件，写入你的智能体配置：
 
 ```json
 {
   "version": "1.0",
   "agentId": "my-first-agent",
   "name": "My First Agent",
-  "description": "A simple example agent",
+  "description": "一个简单的示例智能体",
   "personality": [
     "You are a helpful assistant that provides concise answers.",
     "You are designed to be helpful and informative.",
@@ -170,7 +170,7 @@ Create a `template.json` file in this directory with your agent configuration:
     "historyPolicy": "lastN",
     "historyLength": 50,
     "initialMessages": [
-      "Hello! I'm your new agent. I can help you with weather information and web searches. How can I assist you today?"
+      "你好！我是你的新智能体，我可以帮你查询天气和进行网页搜索，今天想让我为你做点什么？"
     ],
     "chatPrompts": [
       "What's the weather like in New York?",
@@ -181,9 +181,9 @@ Create a `template.json` file in this directory with your agent configuration:
 }
 ```
 
-### 2. Start the Development Server
+### 2. 启动开发服务器
 
-Simply run the development server which will automatically bundle your templates:
+直接启动开发服务器，系统会自动打包 `agents` 目录下的所有模板：
 
 ```bash
 pnpm dev
@@ -191,88 +191,87 @@ pnpm dev
 
 The `predev` script will automatically run before starting the server, bundling all templates in the `agents` directory.
 
-### 3. Test Your Agent
+### 3. 测试你的智能体
 
-Navigate to [http://localhost:3000/chat?agentId=my-first-agent](http://localhost:3000/chat?agentId=my-first-agent) to interact with your agent. Your agent will also appear in the agent selection page.
+在浏览器中访问 [http://localhost:3000/chat?agentId=my-first-agent](http://localhost:3000/chat?agentId=my-first-agent) 即可与该智能体对话；它也会出现在智能体选择页面中。
 
-## Customizing Your Agent
+## 自定义你的智能体
 
-Agent customization is done entirely through the `template.json` file. The file supports the following key fields:
+智能体的所有行为都通过 `template.json` 控制，主要字段说明如下：
 
-- `version`: Template version (optional)
-- `agentId`: Unique identifier for your agent
-- `name`: Display name for your agent
-- `description`: Brief description of what your agent does
-- `personality`: Array of personality traits that guide your agent's behavior
-- `nodes`: Array of node types used by the agent. Each node represents a capability:
-  - LLM nodes (e.g., "llm.anthropic", "llm.openai", "llm.gemini") - Provide language model capabilities
-  - Tool nodes - Provide specific functionality:
-    - "weather" - Get weather forecasts for locations
-    - "search" - Search the web for information
-    - "stock-price" - Get stock market data
-    - "crypto-price" - Get cryptocurrency prices
-    - "image-generation" - Generate images
-    - "deep-research" - Perform in-depth research
-    - "science" - Access scientific papers and data
-    - "cognitive-tools" - Advanced cognitive capabilities
-- `nodeConfigurations`: Configuration for specific nodes
-  - For LLM nodes, specify the model and parameters (temperature, maxTokens, etc.)
-  - For tool nodes, configure their specific settings (e.g., maxResults for search)
-  - Each node type may have its own configuration options
-- `chatSettings`: Controls chat behavior
-  - `historyPolicy`: How chat history is managed ("none", "lastN", "all")
-  - `historyLength`: Number of messages to keep if using "lastN"
-  - `initialMessages`: Messages shown when chat starts
-  - `chatPrompts`: Suggested prompts shown in UI
-- `tags`: Categories for your agent
+- `version`：模板版本（可选）
+- `agentId`：智能体的唯一标识
+- `name`：在界面中显示的名称
+- `description`：对智能体职责的简要说明
+- `personality`：一组描述智能体性格与行为风格的字符串
+- `nodes`：该智能体会使用到的节点类型列表，每个节点代表一项能力：
+  - LLM 节点（如 `"llm.anthropic"`、`"llm.openai"`、`"llm.gemini"`）—— 提供大模型对话能力
+  - 工具节点 —— 提供特定功能：
+    - `"weather"` —— 查询指定地点的天气
+    - `"search"` —— 进行网页检索
+    - `"stock-price"` —— 获取股票行情
+    - `"crypto-price"` —— 获取加密货币价格
+    - `"image-generation"` —— 生成图像
+    - `"deep-research"` —— 进行深度研究
+    - `"science"` —— 访问科学论文与数据
+    - `"cognitive-tools"` —— 高级认知工具能力
+- `nodeConfigurations`：针对各节点的详细配置
+  - 对 LLM 节点，可指定模型名称与参数（temperature、maxTokens 等）
+  - 对工具节点，可设置其特有参数（例如 search 的 `maxResults`）
+  - 不同节点类型会有各自支持的配置项
+- `chatSettings`：控制聊天行为
+  - `historyPolicy`：聊天历史策略（`"none"`、`"lastN"`、`"all"`）
+  - `historyLength`：在使用 `"lastN"` 时保留的消息条数
+  - `initialMessages`：会话开始时展示的系统消息
+  - `chatPrompts`：在 UI 中展示的推荐提问
+- `tags`：用来给智能体打标签、归类
 
-## About the Open Source Client
+## 关于开源客户端（Open Source Client）
 
-The Open Source Client is the complete web application in this repository that provides a reference implementation of the AgentDock Core. It includes:
+开源客户端是本仓库中完整的 Web 应用，用作 AgentDock Core 的参考实现，主要包含：
 
-- A chat interface for interacting with agents
-- Agent selection and management
-- Documentation site
-- API routes for agent communication
-- Image generation capabilities
-- Settings management
-- And more
+- 与智能体对话的聊天界面
+- 智能体选择与管理
+- 文档站点
+- 用于智能体通信的 API 路由
+- 图像生成功能
+- 设置管理等
 
-The client demonstrates how to build a full-featured application using the AgentDock Core framework.
+通过该客户端，你可以看到如何基于 AgentDock Core 搭建一个完整的生产级应用。
 
-## Building for Production
+## 生产环境构建
 
-To create a production build:
+要生成生产构建：
 
 ```bash
 pnpm build
 ```
 
-This will create an optimized production build in the `.next` directory.
+该命令会在 `.next` 目录中生成优化后的生产构建。
 
-To preview the production build locally:
+在本地预览生产环境构建：
 
 ```bash
 pnpm start
 ```
 
-## Using AgentDock Core Standalone
+## 在独立项目中使用 AgentDock Core
 
-If you want to use just the AgentDock Core library in your own project:
+如果你只想在自己的项目中单独使用 AgentDock Core，可以按下面步骤操作：
 
-1. **Install the package**:
+1. **安装依赖包**：
 
    ```bash
    pnpm add agentdock-core
    ```
 
-2. **Import and use in your code**:
+2. **在代码中引入并使用**：
 
    ```typescript
    import { AgentNode } from 'agentdock-core';
    
    async function createAgent() {
-     // Create an agent configuration
+     // 创建一个智能体配置
      const config = {
        id: "my-agent",
        name: "My Agent",
@@ -280,14 +279,14 @@ If you want to use just the AgentDock Core library in your own project:
        tools: ["search"]
      };
      
-     // Create an agent
+     // 创建智能体实例
      const agent = new AgentNode('my-agent', {
        agentConfig: config,
        apiKey: process.env.OPENAI_API_KEY,
-provider: 'openai'
+       provider: 'openai'
      });
      
-     // Handle a message
+     // 处理一条消息
      const result = await agent.handleMessage({
        messages: [{ role: 'user', content: 'Hello, how can you help me?' }]
      });
@@ -296,69 +295,63 @@ provider: 'openai'
    }
    ```
 
-## Next Steps
+## 下一步可以做什么？
 
-Now that you have AgentDock running, you can explore:
+当你成功跑起 AgentDock 之后，可以继续阅读：
 
-- [Agent Templates](agent-templates.md) - Learn more about agent templates and available options
-- [Architecture Overview](architecture/README.md) - Understand the system architecture
-- [Node System](nodes/README.md) - Learn about the node-based architecture
-- [Custom Tool Development](nodes/custom-tool-development.md) - Create your own custom tools
-- [Open Source Client](oss-client/image-generation.md) - Explore features in the reference implementation
+- [智能体模板](agent-templates.md) —— 了解更多模板字段与配置选项
+- [架构总览](architecture/README.md) —— 理解系统整体架构
+- [节点系统](nodes/README.md) —— 深入了解基于节点的架构
+- [自定义工具开发](nodes/custom-tool-development.md) —— 编写你自己的工具节点
+- [开源客户端功能](oss-client/image-generation.md) —— 探索参考实现中的各项特性
 
-## Troubleshooting
+## 故障排查
 
-### Common Issues
+### 常见问题
 
-1. **"Cannot find module 'pnpm'"**
-   - Make sure you have pnpm installed globally or via corepack
+1. **“Cannot find module 'pnpm'”**
+   - 请确认已通过全局安装或 corepack 安装 pnpm
 
-2. **API Key Errors**
-   - Verify that you've added the correct API keys to your `.env.local` file
-   - Check that the API key format is correct for the provider you're using
+2. **API Key 相关错误**
+   - 检查是否在 `.env.local` 中正确填入了 API Key
+   - 确认 Key 的格式符合对应提供商的要求
 
-3. **Agent not appearing after creation**
-   - Make sure you restart the development server after creating a new agent
-   - Check that your template.json file is valid JSON with all required fields
+3. **新建的智能体没有出现在列表中**
+   - 创建新模板后，请重新启动开发服务器
+   - 检查 `template.json` 是否为合法 JSON 且包含必需字段
 
-4. **Dependency Issues**
-   - Try running `pnpm clean && pnpm install` to clean and reinstall all dependencies
+4. **依赖问题**
+   - 尝试执行 `pnpm clean && pnpm install` 重新安装依赖
 
-### Getting Help
+### 获取更多帮助
 
-If you encounter problems not covered here, please:
-- Check existing issues in the GitHub repository
-- Open a new issue with detailed information about your problem
+如果遇到以上内容未覆盖的问题，可以：
+- 在 GitHub 仓库中搜索现有 Issue
+- 提交一个包含详细信息的新 Issue
 
-### Start Development Server
+### 快速启动开发服务器
 
 ```bash
 pnpm dev
 ```
 
-This will start the Next.js reference client application.
+该命令会启动 Next.js 参考客户端应用。
 
-### Using AgentDock Core in Other Backends
+### 在其他后端框架中集成 AgentDock Core
 
-While this guide focuses on the reference Next.js client, `agentdock-core` is designed as a standalone library for Node.js environments. You can integrate it into any Node.js backend framework (like Express, Fastify, Hono, NestJS, etc.):
+本指南主要围绕 Next.js 参考客户端展开，但 `agentdock-core` 本质上是一个适用于 Node.js 环境的独立库，你可以将其集成到任意后端框架（如 Express、Fastify、Hono、NestJS 等）中：
 
-1.  **Install:** Add `@agentdock/core` (once published) or link the local `agentdock-core` package to your backend project.
-2.  **Import:** Import necessary classes and functions (e.g., `AgentNode`, `NodeRegistry`, `registerCoreNodes`, configuration loaders).
-3.  **Initialize:** Register core nodes (`registerCoreNodes()`) and any custom nodes/tools.
-4.  **Integrate:** Create API endpoints (e.g., `/api/chat/:agentId`) in your chosen framework.
-5.  **Handle Requests:** Within your endpoint handlers, instantiate `AgentNode`, manage sessions (using core session/storage managers or your own), handle message processing via `agentNode.handleMessage`, and stream responses back to the client.
+1.  **安装：** 在你的后端项目中添加 `agentdock-core` 依赖（或通过本地 link 的方式引用）。
+2.  **引入：** 导入所需的类与函数（如 `AgentNode`、`NodeRegistry`、`registerCoreNodes`、配置加载器等）。
+3.  **初始化：** 调用 `registerCoreNodes()` 注册核心节点，并注册你的自定义节点/工具。
+4.  **集成：** 在后端框架中创建 API 路由（例如 `/api/chat/:agentId`）。
+5.  **处理请求：** 在路由处理函数中实例化 `AgentNode`，使用核心提供的会话/存储管理器（或你自己的实现）管理状态，通过 `agentNode.handleMessage` 处理消息并将流式响应返回给客户端。
 
-### Using AgentDock from Other Languages (Python, Rust, etc.)
+### 从其他语言（Python、Rust 等）访问 AgentDock
 
-You cannot directly use the `agentdock-core` TypeScript library in non-JavaScript/TypeScript environments. However, you can interact with AgentDock agents from *any* language or platform:
+`agentdock-core` 是 TypeScript 库，无法在非 JS/TS 环境中直接使用。但你可以通过 HTTP API 方式，从任意语言或平台访问 AgentDock 智能体：
 
-1.  **Build an API:** Create a backend service using Node.js and `agentdock-core` (as described above) that exposes an HTTP API (e.g., REST).
-2.  **Consume the API:** From your Python, Rust, Java, frontend application, or any other client, make standard HTTP requests to your AgentDock backend API endpoints to interact with your agents.
+1.  **构建后端 API：** 使用 Node.js 与 `agentdock-core` 搭建后端服务，对外暴露 HTTP API（例如 REST 接口）。
+2.  **在其他语言中调用：** 从 Python、Rust、Java、前端应用或任何其他客户端，通过标准 HTTP 请求调用这些 API，即可与智能体交互。
 
-This API-centric approach allows AgentDock's core capabilities to be leveraged across diverse technology stacks.
-
-## Next Steps
-
--   Explore the [Agent Templates](agent-templates.md) to understand configuration.
--   Learn about the [Node System](../nodes/README.md) in detail.
--   Dive into the [Core Architecture](../architecture/README.md). 
+这种以 API 为中心的方式，可以让 AgentDock 的核心能力在不同技术栈中复用。

@@ -3,6 +3,8 @@
   "agentId": "sigmund-freud",
   "name": "Dr. Sigmund Freud",
   "description": "Psychoanalytic AI agent with the personality of Sigmund Freud.",
+  "nameKey": "agent.sigmundFreud.name",
+  "descriptionKey": "agent.sigmundFreud.description",
   "tags": ["health", "characters", "featured"],
   "priority": 2,
   "personality": [

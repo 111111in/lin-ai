@@ -1,30 +1,30 @@
-# Orchestration Framework
+# 编排框架（Orchestration）
 
-This directory contains documentation about AgentDock's orchestration framework.
+本目录包含 AgentDock 编排框架相关文档。
 
 ## Overview
 
-Orchestration in AgentDock controls the flow of agent interactions and tool availability based on the conversation context. It provides a structured way to define complex agent behaviors through:
+AgentDock 的编排系统会基于对话上下文，控制智能体交互流程以及可用工具集合。它提供了一种结构化方式来定义复杂智能体行为，包括：
 
-- Step-based workflows
-- Conditional tool access
-- Context-aware transitions
-- Tool sequence enforcement
-- Memory-efficient state management
+- 基于步骤（Step）的工作流
+- 基于条件的工具访问控制
+- 上下文感知的步骤跳转
+- 工具序列强制执行
+- 高内存效率的状态管理
 
 ## Documentation
 
-- [Orchestration Overview](./orchestration-overview.md)
-- [Orchestration Configuration](./orchestration-config.md)
-- [State Management](./state-management.md)
-- [Step Sequencing](./step-sequencing.md)
-- [Conditional Transitions](./conditional-transitions.md)
-- [LLM Orchestration](./llm-orchestration.md)
+- [编排总览](./orchestration-overview.md)
+- [编排配置](./orchestration-config.md)
+- [状态管理](./state-management.md)
+- [步骤编排（序列）](./step-sequencing.md)
+- [条件跳转](./conditional-transitions.md)
+- [LLM 编排](./llm-orchestration.md)
 
 ## Documentation Files
 
-- [orchestration-overview.md](./orchestration-overview.md) - Core concepts and architecture of the orchestration system
-- [orchestration-config.md](./orchestration-config.md) - Configuration format and options
-- [step-sequencing.md](./step-sequencing.md) - Tool sequence enforcement and next-step prediction
-- [state-management.md](./state-management.md) - Optimized state management for orchestration
-- [conditional-transitions.md](./conditional-transitions.md) - How conditions work for transitioning between steps 
+- [orchestration-overview.md](./orchestration-overview.md) - 编排系统的核心概念与架构
+- [orchestration-config.md](./orchestration-config.md) - 配置格式与选项说明
+- [step-sequencing.md](./step-sequencing.md) - 工具序列强制与“下一步”约束
+- [state-management.md](./state-management.md) - 面向编排的优化状态管理
+- [conditional-transitions.md](./conditional-transitions.md) - 条件如何驱动步骤之间的切换

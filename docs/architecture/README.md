@@ -1,48 +1,48 @@
-# AgentDock Architecture
+# AgentDock 架构概览
 
-This section provides an overview of the architecture of AgentDock Core, the foundation library that powers all AgentDock functionality.
+本章节介绍 AgentDock Core 的整体架构。AgentDock Core 是支撑所有 AgentDock 功能的基础库。
 
-## Core Philosophy
+## 核心设计理念
 
-AgentDock Core is designed with the following principles:
+AgentDock Core 的设计遵循以下原则：
 
--   **Modularity:** Components like LLM interaction, session management, storage, and orchestration are distinct and replaceable.
--   **Extensibility:** Easy to add new LLM providers, storage backends, tools, or custom agent logic.
--   **Type Safety:** Comprehensive TypeScript types ensure developer confidence and reduce runtime errors.
--   **Provider Agnosticism:** Abstracting away differences between LLM providers and storage systems where possible.
--   **State Management Focus:** Robust mechanisms for managing conversational state across interactions.
+-   **模块化（Modularity）：** 将 LLM 调用、会话管理、存储、编排等拆分为独立可替换的模块。
+-   **可扩展性（Extensibility）：** 易于接入新的 LLM 提供商、存储后端、工具或自定义智能体逻辑。
+-   **类型安全（Type Safety）：** 全面使用 TypeScript 类型，提升开发者信心，减少运行时错误。
+-   **提供商无关（Provider Agnosticism）：** 在可能的情况下，屏蔽不同 LLM 提供商与存储系统之间的差异。
+-   **状态管理优先（State Management Focus）：** 为多轮对话提供健壮的状态管理机制。
 
-## Key Subsystems
+## 关键子系统
 
-AgentDock Core is composed of several interconnected subsystems:
+AgentDock Core 由若干相互连接的子系统组成：
 
-1.  **LLM Abstraction (`/llm`):** Provides a consistent interface (`CoreLLM`) for interacting with different LLM providers (OpenAI, Anthropic, Gemini via Vercel AI SDK). Handles API calls, streaming, and basic token usage reporting.
-2.  **Storage Abstraction Layer (`/storage`):** Offers a pluggable system for Key-Value storage (Memory, Redis, Vercel KV implemented) with plans for Vector and Relational storage. See [Storage Overview](../storage/README.md).
-3.  **Session Management (`/session`):** Manages isolated conversational state using the Storage Abstraction Layer. Ensures context preservation and handles state lifecycle (creation, updates, TTL-based cleanup). See [Session Management](./sessions/session-management.md).
-4.  **Orchestration Framework (`/orchestration`):** Controls agent behavior by managing steps (modes), conditional transitions, tool availability, and optional tool sequencing based on session state. See [Orchestration Overview](./orchestration/orchestration-overview.md).
-5.  **Node System (`/nodes`):** Defines the core execution units and modular architecture. Based on `BaseNode`, it includes the primary `AgentNode` (integrating LLM, tools, session, orchestration), tool nodes, and potentially custom nodes. Managed by `NodeRegistry` (for types) and `ToolRegistry` (for runtime availability). See [Node System Overview](../nodes/README.md).
-6.  **Tool System (Integrated within `/nodes`):** Tools are implemented as specialized nodes. Their definition, registration (`NodeRegistry`), runtime availability (`ToolRegistry`), and execution (triggered by `AgentNode` via LLM function/tool calling) are integral parts of the Node System.
-7.  **Error Handling (`/errors`):** Standardized error types and handling mechanisms.
-8.  **Configuration (`/config`, Agent Templates):** Agent behavior is defined via template files (`template.json`) specifying LLM, tools, prompts, orchestration rules, etc.
+1.  **LLM 抽象层（`/llm`）：** 通过统一接口 `CoreLLM` 与不同 LLM 提供商交互（OpenAI、Anthropic、Gemini 等，经由 Vercel AI SDK）。负责发起 API 调用、流式输出以及基础的 Token 统计。
+2.  **存储抽象层（`/storage`）：** 提供可插拔的 Key‑Value 存储体系（已实现 Memory、Redis、Vercel KV），并预留向量存储和关系型存储的扩展能力。详见 [存储总览](../storage/README.md)。
+3.  **会话管理（`/session`）：** 基于存储抽象层管理独立的会话状态，确保上下文持续可用，并处理会话的生命周期（创建、更新、基于 TTL 的清理）。详见 [会话管理](./sessions/session-management.md)。
+4.  **编排框架（`/orchestration`）：** 通过“步骤（mode）+ 条件跳转 + 工具可用性 + 可选的工具序列”来控制智能体行为，核心依据是会话状态。详见 [编排总览](./orchestration/orchestration-overview.md)。
+5.  **节点系统（`/nodes`）：** 定义核心执行单元与模块化架构。基于 `BaseNode`，包含主要的 `AgentNode`（整合 LLM、工具、会话与编排）、各类工具节点以及自定义节点。由 `NodeRegistry`（类型注册）与 `ToolRegistry`（运行时工具注册）统一管理。详见 [节点系统总览](../nodes/README.md)。
+6.  **工具系统（集成于 `/nodes`）：** 工具以“专用节点”的形式实现，其定义、注册（`NodeRegistry`）、运行时可用性（`ToolRegistry`）以及被 `AgentNode` 通过函数/工具调用触发执行，都是节点系统的一部分。
+7.  **错误处理（`/errors`）：** 提供标准化的错误类型与处理机制。
+8.  **配置系统（`/config` 与 Agent 模板）：** 通过 `template.json` 模板文件定义智能体行为，包括 LLM、工具、提示词、编排规则等。
 
-## High-Level Interaction Flow
+## 交互流程总览
 
-A typical interaction involves:
+一次典型的请求‑响应流程如下：
 
-1.  **Request:** An incoming request (e.g., from the Open Source Client) hits an API endpoint.
-2.  **Session Handling:** The endpoint retrieves or establishes a `SessionId`.
-3.  **Agent Instantiation:** An `AgentNode` instance is created based on the agent template configuration.
-4.  **State Retrieval:** Relevant session state (e.g., `OrchestrationState`) is loaded via `SessionManager` / `OrchestrationStateManager`.
-5.  **Orchestration Check:** The orchestration logic determines the active step and filters available tools based on conditions and sequences.
-6.  **LLM Call:** `AgentNode` uses `CoreLLM` to interact with the LLM provider, passing the message history, system prompt, and filtered tools.
-7.  **Tool Execution (if needed):** If the LLM requests a tool, `AgentNode` executes it, potentially updating session state.
-8.  **Response Streaming:** The LLM response (text or tool calls) is streamed back.
-9.  **State Update:** Session state (message history, token usage, orchestration state) is updated via the respective managers.
-10. **Response Completion:** The stream ends, and the final state is persisted.
+1.  **请求进入：** 来自开源客户端等入口的请求首先到达对应的 API 路由。
+2.  **会话处理：** 路由层获取或创建 `SessionId`。
+3.  **实例化智能体：** 根据智能体模板配置创建 `AgentNode` 实例。
+4.  **状态加载：** 通过 `SessionManager` / `OrchestrationStateManager` 载入相关会话状态（例如 `OrchestrationState`）。
+5.  **编排判定：** 编排逻辑确定当前激活的步骤，并基于条件与工具序列筛选可用工具。
+6.  **LLM 调用：** `AgentNode` 使用 `CoreLLM` 调用 LLM，传入消息历史、系统提示词以及已筛选的工具列表。
+7.  **工具执行（如有）：** 若 LLM 触发工具调用，`AgentNode` 执行对应工具，并在需要时更新会话状态。
+8.  **流式返回：** 将 LLM 的文本或工具调用结果以流式方式返回给客户端。
+9.  **状态更新：** 通过对应的管理器更新会话状态（消息历史、Token 使用量、编排状态等）。
+10. **结束与持久化：** 流结束后，最终状态被持久化存储。
 
-See [Request Flow](./core/request-flow.md) for more details.
+更详细的流程请参见 [请求流转](./core/request-flow.md)。
 
-## Directory Structure (`agentdock-core/src`)
+## 目录结构（`agentdock-core/src`）
 
 ```
 /src
@@ -61,22 +61,22 @@ See [Request Flow](./core/request-flow.md) for more details.
 └── utils/          # General utility functions
 ```
 
-## Further Reading
+## 延伸阅读
 
--   [Core Architecture Overview](./core/overview.md)
--   [Node System Overview](../nodes/README.md)
--   [Technology Stack](./core/technology-stack.md)
+-   [核心架构详情](./core/overview.md)
+-   [节点系统总览](../nodes/README.md)
+-   [技术栈](./core/technology-stack.md)
 
-## Evaluation Framework
+## 评估框架概览
 
-A crucial component of AgentDock is its **Evaluation Framework**, designed to systematically measure, analyze, and improve agent quality. This framework resides within `agentdock-core` and provides a comprehensive suite of tools for assessing various aspects of agent performance.
+AgentDock 中一个非常重要的组成部分是 **评估框架（Evaluation Framework）**。它用于系统化地度量、分析并持续改进智能体质量，位于 `agentdock-core` 包内，为不同维度的性能评估提供完整工具集。
 
-Key aspects include:
+核心特点包括：
 
-*   **Modular Evaluators**: A collection of diverse evaluators (e.g., `RuleBasedEvaluator`, `LLMJudgeEvaluator`, `NLPAccuracyEvaluator`, Lexical Suite, `ToolUsageEvaluator`) allow for targeted assessment of different quality dimensions.
-*   **`EvaluationRunner`**: Orchestrates the execution of evaluation runs based on defined criteria and configurations.
-*   **Configurable Criteria**: Enables developers to define specific `EvaluationCriteria` (name, description, scale, weight) against which agents are assessed.
-*   **Result Aggregation & Storage**: Provides mechanisms for aggregating results (e.g., weighted scoring) and persisting them via `EvaluationStorageProvider` implementations.
-*   **Extensibility**: Designed with interfaces like `Evaluator` and `EvaluationStorageProvider` to allow for easy custom extensions.
+*   **模块化评估器：** 内置多种评估器（如 `RuleBasedEvaluator`、`LLMJudgeEvaluator`、`NLPAccuracyEvaluator`、词汇评估套件、`ToolUsageEvaluator` 等），可以针对不同质量维度进行精细化评估。
+*   **`EvaluationRunner`：** 负责根据配置与评估标准协调整次评估流程。
+*   **可配置评估标准：** 支持通过 `EvaluationCriteria` 定义评估名称、描述、评分尺度、权重等信息。
+*   **结果聚合与存储：** 提供加权评分、结果聚合以及通过 `EvaluationStorageProvider` 持久化存储的能力。
+*   **高度可扩展：** 基于 `Evaluator` 与 `EvaluationStorageProvider` 等接口，可以方便地扩展自定义评估组件。
 
-The Evaluation Framework is integral to maintaining high standards of agent reliability and performance, facilitating data-driven development and iterative improvement. For more details, see the [Evaluation Framework Documentation](../evaluations/README.md). 
+评估框架是保证智能体可靠性与性能的关键基础设施，有助于数据驱动的迭代优化。更多细节可参见 [评估框架文档](../evaluations/README.md)。

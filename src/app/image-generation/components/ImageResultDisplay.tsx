@@ -79,7 +79,7 @@ export function ImageResultDisplay({
           </div>
           <h2 className="text-2xl font-black">
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Generated Image
+              生成结果
             </span>
           </h2>
         </div>
@@ -92,7 +92,7 @@ export function ImageResultDisplay({
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
             <Download className="w-4 h-4 mr-2 relative z-10" />
-            <span className="relative z-10">Download</span>
+            <span className="relative z-10">下载</span>
           </Button>
           <Button
             variant="outline"
@@ -102,7 +102,7 @@ export function ImageResultDisplay({
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
             <ExternalLink className="w-4 h-4 mr-2 relative z-10" />
-            <span className="relative z-10">Full Size</span>
+            <span className="relative z-10">查看大图</span>
           </Button>
           {conversationHistory.length > 0 && (
             <Button
@@ -119,7 +119,7 @@ export function ImageResultDisplay({
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
               <MessageCircle className="w-4 h-4 mr-2 relative z-10" />
               <span className="relative z-10">
-                {showHistory ? 'Hide History' : 'History'}
+                {showHistory ? '隐藏记录' : '记录'}
               </span>
             </Button>
           )}
@@ -131,7 +131,7 @@ export function ImageResultDisplay({
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
             <RotateCcw className="w-4 h-4 mr-2 relative z-10" />
-            <span className="relative z-10">New Image</span>
+            <span className="relative z-10">新建图片</span>
           </Button>
         </div>
       </div>
@@ -146,7 +146,7 @@ export function ImageResultDisplay({
                   <ImageIcon className="w-8 h-8 text-primary" />
                 </div>
                 <p className="text-base font-bold text-foreground">
-                  Loading image...
+                  正在加载图片...
                 </p>
               </div>
             </div>
@@ -156,7 +156,7 @@ export function ImageResultDisplay({
             <div className="flex flex-col items-center justify-center h-80 bg-muted/20 text-muted-foreground">
               <div className="p-4 rounded-lg bg-card/80 backdrop-blur-sm border border-destructive/20 shadow-sm">
                 <p className="mb-3 text-sm font-medium text-destructive/80">
-                  Failed to load image
+                  图片加载失败
                 </p>
                 <Button
                   variant="outline"
@@ -165,7 +165,7 @@ export function ImageResultDisplay({
                   className="w-full"
                 >
                   <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                  Try Opening Directly
+                  尝试直接打开
                 </Button>
               </div>
             </div>
@@ -173,7 +173,7 @@ export function ImageResultDisplay({
 
           <img
             src={absoluteImageUrl}
-            alt="Generated image"
+            alt="生成的图片"
             className={`max-w-full h-auto mx-auto transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             style={{ maxHeight: '60vh' }}
             onLoad={() => setImageLoaded(true)}
@@ -192,7 +192,7 @@ export function ImageResultDisplay({
               <MessageCircle className="w-4 h-4 text-primary" />
             </span>
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Description
+              描述
             </span>
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
@@ -208,7 +208,7 @@ export function ImageResultDisplay({
               <MessageCircle className="w-4 h-4 text-primary" />
             </span>
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Image History
+              图片记录
             </span>
           </h3>
           <div className="space-y-5">
@@ -227,7 +227,7 @@ export function ImageResultDisplay({
                     item.role === 'user' ? 'text-foreground' : 'text-primary'
                   }`}
                 >
-                  {item.role === 'user' ? 'Your Request' : 'Generated Result'}
+                  {item.role === 'user' ? '你的请求' : '生成结果'}
                 </p>
                 <div className="space-y-4">
                   {item.parts.map((part, partIndex) => (
@@ -239,7 +239,7 @@ export function ImageResultDisplay({
                         <div className="mt-4 overflow-hidden rounded-xl border-2 border-border/30 shadow-lg">
                           <img
                             src={ensureAbsoluteUrl(part.image)}
-                            alt={`${item.role} image`}
+                            alt={`${item.role === 'user' ? '用户' : '模型'} 图片`}
                             className="max-w-full h-auto object-contain"
                             loading="lazy"
                           />

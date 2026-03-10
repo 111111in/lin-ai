@@ -21,16 +21,15 @@ export async function generateMetadata({
   searchParams
 }: CategoryPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
   const category = resolvedParams.category;
 
   // Find the display name for the category
   const currentCategory = AGENT_TAGS.find((tag) => tag.id === category);
-  const categoryName = currentCategory?.name || category; // Fallback to id if name not found
+  const categoryId = currentCategory?.id || category; // Use id as a stable key
 
-  // Capitalize the category name for the title
-  const title = `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} Agents`;
-  const description = `Explore and use our collection of ${categoryName} AI agents powered by AgentDock.`;
+  // Capitalize the category id for the default (English) metadata title
+  const title = `${categoryId.charAt(0).toUpperCase() + categoryId.slice(1)} Agents`;
+  const description = `Explore and use our collection of ${categoryId} AI agents powered by AgentDock.`;
 
   // Return metadata with dynamic OG image - remove description
   return generatePageMetadata({
@@ -80,7 +79,8 @@ export default function CategoryPageServer({
   return (
     <CategoryPage
       category={category}
-      categoryName={currentCategory?.name || category}
+      // Pass the category id as the display key; actual label is resolved via i18n on the client
+      categoryName={currentCategory?.id || category}
       templates={filteredTemplates}
     />
   );

@@ -1,10 +1,10 @@
-# Keyword Coverage Evaluator
+# 关键词覆盖率评估器
 
-The `KeywordCoverageEvaluator` checks for the presence, frequency, or coverage of specified keywords or phrases within a given text. This is a straightforward but highly effective way to ensure that essential information is included in an agent's response, or conversely, that undesirable terms are absent. Experience finds this useful for quick checks on information inclusion or policy adherence.
+`KeywordCoverageEvaluator` 用于检查给定文本中指定关键词或短语的**出现情况、出现频次或覆盖率**。这是一种直接但非常有效的方法，用于确保智能体回复包含必要信息，或反向确保不出现不希望出现的词语。实践经验表明，它很适合用于快速检查“信息是否覆盖到位”或“是否符合策略要求”。
 
-## Core Workflow
+## 核心工作流
 
-The `KeywordCoverageEvaluator` takes an input text (typically the agent's response) and a configuration specifying a list of keywords and matching rules (e.g., case sensitivity, expected outcome). It then scans the input text to determine the presence, frequency, or coverage of these keywords, producing a score that reflects this, which is included in the `EvaluationResult`.
+`KeywordCoverageEvaluator` 接收一段输入文本（通常是智能体回复）以及一份配置，配置中包含关键词列表与匹配规则（例如是否区分大小写、期望的匹配结果等）。随后它会扫描文本以确定关键词的出现情况/频次/覆盖率，并生成一个反映该结果的分数，写入 `EvaluationResult`。
 
 ```mermaid
 graph TD
@@ -27,23 +27,23 @@ graph TD
     style ER fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
-## Use Cases
+## 使用场景
 
-The `KeywordCoverageEvaluator` is valuable for:
+`KeywordCoverageEvaluator` 的典型用途包括：
 
-*   Ensuring product names, disclaimers, or specific instructions are mentioned.
-*   Verifying that all topics from a checklist are addressed.
-*   Basic checking for forbidden words (though `ToxicityEvaluator` might be more specialized).
-*   Counting occurrences of specific terms for analytical purposes.
+* 确保产品名称、免责声明或特定指令被提及。
+* 验证清单中的所有主题都被覆盖。
+* 基础的禁用词检查（更专门的场景可使用 `ToxicityEvaluator`）。
+* 统计特定术语的出现次数，用于分析目的。
 
 ## Configuration
 
-Configuration involves defining the keywords and the matching logic:
+配置主要用于定义关键词与匹配逻辑：
 
-*   `keywords`: An array of strings or patterns to search for.
-*   `caseSensitive`: Boolean, defaults to `false`.
-*   `expectedOutcome`: Defines what constitutes a pass (e.g., 'any' keyword found, 'all' keywords found, 'none' found, or a specific count/frequency).
-*   `sourceField`: Specifies which field from `EvaluationInput` to check (defaults to 'response').
+* `keywords`：要查找的字符串或模式（pattern）数组。
+* `caseSensitive`：是否区分大小写，布尔值，默认 `false`。
+* `expectedOutcome`：定义何种情况算通过（例如：找到“任意”关键词、找到“全部”关键词、一个都不应出现、或满足特定计数/频率）。
+* `sourceField`：指定从 `EvaluationInput` 的哪个字段读取文本（默认 `'response'`）。
 
 ```typescript
 // Example configuration structure (to be detailed)
@@ -58,12 +58,12 @@ Configuration involves defining the keywords and the matching logic:
 
 ## Output (`EvaluationResult`)
 
-The `KeywordCoverageEvaluator` produces an `EvaluationResult`:
+`KeywordCoverageEvaluator` 产生的 `EvaluationResult` 通常包含：
 
-*   **`criterionName`**: Reflects the keyword check being performed (e.g., "IncludesMandatoryTerms").
-*   **`score`**: Typically boolean (`true`/`false`) or a numeric score (e.g., percentage of keywords found, count of occurrences).
-*   **`reasoning`**: Details about which keywords were found/missing, or counts.
-*   **`evaluatorType`**: `'KeywordCoverage'`.
-*   **`error`**: For configuration errors or issues accessing the text.
+* **`criterionName`**：反映当前进行的关键词检查（例如 `"IncludesMandatoryTerms"`）。
+* **`score`**：通常为布尔值（`true`/`false`）或数值（例如：找到的关键词占比、出现次数）。
+* **`reasoning`**：说明哪些关键词被找到/缺失，或给出计数细节。
+* **`evaluatorType`**：`'KeywordCoverage'`。
+* **`error`**：用于表示配置错误或读取文本失败等问题。
 
-This evaluator offers a simple way to enforce content requirements based on keyword presence. 
+该评估器提供了一种基于关键词出现情况来约束内容要求的简单方式。

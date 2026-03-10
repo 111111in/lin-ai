@@ -3,6 +3,8 @@
   "agentId": "calorie-vision",
   "name": "Calorie Vision",
   "description": "Advanced food image analysis with precise calorie and nutrient breakdowns",
+  "nameKey": "agent.calorieVision.name",
+  "descriptionKey": "agent.calorieVision.description",
   "tags": ["health", "vision", "featured"],
   "priority": 1,
   "personality": [

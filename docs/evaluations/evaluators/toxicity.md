@@ -1,10 +1,10 @@
-# Toxicity Evaluator
+# 毒性评估器
 
-The `ToxicityEvaluator` scans text for the presence of predefined toxic terms, offensive language, or other undesirable content based on a blocklist. This is a fundamental safety check to help ensure agents do not produce harmful or inappropriate responses. Experience underscores that even basic blocklist checks are a necessary first line of defense for responsible agent deployment.
+`ToxicityEvaluator` 会基于黑名单（blocklist）扫描文本中是否出现预定义的有害词、冒犯性语言或其它不希望出现的内容。这是一项基础的安全检查，用于帮助确保智能体不会输出有害或不适当的回复。实践经验强调：即便是最基础的黑名单检测，也应当作为负责任的智能体上线部署的第一道防线。
 
-## Core Workflow
+## 核心工作流
 
-The `ToxicityEvaluator` compares an input text (e.g., an agent's response) against a configured blocklist of toxic terms or patterns. It scans the text for any matches, and based on these findings, determines a toxicity status (e.g., whether toxic terms were detected, or a count of detected terms). This status forms the basis of the `EvaluationResult`.
+`ToxicityEvaluator` 将输入文本（例如智能体回复）与配置的有害词/模式黑名单进行对比，扫描是否存在匹配项。根据扫描结果，它会生成一个“毒性状态”（例如是否检测到有害词，或检测到的数量），并以此作为 `EvaluationResult` 的基础。
 
 ```mermaid
 graph TD
@@ -27,22 +27,22 @@ graph TD
     style ER fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
-## Use Cases
+## 使用场景
 
-The `ToxicityEvaluator` is primarily used for:
+`ToxicityEvaluator` 主要用于：
 
-*   Flagging agent responses that contain offensive or inappropriate language.
-*   Ensuring compliance with content policies that forbid certain terms.
-*   Basic safety screening of user inputs if the agent is designed to process them in sensitive ways (though this is less common for the evaluator's direct use).
+* 标记包含冒犯性或不适当语言的智能体回复。
+* 确保符合内容策略（例如禁止出现某些词/短语）。
+* 如果智能体需要以较敏感的方式处理用户输入，也可用于对用户输入做基础安全筛查（不过评估器直接用于此场景相对少见）。
 
 ## Configuration
 
-Configuration typically involves defining the list of toxic terms and matching behavior:
+配置通常包括：定义有害词列表以及匹配行为：
 
-*   `blockList`: An array of strings or regular expressions representing toxic terms/patterns.
-*   `caseSensitive`: Boolean, defaults to `false`.
-*   `matchWholeWord`: Boolean, to avoid flagging substrings within non-toxic words.
-*   `sourceField`: Specifies which field from `EvaluationInput` to check (defaults to 'response').
+* `blockList`：字符串或正则表达式数组，表示有害词/模式。
+* `caseSensitive`：是否区分大小写，布尔值，默认 `false`。
+* `matchWholeWord`：是否按“整词”匹配，避免在无害词中误报子串。
+* `sourceField`：指定从 `EvaluationInput` 的哪个字段读取要检查的文本（默认 `'response'`）。
 
 ```typescript
 // Example configuration structure (to be detailed)
@@ -57,12 +57,12 @@ Configuration typically involves defining the list of toxic terms and matching b
 
 ## Output (`EvaluationResult`)
 
-The `ToxicityEvaluator` produces an `EvaluationResult`:
+`ToxicityEvaluator` 产生的 `EvaluationResult` 通常包含：
 
-*   **`criterionName`**: Reflects the toxicity check (e.g., "IsNonToxic").
-*   **`score`**: Typically boolean (`true` if no toxic terms found, `false` if toxic terms are present) or a count of toxic terms found.
-*   **`reasoning`**: Details about which toxic terms were found, if any.
-*   **`evaluatorType`**: `'Toxicity'`.
-*   **`error`**: For configuration errors or issues accessing the text.
+* **`criterionName`**：反映毒性检查项（例如 `"IsNonToxic"`）。
+* **`score`**：通常为布尔值（未发现有害词时为 `true`，发现时为 `false`），或为检测到的有害词数量。
+* **`reasoning`**：说明检测到了哪些有害词（如果有）。
+* **`evaluatorType`**：`'Toxicity'`。
+* **`error`**：用于表示配置错误或读取文本失败等问题。
 
-This provides a direct mechanism for identifying and flagging potentially harmful content based on a defined set of rules. 
+该评估器提供了一种基于明确规则集来直接识别并标记潜在有害内容的机制。

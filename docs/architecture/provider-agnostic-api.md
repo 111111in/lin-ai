@@ -1,58 +1,61 @@
-# Provider-Agnostic API Architecture
+# 多提供商统一 API 架构
 
-This document explains how AgentDock works with multiple LLM providers through a unified API layer.
+本文档说明 AgentDock 如何通过**统一的 API 抽象层**同时对接多个 LLM 提供商。
 
-## What This Means For Users
+## 对用户意味着什么？
 
-AgentDock supports a variety of LLM providers (OpenAI, Anthropic, Gemini, DeepSeek, Groq, etc.) through a single, consistent interface. This means:
+AgentDock 通过同一套接口支持多种 LLM 提供商（如 OpenAI、Anthropic、Gemini、DeepSeek、Groq 等），这带来的效果是：
 
-1. **Consistent Experience** - The same chat interface works across all providers
-2. **Easy Provider Switching** - Change providers without changing your application code
-3. **Unified Error Handling** - Clear, consistent error messages regardless of provider
-4. **Simple API Key Management** - Manage all provider keys in one place
+1. **体验一致**：同一个聊天界面可以无缝切换不同模型提供商。  
+2. **轻松切换提供商**：切换底层 LLM 只需改配置，不需要改应用业务代码。  
+3. **统一错误处理**：无论底层是哪个提供商，错误信息都以统一、清晰的形式呈现。  
+4. **集中管理密钥**：在同一个地方管理所有提供商的 API Key。
 
-## Benefits
+## 优势
 
-### For Developers
+### 对开发者
 
-1. **Simplified Integration** - Connect to any supported provider using the same API
-2. **No Provider-Specific Code** - Write code once that works with all providers
-3. **Future-Proof** - New providers are added to the core library without requiring changes to your application
-4. **Type Safety** - Full TypeScript support for all providers
+1. **集成更简单**：只需对接一次统一 API，即可访问所有已支持的提供商。  
+2. **无需写提供商特定逻辑**：业务代码只写一份，对所有提供商通用。  
+3. **更具前瞻性**：后续在核心库中新增新的 LLM 提供商时，一般不需要改动你的应用。  
+4. **类型安全**：为所有提供商提供完整的 TypeScript 类型支持。
 
-### For End Users
+### 对终端用户
 
-1. **Provider Flexibility** - Use preferred providers without learning new interfaces
-2. **Graceful Error Handling** - Receive clear, actionable error messages
-3. **Consistent Model Selection** - Choose models through a standardized interface
-4. **Smooth Failover** - Automatic retries and provider fallbacks when configured
+1. **灵活选择提供商**：可以根据成本、性能、合规等需求自由选择不同提供商。  
+2. **更好的错误提示**：收到的是可读性更强、可操作性更高的错误信息。  
+3. **统一的模型选择方式**：通过标准化界面选择模型，而不是面对各家不同的 API 细节。  
+4. **平滑的故障切换**：在配置好回退策略后，出现故障时可自动重试或切换到备用提供商。
 
-## Supported Providers
+## 已支持的模型提供商
 
-AgentDock currently supports these LLM providers:
+当前 AgentDock 支持的主要 LLM 提供商包括：
 
-- **OpenAI** - GPT models (3.5, 4, etc.)
-- **Anthropic** - Claude models
-- **Google** - Gemini models
-- **DeepSeek** - DeepSeek models
-- **Groq** - Fast inference for various models
-- **Cerebras** - LLaMA and other open source models
+- **OpenAI**：GPT 系列模型（3.5、4 等）  
+- **Anthropic**：Claude 系列模型  
+- **Google**：Gemini 系列模型  
+- **DeepSeek**：DeepSeek 系列模型  
+- **Groq**：高性能推理平台，适配多种开源模型  
+- **Cerebras**：LLaMA 及其他开源模型
 
-## Error Handling
+## 统一错误处理
 
-The provider-agnostic design includes standardized error handling:
+在「多提供商统一 API」设计下，错误处理被标准化为统一的模式：
 
-1. **Normalized Errors** - Technical provider errors are translated to user-friendly messages
-2. **Clear API Key Guidance** - Specific instructions when API keys are missing or invalid
-3. **Appropriate Recovery Options** - Context-aware options for resolving different error types
+1. **错误标准化（Normalized Errors）**：  
+   将底层各个提供商返回的技术性错误，转换为统一的错误结构和可读提示。
+2. **清晰的密钥指引（API Key Guidance）**：  
+   当密钥缺失或无效时，返回明确的排查步骤与配置说明。
+3. **合理的恢复选项（Recovery Options）**：  
+   根据错误类型，提供重试、切换模型、切换提供商等上下文感知的恢复策略。
 
-## How It Works
+## 工作原理概览
 
-Behind the scenes, AgentDock:
+在内部实现上，AgentDock 会完成以下工作：
 
-1. Accepts a standard message format for all providers
-2. Translates requests to provider-specific formats
-3. Manages streaming connections appropriately for each provider
-4. Normalizes responses and errors back to a standard format
+1. 接收一份**统一格式**的消息与配置请求；  
+2. 将该请求转换为不同提供商所需的**专有请求格式**；  
+3. 针对不同提供商正确管理**流式连接**和调用参数；  
+4. 将返回结果与错误信息再次**归一化**为统一格式，供上层使用。
 
-This abstraction layer means that applications using AgentDock don't need to know the details of each provider's API. 
+得益于这一抽象层，使用 AgentDock 的应用**无需关心**每个提供商底层 API 的差异，只需要与统一的 Core 接口打交道即可。 

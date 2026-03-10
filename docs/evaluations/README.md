@@ -1,21 +1,24 @@
-# AgentDock Evaluation Framework: Measuring What Matters
+# AgentDock 评估框架：衡量真正重要的东西
 
-The capability to build AI agents is rapidly becoming commoditized. The real differentiator lies in the ability to systematically and reliably measure agent quality. Without robust evaluation, "improvement" is guesswork, and "reliability" is a marketing slogan. Experience in deploying these systems has consistently shown that what isn't measured, isn't managed, and certainly isn't improved in a way that stands up to real-world demands.
+构建 AI 智能体本身正在逐渐“商品化”，真正拉开差距的是：**能否系统、可靠地评估智能体质量**。  
+如果缺少评估，所谓的“改进”只是拍脑袋；所谓“可靠”，也只是宣传语。在真实部署经验中，一个基本共识是：**看不见的数据，就谈不上管理，更无法有针对性地提升。**
 
-AgentDock Core now includes a foundational, extensible **Evaluation Framework** designed to address this critical need. This isn't about chasing every possible academic metric; it's about providing a practical, adaptable toolkit for developers to define what quality means for *their* agents and to measure it consistently.
+AgentDock Core 内置了一套**基础但可扩展的评估框架（Evaluation Framework）**，用来解决这一关键问题。它的目标不是囊括所有学术指标，而是为开发者提供一套**务实、可调的工具箱**，帮助你定义“对你而言的质量”，并持续地、可重复地量化它。
 
-## Core Philosophy: Practicality and Extensibility
+## 核心理念：务实 + 可扩展
 
-The framework is built on two core tenets:
+框架建立在两个核心原则之上：
 
-1.  **Practicality:** The framework provides a suite of common-sense evaluators out-of-the-box--from simple rule-based checks and lexical analysis to sophisticated LLM-as-judge capabilities. These are tools designed for immediate utility in typical development and CI/CD workflows. The focus is on actionable insights, not just scores.
-2.  **Extensibility:** No framework can anticipate every evaluation need. The AgentDock Evaluation Framework is architected around a clear `Evaluator` interface. This allows developers to seamlessly integrate custom evaluation logic, whether it's proprietary business rules, specialized NLP models, or wrappers around third-party evaluation services, without needing to modify the core framework.
+1. **务实（Practicality）**  
+   框架开箱即用地提供了一系列“常识型”评估器：从简单的规则校验、词汇分析，到更复杂的 LLM‑as‑judge 能力。这些评估器都面向典型开发流程与 CI/CD 场景，目标是**产出可行动的洞察，而不仅仅是一个分数**。  
+2. **可扩展（Extensibility）**  
+   没有任何框架能预见所有评估需求。AgentDock 评估框架围绕清晰的 `Evaluator` 接口设计，你可以在不修改核心代码的前提下，接入自定义评估逻辑——无论是私有业务规则、专用 NLP 模型，还是第三方评估服务的封装。
 
-This isn't just about running tests; it's about building a continuous feedback loop that drives genuine improvement in agent performance, safety, and reliability.
+这不仅仅是“跑几次测试”，而是为智能体的表现、安全性与可靠性建立一个**持续反馈闭环**。
 
-## Key Components & Concepts
+## 核心组件与概念
 
-Understanding the framework starts with a few core components:
+理解该框架，可以从几个关键组件开始：
 
 ```mermaid
 graph TD
@@ -60,17 +63,17 @@ graph TD
     style ARC fill:#lightgrey,stroke:#333
 ```
 
-*   **`EvaluationInput`**: This is the data packet for an evaluation. It's a rich structure containing not just the agent's `response`, but also the `prompt`, `groundTruth` (if available), `messageHistory`, `context`, `agentConfig`, and the `criteria` to be assessed. Providing comprehensive input enables more nuanced and context-aware evaluations.
-*   **`EvaluationCriteria`**: Defines *what* you're measuring. Each criterion has a `name`, `description`, and an `EvaluationScale` (e.g., `binary`, `likert5`, `numeric`, `pass/fail`). This allows for both quantitative and qualitative assessments.
-*   **`Evaluator` Interface**: The heart of the system's extensibility. Any class implementing this interface can be plugged into the framework. It defines a `type` identifier and an `evaluate` method that takes an `EvaluationInput` and `EvaluationCriteria[]`, returning `EvaluationResult[]`.
-*   **`EvaluationResult`**: The output from a single evaluator for a single criterion. It includes the `criterionName`, the `score` (which can be a number, boolean, or string), optional `reasoning`, and the `evaluatorType`.
-*   **`EvaluationRunConfig`**: Configures an evaluation run. It specifies the `evaluatorConfigs` (which evaluators to use and their specific settings), includes the optional `storageProvider (optional)`, and can include run-level `metadata`.
-*   **`EvaluationRunner`**: The orchestrator. The `runEvaluation(input: EvaluationInput, config: EvaluationRunConfig)` function takes the input and configuration, instantiates the necessary evaluators, executes them, and aggregates their findings.
-*   **`AggregatedEvaluationResult`**: The final output of `runEvaluation`. It contains an optional `overallScore` (if applicable through normalization and weighting of criteria), a list of all individual `EvaluationResult` objects, a snapshot of the input and configuration, and metadata for the run.
+* **`EvaluationInput`**：一次评估的输入数据包。除了智能体的 `response` 以外，还可以包含 `prompt`、`groundTruth`（如有）、`messageHistory`、`context`、`agentConfig` 以及要评估的 `criteria`。更丰富的输入可以支撑更细致、具上下文感知的评估。  
+* **`EvaluationCriteria`**：定义“你要测什么”。每个指标包含 `name`、`description` 与 `EvaluationScale`（如 `binary`、`likert5`、`numeric`、`pass/fail`），既支持定量也支持定性评估。  
+* **`Evaluator` 接口**：扩展性的核心。任何实现该接口的类都可以插入框架中，接口定义了一个 `type` 标识和 `evaluate` 方法，接收 `EvaluationInput` 与 `EvaluationCriteria[]`，返回 `EvaluationResult[]`。  
+* **`EvaluationResult`**：某个评估器对单一指标的输出，包含 `criterionName`、`score`（可以是数字、布尔或字符串）、可选的 `reasoning` 以及 `evaluatorType`。  
+* **`EvaluationRunConfig`**：描述一次评估要如何运行，指定 `evaluatorConfigs`（使用哪些评估器及其配置）、可选的 `storageProvider`，以及 run 级别的 `metadata`。  
+* **`EvaluationRunner`**：调度者。`runEvaluation(input, config)` 会根据配置创建并运行所有评估器，然后聚合结果。  
+* **`AggregatedEvaluationResult`**：`runEvaluation` 的最终输出，包含（如适用）归一化加权后的 `overallScore`、全部 `EvaluationResult` 列表、输入与配置快照，以及本次运行的元数据。
 
-## Getting Started: The `runEvaluation` Function
+## 快速上手：`runEvaluation` 函数
 
-The primary entry point is the `runEvaluation` function. Developers provide the `EvaluationInput` (what to test and how) and the `EvaluationRunConfig` (which evaluators to use). The function returns a promise resolving to the `AggregatedEvaluationResult`.
+主要入口是 `runEvaluation`。开发者只需提供 `EvaluationInput`（测什么、怎么测）和 `EvaluationRunConfig`（用哪些评估器），函数会返回一个 `AggregatedEvaluationResult`。
 
 ```typescript
 // Conceptual Example:
@@ -95,7 +98,7 @@ async function performMyEvaluation() {
 }
 ```
 
-And here's a visual representation of that flow:
+下图展示了这一流程：
 
 ```mermaid
 sequenceDiagram
@@ -117,11 +120,11 @@ sequenceDiagram
     RFE-->>D: Returns AggregatedEvaluationResult
 ```
 
-## Result Persistence
+## 结果持久化
 
-The `EvaluationRunner` returns the `AggregatedEvaluationResult` in memory. For server-side scenarios (like CI runs or dedicated evaluation scripts), persisting these results is often necessary.
+`EvaluationRunner` 默认在内存中返回 `AggregatedEvaluationResult`。在服务端场景（如 CI 运行或离线评估脚本）中，往往需要将结果持久化。
 
-The `EvaluationRunConfig` accepts an optional `storageProvider` parameter. Server-side scripts can instantiate a logger, such as the `JsonFileStorageProvider` (imported directly via its file path: `agentdock-core/src/evaluation/storage/json_file_storage.ts`), and pass it to the runner. This provider will append each `AggregatedEvaluationResult` as a JSON line to the specified file.
+`EvaluationRunConfig` 提供可选的 `storageProvider`。服务端脚本可以实例化一个记录器（如 `JsonFileStorageProvider`，路径为 `agentdock-core/src/evaluation/storage/json_file_storage.ts`），并传入 Runner，每次评估都会把结果以 JSON 行追加到指定文件。
 
 ```typescript
 // Example of using JsonFileStorageProvider in a server-side script:
@@ -135,35 +138,35 @@ const config: EvaluationRunConfig = {
 // ...
 ```
 
-While this direct file logging is practical for many use cases, the long-term vision is for evaluation result persistence to integrate more deeply with AgentDock Core's broader [Storage Abstraction Layer (SAL)](../storage/README.md). This would allow evaluation results to be seamlessly routed to various configurable backends (e.g., databases, cloud storage) managed by the SAL, offering greater flexibility and consistency with how other AgentDock data is handled. For now, direct instantiation of specific loggers like `JsonFileStorageProvider` provides a robust server-side solution.
+从长远看，我们希望把评估结果的持久化更深入地接入 AgentDock Core 的 [存储抽象层 SAL](../storage/README.md)，让评估结果也能像其他数据一样被路由到多种可配置后端（数据库、云存储等）。在此之前，显式创建如 `JsonFileStorageProvider` 这样的记录器已经足以覆盖大部分服务端场景。
 
-## Available Evaluators
+## 内置评估器一览
 
-The framework ships with a versatile set of built-in evaluators:
+框架内置了一系列通用评估器：
 
-*   [**Rule-Based Evaluator**](./evaluators/rule-based.md): For fast, deterministic checks based on predefined rules (length, regex, keywords, JSON parsing).
-*   [**LLM-as-Judge Evaluator**](./evaluators/llm-judge.md): Leverages a language model to provide nuanced, qualitative assessments.
-*   [**NLP Accuracy Evaluator**](./evaluators/nlp-accuracy.md): Measures semantic similarity between a response and ground truth using embeddings.
-*   [**Tool Usage Evaluator**](./evaluators/tool-usage.md): Assesses the correctness of an agent's tool invocations and argument handling.
-*   **Lexical Evaluators**: A suite of fast, non-LLM evaluators for common textual checks:
-    *   [**Lexical Similarity Evaluator**](./evaluators/lexical-similarity.md): Compares string similarity using various algorithms.
-    *   [**Keyword Coverage Evaluator**](./evaluators/keyword-coverage.md): Checks for the presence and coverage of specified keywords.
-    *   [**Sentiment Evaluator**](./evaluators/sentiment.md): Analyzes the sentiment (positive, negative, neutral) of the text.
-    *   [**Toxicity Evaluator**](./evaluators/toxicity.md): Scans text for predefined toxic terms.
+- [**规则评估器（Rule-Based Evaluator）**](./evaluators/rule-based.md)：基于预定义规则进行快速、确定性的检查（长度、正则、关键词、JSON 解析等）；  
+- [**LLM 裁判评估器（LLM-as-Judge Evaluator）**](./evaluators/llm-judge.md)：利用 LLM 对输出进行更细腻的定性评估；  
+- [**NLP 准确率评估器（NLP Accuracy Evaluator）**](./evaluators/nlp-accuracy.md)：通过 Embedding 度量回复与标准答案的语义相似度；  
+- [**工具使用评估器（Tool Usage Evaluator）**](./evaluators/tool-usage.md)：检查智能体调用工具的正确性及参数处理；  
+- **词汇评估器（Lexical Evaluators）**：一组无需 LLM 的快速文本检验工具：  
+  - [**词汇相似度评估器**](./evaluators/lexical-similarity.md)：使用多种算法比较字符串相似度；  
+  - [**关键词覆盖率评估器**](./evaluators/keyword-coverage.md)：检查关键字是否出现以及覆盖率；  
+  - [**情感评估器**](./evaluators/sentiment.md)：分析文本的情感极性（正/负/中性）；  
+  - [**毒性评估器**](./evaluators/toxicity.md)：基于配置的黑名单扫描潜在有害内容。
 
-## Next Steps
+## 下一步
 
-Dive deeper into the specifics of each evaluator, learn how to create custom evaluators, and explore the example script (`scripts/examples/run_evaluation_example.ts`) in the repository to see the framework in action.
+你可以进一步阅读各个评估器的详细说明，或查看仓库中的示例脚本 `scripts/examples/run_evaluation_example.ts`，了解评估框架在真实脚本中的用法。
 
-This framework is a living system. The expectation is that it will evolve as new patterns and requirements are identified from real-world agent deployments. The current foundation, however, provides the necessary tools to move beyond subjective assessments and start building a culture of measurable quality.
+这个框架是“活的系统”：随着真实生产部署中不断出现的新模式与新需求，它会持续演进。但当前这套基础，已经足够帮助团队走出纯主观体验，开始建立**可度量的质量文化**。
 
-## Example Evaluation Outputs
+## 评估结果示例
 
-This section provides examples of the `AggregatedEvaluationResult` objects that the `EvaluationRunner` produces. These are typically written to a log file (e.g., `evaluation_results.log` if using the `JsonFileStorageProvider`) or can be processed directly if no storage provider is used.
+本节给出若干 `AggregatedEvaluationResult` 示例。实际运行中，这些对象通常会被写入日志文件（如使用 `JsonFileStorageProvider` 时的 `evaluation_results.log`），也可以在没有存储提供者时直接在内存中处理。
 
-### Comprehensive Evaluation Run
+### 综合评估示例
 
-The following is an example output from a run that includes multiple types of evaluators (RuleBased, LLMJudge, NLPAccuracy, ToolUsage, and the Lexical Suite). This demonstrates the typical structure of a complete evaluation result.
+下面是一次包含多种评估器（RuleBased、LLMJudge、NLPAccuracy、ToolUsage 与 Lexical 系列）的完整评估结果结构示例：
 
 ```json
 {
@@ -290,9 +293,9 @@ The following is an example output from a run that includes multiple types of ev
 }
 ```
 
-### Negative Sentiment Test
+### 负向情感测试
 
-This example shows the output when specifically testing the `SentimentEvaluator` with a configuration designed to categorize a clearly negative response. Note that `overallScore` might be absent if only non-numeric scores (like string categories) are produced and no aggregation is performed or possible.
+该示例展示在针对 `SentimentEvaluator` 的配置下，对明显负向回复进行测试时的输出结构。注意：如果本次评估只产生非数值型得分（例如情感类别字符串），且没有进行加权聚合，则 `overallScore` 可能为空。
 
 ```json
 {
@@ -345,9 +348,9 @@ This example shows the output when specifically testing the `SentimentEvaluator`
 }
 ```
 
-### Toxic Response Test
+### 有害内容测试
 
-This example shows the output when specifically testing the `ToxicityEvaluator`. The response contains terms from the blocklist, resulting in a `false` score for the `IsNotToxic` criterion and an `overallScore` of 0 (as this was the only criterion weighted for this run in the example script).
+该示例展示在测试 `ToxicityEvaluator` 时的输出。由于回复中包含黑名单中的词汇，对 `IsNotToxic` 指标的得分为 `false`，且在示例脚本中这是唯一有权重的指标，因此 `overallScore` 为 0。
 
 ```json
 {

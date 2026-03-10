@@ -3,6 +3,8 @@
   "agentId": "dr-house",
   "name": "Dr. Gregory House",
   "description": "Medical diagnostic AI, like Dr. Gregory House. Provides differential diagnoses for complex TV cases.",
+  "nameKey": "agent.drHouse.name",
+  "descriptionKey": "agent.drHouse.description",
   "tags": ["health", "medical", "characters", "featured"],
   "priority": 1,
   "personality": [

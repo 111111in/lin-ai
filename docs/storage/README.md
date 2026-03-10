@@ -1,53 +1,56 @@
-# Storage System
+# 存储系统（Storage System）
 
-AgentDock Core provides a comprehensive storage abstraction layer with 15 production-ready adapters for various data persistence needs. This fully-implemented system enables switching between different storage backends without changing application code.
+AgentDock Core 提供了一套**完整的存储抽象层**，内置 15 个可在生产环境使用的适配器，  
+可以在不修改应用代码的前提下，自由切换不同的存储后端，满足各种数据持久化需求。
 
-## Core Concepts
+## 核心概念
 
--   **Abstraction:** A primary goal is to abstract the underlying storage mechanism, allowing developers to choose the backend that best fits their deployment needs (e.g., in-memory for development, Redis for scalable deployments, Vercel KV for Vercel hosting).
--   **Purpose-Driven Configuration:** Different types of data (Key-Value, Vector, Relational) will ideally be configurable with distinct providers based on their requirements (e.g., using Redis for session KV and pgvector for Vector storage).
--   **Session Scoping:** Much of the core storage usage revolves around managing session-specific data with appropriate isolation and lifecycle management (TTL).
--   **Security:** Includes components like `SecureStorage` for handling sensitive data client-side.
+- **抽象化（Abstraction）**：  
+  通过统一接口屏蔽底层实现，让你可以在内存、Redis、Vercel KV、SQLite、PostgreSQL 等多种后端之间自由切换。
+- **按用途配置（Purpose‑Driven Configuration）**：  
+  不同类型的数据（KV、向量、关系型数据）可以选择不同的存储提供商，例如：Redis 存 session KV，pgvector 存向量。
+- **会话作用域（Session Scoping）**：  
+  大部分核心存储都围绕「会话」展开，并通过 TTL 做好生命周期与隔离。
+- **安全性（Security）**：  
+  提供 `SecureStorage` 等组件，在浏览器侧安全存放敏感数据。
 
-## Key Components (`agentdock-core/src/storage`)
+## 关键组件（`agentdock-core/src/storage`）
 
-1.  **Storage Abstraction Layer (SAL):**
-    -   **Interface (`StorageProvider`):** Defines the standard contract for Key-Value storage operations (`get`, `set`, `delete`, `exists`, etc.).
-    -   **Factory (`StorageFactory`, `getStorageFactory`):** Instantiates the configured `StorageProvider` based on environment variables (`KV_STORE_PROVIDER`, `REDIS_URL`, etc.). Manages provider instances.
-    -   **Implementations (`/providers` and `/adapters`):**
-        -   `MemoryStorageProvider`: Default in-memory KV store.
-        -   `RedisStorageProvider`: Uses `@upstash/redis` for Redis/Upstash KV storage.
-        -   `VercelKVProvider`: Uses `@vercel/kv` for Vercel KV storage.
-        -   Plus 12 additional adapters for various backends (SQLite, PostgreSQL, MongoDB, S3, etc.)
-    -   **Vector Support:** PostgreSQL Vector, Pinecone, Qdrant, ChromaDB, and SQLite-vec for AI/embeddings.
+1. **存储抽象层 SAL（Storage Abstraction Layer）**  
+   - 接口 `StorageProvider`：统一定义 KV 操作（`get` / `set` / `delete` / `exists` 等）；  
+   - 工厂 `StorageFactory` / `getStorageFactory`：根据 `KV_STORE_PROVIDER`、`REDIS_URL` 等环境变量实例化具体存储，并管理实例生命周期；  
+   - 适配器（`/providers` 与 `/adapters`）：  
+     - `MemoryStorageProvider`：默认内存 KV 存储；  
+     - `RedisStorageProvider`：基于 `@upstash/redis`；  
+     - `VercelKVProvider`：基于 `@vercel/kv`；  
+     - 以及 SQLite、PostgreSQL、MongoDB、S3 等多种后端；  
+   - 向量支持：PostgreSQL Vector、Pinecone、Qdrant、ChromaDB、SQLite‑vec 等，用于 Embedding 与语义检索。
 
-2.  **Secure Storage (`SecureStorage`):**
-    -   A separate utility class designed for **client-side (browser)** secure storage.
-    -   Uses the Web Crypto API (AES-GCM) for encryption and HMAC for integrity checking.
-    -   Typically used for storing sensitive browser-side data like user-provided API keys in `localStorage`.
-    -   **Note:** This is distinct from the server-side Storage Abstraction Layer used by `SessionManager`, etc.
+2. **安全存储 `SecureStorage`**  
+   - 专门用于**浏览器端**的安全存储工具类；  
+   - 使用 Web Crypto API（AES‑GCM + HMAC）做加密与完整性校验；  
+   - 典型场景：在 `localStorage` 中安全保存用户 API Key；  
+   - 与服务器端 SAL 独立存在，`SessionManager` 等只依赖 SAL。
 
-## Integration with Other Subsystems
+## 与其他子系统的集成
 
--   **Session Management:** `SessionManager` relies *directly* on the SAL (`StorageProvider` via `StorageFactory`) to persist session state.
--   **Orchestration Framework:** `OrchestrationStateManager` uses `SessionManager`, thus indirectly depending on the SAL for persisting orchestration state.
--   **Advanced Memory / RAG:** Vector storage adapters (pgvector, Pinecone, etc.) are ready for AI memory implementation.
+- **会话管理**：`SessionManager` 直接通过 SAL 持久化会话状态；  
+- **编排框架**：`OrchestrationStateManager` 通过 `SessionManager` 间接使用 SAL；  
+- **高级记忆 / RAG**：向量存储适配器已经就绪，可直接支撑未来的记忆与 RAG 功能。
 
-## Current Status & Usage
+## 当前状态与使用方式
 
--   The Key-Value part of the Storage Abstraction Layer is implemented and stable, supporting 15 different adapters.
--   This KV storage is actively used by `SessionManager` and `OrchestrationStateManager` for persistence when configured (defaults to Memory).
--   `SecureStorage` is available for client-side use cases.
--   Vector storage abstractions are implemented and ready for AI memory features.
+- KV 存储抽象层已经实现并稳定运行，支持 15 种适配器；  
+- 当配置了持久化存储时，`SessionManager` 与 `OrchestrationStateManager` 会自动使用它（否则回退到内存）；  
+- `SecureStorage` 已可在前端使用；  
+- 向量存储接口已经就绪，可随时对接 AI 记忆系统。
 
-## Further Reading
+## 延伸阅读
 
-Dive deeper into specific storage aspects:
-
--   [Getting Started Guide](./getting-started.md)
--   [Storage Abstraction Layer](./storage-abstraction.md) - Complete implementation details
--   [Vector Storage](./vector-storage.md) - AI and embedding storage
--   [Session Management](../architecture/sessions/session-management.md) (Details usage of storage)
+- [快速上手](./getting-started.md)  
+- [存储抽象层](./storage-abstraction.md)  
+- [向量存储](./vector-storage.md)  
+- [会话管理](../architecture/sessions/session-management.md)
 
 # Storage Abstraction Layer
 

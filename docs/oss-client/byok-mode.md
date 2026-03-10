@@ -1,53 +1,53 @@
-# Bring Your Own Keys (BYOK) Mode
+# BYOK 模式（自带 API Key）
 
-## Overview
+## 概览
 
-BYOK (Bring Your Own Keys) mode is a security setting in the AgentDock Open Source Client that controls how API keys are managed. When enabled, AgentDock will **only** use API keys that have been explicitly provided by the user through the settings interface, and will never fall back to environment variables.
+BYOK（Bring Your Own Keys）模式是 AgentDock 开源客户端中的一项安全设置，用于控制 API Key 的管理方式。启用后，AgentDock 将**只**使用用户在设置界面中显式提供的 API Key，且不会回退使用环境变量中的 Key。
 
-This feature provides an additional layer of security and transparency, especially in multi-user or shared environments where users should be responsible for their own API key usage.
+该能力提供了额外的安全性与透明度，尤其适用于多用户或共享环境：每个用户需要对自己的 API Key 使用负责。
 
-## Configuration Options
+## 配置方式
 
-BYOK mode can be configured in two ways, listed in order of priority:
+BYOK 模式可以通过两种方式配置（按优先级从高到低）：
 
-1. **URL Parameter**: Add `?byokMode=true` or `?byokMode=false` to any AgentDock URL (temporary override)
-2. **Settings Interface**: Toggle the "Bring Your Own Keys Mode" switch in the Settings page (persistent setting)
+1. **URL 参数**：在任意 AgentDock URL 后添加 `?byokMode=true` 或 `?byokMode=false`（临时覆盖）
+2. **设置界面**：在设置页切换 “Bring Your Own Keys Mode” 开关（持久化设置）
 
-## Implementation Details
+## 实现细节
 
-BYOK mode is implemented across several key components in the AgentDock architecture:
+BYOK 模式由 AgentDock 架构中的多个关键组件共同实现：
 
-### Client-Side Components
+### 客户端组件
 
-1. **Environment Override Provider** (`src/components/env-override-provider.tsx`):
+1. **环境覆盖 Provider**（`src/components/env-override-provider.tsx`）：
    - Handles the URL parameter `byokMode=true|false`
    - Stores the setting in localStorage for persistence
    - Ensures the setting is available to all components
 
-2. **Chat Container** (`src/components/chat/chat-container.tsx`):
+2. **聊天容器**（`src/components/chat/chat-container.tsx`）：
    - Reads BYOK setting from localStorage
    - Adds the `x-byok-mode` header to API requests
    - Includes proper error handling for BYOK-related errors
 
-### Server-Side Components
+### 服务端组件
 
-1. **API Route Handler** (`src/app/api/chat/[agentId]/route.ts`):
+1. **API 路由处理器**（`src/app/api/chat/[agentId]/route.ts`）：
    - Reads the `x-byok-mode` header from requests
    - Implements the API key resolution logic with BYOK mode awareness
    - Provides detailed error messages when API keys are missing in BYOK mode
 
-2. **Environment Types** (`src/types/env.ts`):
+2. **环境类型定义**（`src/types/env.ts`）：
    - Defines type-safe interfaces for BYOK mode
    - Centralizes API key resolution logic
 
-## API Key Resolution Logic
+## API Key 解析逻辑
 
-When a request is made to the API, the following resolution logic is applied:
+当请求到达 API 时，会按以下顺序解析 API Key：
 
-1. Try to get API key from request headers (`x-api-key`)
-2. Try to get API key from global settings in secure storage
-3. If BYOK mode is enabled and no key is found, throw an error
-4. If BYOK mode is disabled, fall back to environment variables
+1. 尝试从请求头获取（`x-api-key`）
+2. 尝试从安全存储中的全局设置获取
+3. 如果启用 BYOK 且仍找不到 key，则抛出错误
+4. 如果未启用 BYOK，则回退使用环境变量
 
 ```typescript
 // Simplified version of the API key resolution logic
@@ -78,9 +78,9 @@ async function resolveApiKey(request, provider, isByokOnly) {
 }
 ```
 
-## Error Handling
+## 错误处理
 
-When an API key is required but not found in BYOK mode, the API returns a specific error:
+当 BYOK 模式下需要 API Key 但未找到时，API 会返回特定错误：
 
 ```json
 {
@@ -92,47 +92,47 @@ When an API key is required but not found in BYOK mode, the API returns a specif
 }
 ```
 
-The client displays this as a user-friendly error message with a link to the settings page.
+客户端会将其展示为更友好的错误提示，并提供跳转到设置页的链接。
 
-## BYOK in AgentDock Pro vs. Open Source
+## AgentDock Pro 与开源版的 BYOK
 
-The Open Source Client requires you to provide your own API keys for all services. **AgentDock Pro** enhances this model:
+开源客户端要求你为所有服务提供自己的 API Key。**AgentDock Pro** 在此基础上进一步增强：
 
-### AgentDock Pro Benefits
+### AgentDock Pro 的优势
 
-- **Cost-Effective API Access**:
+- **更划算的 API 访问**：
   - Get LLM and API services at lower prices than going directly to providers
   - Save 80-90% compared to setting up individual accounts with each provider
   - Utilize bulk purchasing power for better rates across all services
 
-- **Simplified Cost Management**:
+- **更简单的成本管理**：
   - Single billing relationship instead of managing multiple provider accounts
   - Predictable pricing with unified credit system
   - No minimum spend requirements that many premium services impose
 
-- **Enterprise-Grade Access**:
+- **企业级能力获取**：
   - Access to enterprise tiers without meeting enterprise qualification criteria
   - Higher rate limits without lengthy approval processes
   - Premium services at a fraction of direct provider costs
 
-AgentDock Pro eliminates the overhead of managing relationships with multiple AI and API providers, delivering superior economics for production deployments.
+AgentDock Pro 免去了与多个 AI/API 服务商分别建立与维护关系的成本，为生产部署带来更优的经济性。
 
-## Best Practices
+## 最佳实践
 
-- **Development Environment**: Disable BYOK mode for easier testing with environment variables
-- **Production Environment**: Consider enabling BYOK mode to ensure users are accountable for their own API key usage
-- **Sensitive Deployments**: Always enable BYOK mode in environments where API key usage needs to be strictly controlled
-- **Cost Optimization**: For commercial deployments, consider AgentDock Pro for significant cost savings across multiple services
+- **开发环境**：建议关闭 BYOK，以便用环境变量更方便地测试
+- **生产环境**：可考虑开启 BYOK，让用户对自己的 Key 使用负责
+- **敏感部署**：在需要严格控制 API Key 使用的环境中，建议始终开启 BYOK
+- **成本优化**：商业部署可考虑 AgentDock Pro，以获得多服务的显著成本优势
 
-## Security Considerations
+## 安全注意事项
 
 1. **API Key Storage**: User-provided API keys are stored in SecureStorage, which encrypts the data
 2. **BYOK Setting Storage**: The BYOK mode setting itself is stored in localStorage for accessibility
 3. **Header Security**: The `x-byok-mode` header is validated server-side to prevent tampering
 
-## Debugging BYOK Mode
+## BYOK 模式排查
 
-When troubleshooting BYOK mode issues:
+排查 BYOK 相关问题时：
 
 1. Check localStorage for the `byokOnly` key
 2. Verify request headers include `x-byok-mode`

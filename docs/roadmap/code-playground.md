@@ -1,29 +1,29 @@
-# Code Playground
+# 代码演练场（Code Playground）
 
-The Code Playground enables AI agents to generate, execute, and visualize code directly within the chat interface, providing a seamless environment for coding, debugging, and demonstration.
+代码演练场让 AI 智能体可以在聊天界面中**生成、执行并可视化代码**，为编码、调试和演示提供一体化体验。
 
-## Current Status
+## 当前状态
 
-**Status: Planned**
+**状态：规划中（Planned）**
 
-The Code Playground is currently in the design phase, with implementation planned for both OSS and Pro versions.
+代码演练场目前处于设计阶段，计划在开源版（OSS）与 Pro 版中分别落地相应能力。
 
-## Feature Overview
+## 功能概览
 
-The Code Playground will provide:
+代码演练场将提供：
 
-- **In-Chat Code Generation**: Create runnable code directly in agent responses
-- **Interactive Execution**: Run code and see results without leaving the chat
-- **Sandboxed Environment**: Secure code execution in an isolated environment
-- **Multi-Language Support**: JavaScript, TypeScript, Python, and more
-- **Visual Rendering**: Display charts, tables, and rich visualizations
-- **Debugging Tools**: Error highlighting and troubleshooting assistance
-- **Version Control**: Track code changes throughout the conversation
-- **Custom Node Builder**: Create custom integration nodes for extending platform capabilities
+- **对话内生成代码**：在回复中直接产出可运行代码；  
+- **交互式执行**：无需离开聊天即可运行并查看结果；  
+- **沙箱环境**：在隔离环境中安全执行代码；  
+- **多语言支持**：JavaScript、TypeScript、Python 等；  
+- **可视化渲染**：展示图表、表格与更丰富的可视化；  
+- **调试辅助**：错误高亮与排查建议；  
+- **版本追踪**：在对话过程中跟踪代码变更；  
+- **自定义节点构建器**：在 Pro 中用于创建自定义集成节点，扩展平台能力。
 
-## Architecture Diagrams
+## 架构图
 
-### User Experience Flow
+### 用户体验流程
 
 ```mermaid
 graph TD
@@ -40,7 +40,7 @@ graph TD
     style G fill:#e6f2ff,stroke:#99ccff
 ```
 
-### System Architecture
+### 系统架构
 
 ```mermaid
 graph TD
@@ -72,16 +72,16 @@ graph TD
     style E fill:#0066cc,color:#ffffff,stroke:#0033cc
 ```
 
-## Implementation Details
+## 实现细节
 
-The Code Playground will be implemented through:
+代码演练场计划通过以下模块实现：
 
-### 1. Core Components
+### 1. Core 组件
 
-Code execution and parsing nodes will be added to the AgentDock core:
+在 `agentdock-core` 中增加代码解析与代码执行节点：
 
 ```typescript
-// CodeExecutionNode provides secure code execution
+// CodeExecutionNode：安全执行代码
 class CodeExecutionNode extends BaseNode {
   async execute({ code, language, timeout = 5000 }) {
     // Execute code in sandbox environment
@@ -89,7 +89,7 @@ class CodeExecutionNode extends BaseNode {
   }
 }
 
-// CodeParsingNode extracts code blocks from text
+// CodeParsingNode：从文本中解析代码块
 class CodeParsingNode extends BaseNode {
   async execute({ text }) {
     // Parse code blocks from text
@@ -98,28 +98,28 @@ class CodeParsingNode extends BaseNode {
 }
 ```
 
-### 2. Sandbox Integration
+### 2. 沙箱集成
 
-The Sandbox provides secure code execution using Sandpack:
+沙箱执行环境可基于 Sandpack 等方案实现：
 
-- **Isolated Environment**: Code runs in a secure iframe
-- **Resource Limits**: Prevents infinite loops and excessive resource usage
-- **Multiple Languages**: Supports JavaScript, TypeScript, Python, and more
-- **Dependency Management**: Enables the use of common libraries and frameworks
+- **隔离环境**：代码在安全的 iframe 中运行；  
+- **资源限制**：防止死循环与过度资源占用；  
+- **多语言**：支持 JS/TS/Python 等；  
+- **依赖管理**：允许使用常见库与框架。
 
-### 3. UI Implementation
+### 3. UI 实现
 
-The UI enables seamless code interaction:
+UI 侧提供无缝的代码交互体验：
 
-- **Split View Interface**: Chat and code side-by-side
-- **Code Editor**: Syntax highlighting and autocomplete
-- **Results Panel**: Display execution output and visualizations
-- **Error Handling**: Highlight errors and suggestions for fixing
-- **Visual Controls**: Run, reset, and version control buttons
+- **分屏界面**：聊天与代码并排；  
+- **代码编辑器**：语法高亮、自动补全；  
+- **结果面板**：展示输出与可视化；  
+- **错误处理**：高亮错误并给出修复建议；  
+- **操作控件**：运行、重置、版本控制等。
 
-## Custom Node Builder
+## 自定义节点构建器（Custom Node Builder）
 
-A key feature of the Code Playground in AgentDock Pro is the ability to create custom integration nodes, expanding platform capabilities:
+在 AgentDock Pro 中，一个关键能力是：在代码演练场内创建自定义集成节点，用于扩展平台能力：
 
 ```mermaid
 graph TD
@@ -134,16 +134,16 @@ graph TD
     style F fill:#e6f2ff,stroke:#99ccff
 ```
 
-### Creating Custom Integrations
+### 创建自定义集成
 
-The Custom Node Builder empowers users to:
+自定义节点构建器可以帮助用户：
 
-1. **Build Service Connectors**: Create nodes that connect to any third-party API or service
-2. **Define Custom Logic**: Implement specialized business logic for unique use cases
-3. **Extend Platform Capabilities**: Add functionality not available in built-in nodes
-4. **Develop Organization-Specific Tools**: Create private integrations for internal systems
+1. **构建服务连接器**：连接任意第三方 API / 服务；  
+2. **定义自定义逻辑**：实现特定业务场景的专用逻辑；  
+3. **扩展平台能力**：补齐内置节点未覆盖的功能；  
+4. **打造组织专用工具**：为内部系统开发私有集成。
 
-### Implementation Process
+### 实现流程
 
 ```typescript
 // Example of a custom integration node created in the Code Playground
@@ -164,15 +164,15 @@ export class CustomAPINode extends BaseNode {
 }
 ```
 
-### Key Benefits
+### 关键收益
 
-- **No External Development Environment**: Build, test, and deploy custom nodes entirely within AgentDock
-- **Immediate Testing**: Test custom nodes with real data in the sandbox environment
-- **Simplified Deployment**: Register nodes directly to your workspace
-- **Version Control**: Track changes and manage versions of custom nodes
-- **Sharing**: Share custom nodes within your organization or publish to the marketplace
+- **无需外部开发环境**：在 AgentDock 内完成构建、测试与部署；  
+- **即时验证**：在沙箱里用真实数据快速测试；  
+- **部署更简单**：可直接注册到工作区；  
+- **版本管理**：追踪变更并管理版本；  
+- **共享**：可在组织内共享，或发布到市场。
 
-## Use Cases
+## 使用场景
 
 ### 1. Interactive Tutorials
 
@@ -234,7 +234,7 @@ graph TD
     style E fill:#e6f2ff,stroke:#99ccff
 ```
 
-## Security Considerations
+## 安全性考虑
 
 The Code Playground implements several security measures:
 
@@ -245,7 +245,7 @@ The Code Playground implements several security measures:
 5. **Output Sanitization**: Results are sanitized before display
 6. **Permission Controls**: Custom node capabilities restricted by user permissions
 
-## Integration with AgentDock
+## 与 AgentDock 的集成
 
 The Code Playground integrates with the existing AgentDock architecture:
 
@@ -255,7 +255,7 @@ The Code Playground integrates with the existing AgentDock architecture:
 4. **Tool System**: Available as tools for any AgentNode
 5. **Custom Node Registry**: Manages and tracks user-created integration nodes
 
-## Timeline
+## 时间线
 
 | Phase | Description |
 |-------|-------------|
@@ -267,7 +267,7 @@ The Code Playground integrates with the existing AgentDock architecture:
 | Rich Visualization | Implement data visualization capabilities |
 | Custom Node Builder | Develop tooling for creating custom integrations |
 
-## Benefits
+## 价值
 
 1. **Immediate Execution**: Run code examples directly within the chat
 2. **Enhanced Learning**: Interactive coding tutorials and demonstrations
@@ -277,7 +277,7 @@ The Code Playground integrates with the existing AgentDock architecture:
 6. **Platform Extension**: Build custom nodes for specific integration needs
 7. **Unified Development**: Create, test, and deploy integrations in one environment
 
-## Connection to Other Roadmap Items
+## 与其他路线图项的关系
 
 - **Evaluation Framework**: Integrates for code quality and performance assessment
 - **Natural Language AI Agent Builder**: Can generate code-focused agents

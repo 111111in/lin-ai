@@ -1,13 +1,15 @@
-# Response Streaming in AgentDock
+# AgentDock 中的流式响应（Response Streaming）
 
-AgentDock's response streaming system extends the Vercel AI SDK to provide enhanced functionality for orchestration, error handling, and state management.
+AgentDock 的流式响应系统在 Vercel AI SDK 之上进行了扩展，  
+为**编排、错误处理与状态管理**提供了更强大的能力。
 
-## AgentDockStreamResult
+## `AgentDockStreamResult`
 
-The core of AgentDock's streaming capabilities is the `AgentDockStreamResult` interface, which extends Vercel AI SDK's `StreamTextResult`:
+AgentDock 流式能力的核心是 `AgentDockStreamResult` 接口，  
+它在 Vercel AI SDK 的 `StreamTextResult` 基础上进行了增强：
 
 ```typescript
-export interface AgentDockStreamResult<T extends ToolSet = ToolSet, R = unknown> 
+export interface AgentDockStreamResult<T extends ToolSet = ToolSet, R = unknown>
   extends VercelStreamTextResult<T, R> {
   _orchestrationState?: {
     recentlyUsedTools?: string[];
@@ -24,43 +26,46 @@ export interface AgentDockStreamResult<T extends ToolSet = ToolSet, R = unknown>
 }
 ```
 
-### Key Enhancements
+### 关键增强点
 
-1. **Orchestration State Tracking**
-   - Maintains a record of recently used tools
-   - Tracks cumulative token usage across multiple requests
-   - Supports arbitrary state properties for extensibility
+1. **编排状态追踪（Orchestration State Tracking）**  
+   - 记录最近使用过的工具列表；  
+   - 按会话维度累计统计 token 使用量；  
+   - 支持扩展任意自定义状态字段。  
 
-2. **Enhanced Error Handling**
-   - Includes flags to indicate streaming errors
-   - Preserves error messages for client-side handling
-   - Overrides `toDataStreamResponse` to properly include error information
+2. **强化错误处理（Enhanced Error Handling）**  
+   - 通过布尔标记标识流式过程是否出现错误；  
+   - 保留错误信息，便于前端或上层代码处理；  
+   - 对 `toDataStreamResponse` 做了覆盖，以确保错误信息在流式响应中被正确传递。  
 
-3. **Backward Compatibility**
-   - Provides a type alias (`StreamTextResult`) for backward compatibility
-   - Maintains the same streaming interface as Vercel AI SDK
+3. **向后兼容（Backward Compatibility）**  
+   - 提供与原有 `StreamTextResult` 的类型别名，保持既有调用方式不变；  
+   - 保持与 Vercel AI SDK 一致的使用体验。
 
-## Integration with LLMOrchestrationService
+## 与 `LLMOrchestrationService` 的集成
 
-The `AgentDockStreamResult` is primarily returned by the `LLMOrchestrationService.streamWithOrchestration` method, which:
+`AgentDockStreamResult` 主要由 `LLMOrchestrationService.streamWithOrchestration` 返回，该方法会：
 
-1. Wraps the CoreLLM's `streamText` method
-2. Injects orchestration-specific callbacks
-3. Updates token usage in session state
-4. Tracks tool usage for subsequent requests
+1. 对 `CoreLLM.streamText` 进行封装；  
+2. 注入与编排相关的回调（如状态更新钩子）；  
+3. 在会话状态中更新 token 使用量；  
+4. 记录工具使用情况，为后续请求提供上下文。
 
-## Usage in AgentNode
+## 在 `AgentNode` 中的使用方式
 
-The `AgentNode` returns the `AgentDockStreamResult` from its `handleMessage` method, allowing:
+`AgentNode` 的 `handleMessage` 方法直接返回 `AgentDockStreamResult`，这带来：
 
-1. Clients to consume the stream directly
-2. Error handling at the adapter/route level
-3. Access to orchestration state for complex flows
+1. 客户端可以按原样消费流；  
+2. 适配层 / API 路由可以在更高层统一处理错误；  
+3. 对于复杂流程，可在流对象中读取编排状态做进一步控制或监控。
 
-## Benefits
+## 带来的收益
 
-- **Enhanced Reliability**: Better error propagation and handling
-- **Improved State Management**: Automatic tracking of tokens and tools
-- **Seamless Integration**: Works with the existing Vercel AI SDK patterns
+- **更高可靠性**：  
+  错误链路更清晰，便于快速定位问题。  
+- **更好的状态管理**：  
+  token 与工具使用情况被自动追踪，不需要在业务层重复实现。  
+- **无缝集成**：  
+  在保持与 Vercel AI SDK 一致用法的前提下，提供额外的编排与诊断能力。
 
-For more information about the AgentNode implementation, see [Agent Node Documentation](../agent-node.md). 
+关于 `AgentNode` 的更多实现细节，可参考：[Agent 节点文档](../agent-node.md)。 

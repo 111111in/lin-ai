@@ -1,12 +1,20 @@
-# Tool Usage Evaluator
+# 工具使用评估器（Tool Usage Evaluator）
 
-The `ToolUsageEvaluator` is designed to assess the correctness of an agent's tool invocations. In modern agent systems, the ability to reliably and accurately use tools is paramount. This evaluator checks if the agent called the right tools, with the right arguments, and in the expected manner. Deploying agents has shown that tool use is a frequent point of failure, making robust evaluation in this area critical.
+`ToolUsageEvaluator` 用于评估智能体调用工具是否正确。在现代智能体系统中，**稳定、准确地使用工具**至关重要。  
+该评估器会检查智能体是否调用了正确的工具、是否传入了正确的参数，以及调用方式是否符合预期。实践表明，工具调用经常是故障高发点，因此在这一环节做系统化评估非常关键。
 
-It typically examines the `messageHistory` within the `EvaluationInput` to find tool call messages and compares them against predefined expectations.
+评估器通常会遍历 `EvaluationInput.messageHistory`，从中找到工具调用消息，并与预先定义的“工具调用期望规则”进行对比。
 
-## Core Workflow
+## 核心流程
 
-The `ToolUsageEvaluator` processes the agent's message history (from `EvaluationInput`) to identify any tool calls made by the agent. These actual tool calls are then compared against a set of predefined 'Expected Tool Call Rules' provided in the evaluator's configuration. This comparison typically involves validating the tool name, checking the arguments passed to the tool, and ensuring adherence to rules about whether a tool call was required or optional. The outcomes of these checks form the `EvaluationResult` objects.
+`ToolUsageEvaluator` 会处理智能体的消息历史，识别出实际发生的工具调用，并与配置中提供的期望调用规则对比。  
+对比内容通常包括：
+
+- 工具名称是否匹配；  
+- 传入参数是否符合要求；  
+- 本次工具调用是“必须”还是“可选”，是否满足约束；  
+
+这些检查的结果会最终体现在对应的 `EvaluationResult` 中。
 
 ```mermaid
 graph TD
@@ -40,19 +48,19 @@ graph TD
     style ER fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
-## Use Cases
+## 适用场景
 
-The `ToolUsageEvaluator` is essential for:
+`ToolUsageEvaluator` 特别适合：
 
-*   Verifying that an agent calls a specific required tool.
-*   Ensuring that all arguments passed to a tool call are valid (e.g., correct type, within expected ranges, matching a pattern).
-*   Checking if a tool was called when it shouldn't have been.
-*   Validating the sequence or number of tool calls.
-*   Confirming that data returned by a tool is processed correctly by the agent in subsequent steps (though this might sometimes require a more complex evaluator).
+* 验证某个关键工具是否被正确调用；  
+* 确认工具参数有效（类型正确、范围合理、满足正则等）；  
+* 检查不该调用工具的场景是否被错误调用；  
+* 校验调用顺序或调用次数是否符合预期；  
+* 在更复杂场景下，配合其他评估器确认工具返回的数据是否被正确使用。
 
-## Configuration
+## 配置
 
-Configuration involves defining the expectations for tool usage:
+配置主要是定义对工具使用的期望：
 
 *   A list of expected tool calls, including the tool `name`.
 *   For each expected tool call, validation rules for its `arguments`.
@@ -85,14 +93,14 @@ Configuration involves defining the expectations for tool usage:
 }
 ```
 
-## Output (`EvaluationResult`)
+## 输出结构（`EvaluationResult`）
 
-The `ToolUsageEvaluator` produces `EvaluationResult` objects for criteria related to tool usage:
+`ToolUsageEvaluator` 会针对与工具使用相关的指标生成 `EvaluationResult`：
 
-*   **`criterionName`**: Could be specific to a tool (e.g., "CorrectlyCalled_example_tool") or more general ("ValidToolArguments").
-*   **`score`**: Typically boolean (`true` if the check passes, `false` otherwise) or a numeric score representing the degree of correctness.
-*   **`reasoning`**: Details about why a tool usage check passed or failed (e.g., "Tool 'example_tool' not called", "Argument 'arg2' for tool 'example_tool' was not positive").
-*   **`evaluatorType`**: `'ToolUsage'`.
-*   **`error`**: For unexpected issues during evaluation, not for failed tool usage checks themselves.
+* **`criterionName`**：可以是针对某个具体工具（例如 `"CorrectlyCalled_example_tool"`），也可以是更通用的名称（如 `"ValidToolArguments"`）；  
+* **`score`**：通常是布尔值（通过为 `true`，否则为 `false`）或表示正确程度的数值；  
+* **`reasoning`**：说明检查通过/失败的原因（如 “Tool 'example_tool' not called”、“Argument 'arg2' for tool 'example_tool' was not positive”）；  
+* **`evaluatorType`**：固定为 `'ToolUsage'`；  
+* **`error`**：仅在评估过程中本身出现异常时填充，而不是用来表示普通规则失败。
 
-Correct tool usage is a cornerstone of effective agent behavior, and this evaluator provides the means to systematically verify it. 
+正确使用工具是高质量智能体行为的基石，而该评估器则提供了一种**系统化验证工具调用**的方式。 
